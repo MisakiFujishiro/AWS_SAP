@@ -1,2 +1,2 @@
 make html
-open build/html/index.html
+open docs/html/index.html
