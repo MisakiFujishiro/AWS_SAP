@@ -1,2 +1,2 @@
 make html
-open docs/html/index.html
+open docs/index.html

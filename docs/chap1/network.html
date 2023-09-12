@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ネットワーク設計 &mdash; AWS_SAP 0.0.1 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="アカウント" href="account.html" />
+    <link rel="prev" title="複雑な組織への対応" href="basic.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> AWS_SAP
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">試験概要:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../basic/basic.html">AWS SAPの基本情報</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">複雑な組織への対応:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="basic.html">複雑な組織への対応</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">ネットワーク設計</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#vpc">VPCエンドポイント</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id2">ゲートウェイ型</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id3">インターフェース型</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id4">サードパーティサービスの提供</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#id5">ゲートウェイ型とインターフェース型の違い</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#vpn">VPN</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#direct-connect">Direct Connect</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id6">VPCピア接続</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#transit-gateway">Transit Gateway</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#route53">Route53</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="account.html">アカウント</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">ソリューション設計と継続的改善:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../chap23/basic.html">ソリューション設計と継続的改善</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../chap23/operation.html">運用上の優秀性</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../chap23/security.html">セキュリティ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../chap23/reliability.html">信頼性</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../chap23/performance.html">パフォーマンス</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../chap23/cost.html">コスト最適化</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">移行とモダナイゼーションの加速:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../chap4/basic.html">移行とモダナイゼーションの加速</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../chap4/approach.html">移行評価とアプローチ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../chap4/modernization.html">移行後アーキテクチャとアーキテクチャとモダナイゼーション</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">AWS_SAP</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a></li>
+      <li class="breadcrumb-item active">ネットワーク設計</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/chap1/network.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="id1">
+<h1>ネットワーク設計<a class="headerlink" href="#id1" title="Permalink to this heading">¶</a></h1>
+<p>VPCエンドポイントや、VPN接続などが問われることが多いので、以下を確認しておくと良い</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://d1.awsstatic.com/webinars/jp/pdf/services/20201021_AWS-BlackBelt-VPC.pdf">VPCのBlackBelt資料</a></p></li>
+<li><p><a class="reference external" href="https://aws.amazon.com/jp/blogs/news/webinar-bb-amazonvpc-2020/">VPCのBlackBelt動画</a></p></li>
+<li><p><a class="reference external" href="https://www.cloudremix.net/awsdocs/20190417_AWS-BlackBelt-VPC-Advanced.pdf">VPC AdvancedのBlackBelt資料</a></p></li>
+<li><p><a class="reference external" href="https://aws.amazon.com/jp/blogs/news/webinar-bb-amazon-vpc-advanced-2019/">VPC AdvancedのBlackBelt動画</a></p></li>
+</ul>
+<section id="vpc">
+<h2>VPCエンドポイント<a class="headerlink" href="#vpc" title="Permalink to this heading">¶</a></h2>
+<p>AWSのサービス（パブリックネットワークに存在）に対してアクセスする際、インターネットを経由せずにAWS内部の通信で接続するために利用されるのがVPCエンドポイントである。</p>
+<p>VPCエンドポイントにはゲートウェイ型とインターフェース型が存在する</p>
+<section id="id2">
+<h3>ゲートウェイ型<a class="headerlink" href="#id2" title="Permalink to this heading">¶</a></h3>
+<p>S3とDynamo DBが対応しており、料金がかからない特徴がある。<br />
+ゲートウェイであるので、インターネットGWなどと同様、ルーティング設定された条件を満たすとVPCエンドポイントを経由して、リソースにアクセスする。</p>
+<p><img alt="" src="../_images/chap1_vpc_endpoint_gw.png" /></p>
+<p>作成としては以下の手順を踏む</p>
+<ol class="arabic simple">
+<li><p>VPCサービスのエンドポイント機能を選択</p></li>
+<li><p>com.amazonaws.ap-northeast-1.s3のGWを選択</p></li>
+<li><p>設定するVPCを選択</p></li>
+<li><p>設定する<code class="docutils literal notranslate"><span class="pre">ルートテーブル</span></code>を選択</p></li>
+<li><p>バケットポリシー側で設定したVPC-Endpointからのアクセスを許可する</p></li>
+</ol>
+<p><img alt="" src="../_images/chap1_vpc_gw_setting_1.png" />
+<img alt="" src="../_images/chap1_vpc_gw_setting_2.png" /></p>
+</section>
+<section id="id3">
+<h3>インターフェース型<a class="headerlink" href="#id3" title="Permalink to this heading">¶</a></h3>
+<p>50種類以上のサービスが対応しており、S3はインターフェース型の接続も可能。<br />
+データの転送とサービス利用時間に応じて課金する必要がある。<br />
+VPC内のサブネットにENIを払い出し、ENIにアクセスすることで対象のAWSサービスにアクセスする。
+AWS PrivateLinkという技術が利用される。</p>
+<p><img alt="" src="../_images/chap1_vpc_endpoint_if.png" /></p>
+<p>作成としては以下の手順を踏む</p>
+<ol class="arabic simple">
+<li><p>VPCサービスのエンドポイント機能を選択</p></li>
+<li><p>com.amazonaws.ap-northeast-1.s3のInterfaceを選択</p></li>
+<li><p>設定するVPCを選択</p></li>
+<li><p>設定する<code class="docutils literal notranslate"><span class="pre">サブネット</span></code>を選択</p></li>
+<li><p>適用する<code class="docutils literal notranslate"><span class="pre">セキュリティグループ</span></code>を選択</p></li>
+<li><p>バケットポリシー側で設定したVPC-Endpointからのアクセスを許可する</p></li>
+</ol>
+<p><img alt="" src="../_images/chap1_vpc_if_setting_1.png" />
+<img alt="" src="../_images/chap1_vpc_if_setting_2.png" /></p>
+<section id="id4">
+<h4>サードパーティサービスの提供<a class="headerlink" href="#id4" title="Permalink to this heading">¶</a></h4>
+<p>自作のサービス（サードパーティサービス）を他のVPCやオンプレに対してプライベートに利用してほしい場合はNLBを経由して、インターフェース型のVPCエンドポイントを払い出すことができる。</p>
+<p><img alt="" src="../_images/chap1_vpc_therdparty_image.png" /></p>
+</section>
+</section>
+<section id="id5">
+<h3>ゲートウェイ型とインターフェース型の違い<a class="headerlink" href="#id5" title="Permalink to this heading">¶</a></h3>
+<p>ゲートウェイ型のEndpointのIPは、内部IPではなく外部IPであるという点が特徴的である。
+すなわちAWS内部からAWS内部への通信であるものの、VPC内→エンドポイントへの通信は外部のIPへのアクセスに見える。<br />
+一方で、インターフェース型はENIがVPCの内部にサービスが立ち上がっているように見えるので、VPC内部→VPC内部の通信で完結する。<br />
+この辺りは<a class="reference external" href="https://dev.classmethod.jp/articles/vpc-endpoint-gateway-type/">2つのVPCエンドポイントの違いを知る</a>が参考になる。</p>
+<p>さらに、VPC外からの接続について差分がある。<br />
+GW型では通信を設定し合ったVPCのみで通信が可能であり、そのVPCと接続している他の環境（オンプレや別のVPC）から Endpointを経由することはできない。<br />
+一方で、インターフェース型は、VPC外からもVPC自体への接続を確保してしまえば、 Endpointを経由して対象サービスにアクセスすることができる。</p>
+</section>
+</section>
+<section id="vpn">
+<h2>VPN<a class="headerlink" href="#vpn" title="Permalink to this heading">¶</a></h2>
+</section>
+<section id="direct-connect">
+<h2>Direct Connect<a class="headerlink" href="#direct-connect" title="Permalink to this heading">¶</a></h2>
+</section>
+<section id="id6">
+<h2>VPCピア接続<a class="headerlink" href="#id6" title="Permalink to this heading">¶</a></h2>
+</section>
+<section id="transit-gateway">
+<h2>Transit Gateway<a class="headerlink" href="#transit-gateway" title="Permalink to this heading">¶</a></h2>
+</section>
+<section id="route53">
+<h2>Route53<a class="headerlink" href="#route53" title="Permalink to this heading">¶</a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="basic.html" class="btn btn-neutral float-left" title="複雑な組織への対応" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="account.html" class="btn btn-neutral float-right" title="アカウント" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, misaki.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
