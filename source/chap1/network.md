@@ -139,21 +139,97 @@ VPCエンドポイント側に設定するGW
 ### Direct Connect
 ユーザーのルーター（Customer Router）からDirect Connectのルータ（DX Router）に光ファイバーケーブルを介して接続するサービス。インターネットを経由しない専用線を確保できる。
 
+通信速度に関しても最大100GBpsを確保することができるので、金額と設定の手間がかかる分、安全性と通信速度を確保できる。
+
 ![](../img/cpah1_vpn_direct.png)
 
 接続方法などは[参考サイト](https://atbex.attokyo.co.jp/blog/detail/85/)参照。
 
 
+
+
+
 ## VPC同士の接続
-VPCが他のVPCと接続するための設定。
+VPCが他のVPCと接続するための設定。  
+一対一の場合は、VPCピア接続が容易。一対多の場合はTransit GWを利用すると管理が容易になる。
 
 ### VPCピア接続
+異なるリージョンであっても、設置を行うことでVPC-AとVPC-Bで通信を可能にする。
+ただし、VPC-AとVPC-BがVPCピア接続していても、VPC-Bとピア接続しているVPC-CからVPC-Aへの接続はできない。
+
+![](../img/chap1_vpc_peer_image.png)
+
+#### 設定方法
+[参考サイト](https://zenn.dev/rescuenow/articles/8e21a751c828c6)がわかりやすいので確認すると良い。
+
+1. リクエスタ(接続元)側でピア接続設定を行う
+    - 接続元のVPC ID
+    - 接続先のアカウント情報（同じアカウントか否か）
+    - 接続先のリージョン（同一リージョンか否か）
+    - 接続先のVPC ID
+![](../img/chap1_vpc_peer_setting_1.png)
+2. アクセプタ(接続先)側で承認する
+    - ピア接続設定を確認すると承認待ちになっているので承認をする
+3. リクエスタとアクセプタ両方でルートテーブルの設定を行う
+    - CIDRの設定を行う
+    - ターゲットにピアリング接続を行う
+![](../img/chap1_vpc_peer_setting_2.png)
+
 
 
 ### Transit Gateway
+最大で5000のVPC同士の接続やVPCとオンプレとの接続を管理することができる。
+Site-to-Site VPN接続やVPCピア接続について個別設定せずに、Transit GWで集中管理できる。
+
+![](../img/chap1_transitgw_image.png)
+
+#### VPCピア接続の取りまとめ
+VPCピア接続を利用して複数のVPC同士を接続すると以下のような課題がある
+- トランジットトラフィックに対応できない
+    - VPCを跨いだ通信はできない
+    - すなわち、すべてのVPC同士の設定が必要
+- VPCを追加すると、全てに修正が入る
+
+Transit GWを利用することで、トランジットトラフィックに対応でき、追加時もTransitGWを修正するだけで良い
+
+![](../img/chap1_transitgw_merit_1.png)
+
+
+#### VPN接続の取りまとめ
+VPN接続を利用して複数のVPCに接続しようとすると、それぞれのVPCに対してVPNの設定が必要。
+しかし、TransitGWを利用すれば、オンプレとTransit GWまでの設定をするだけで、後ろのVPCの追加が容易になる。
+
+![](../img/chap1_transitgw_merit_2.png)
+
+
 
 
 
 ## Route53
+### HosteZone
+パブリックホストゾーンとプライベートホストゾーンがある。
+- パブリック：インターネット上に公開されたDNSドメインを管理
+- プライベート：VPC内のドメインのレコードを管理
 
+![](../img/chap1_route53_hostzone.png)
+
+### Resolver
+VPC内やオンプレからの問い合わせを解決するサービスで[こちらの記事](https://dev.classmethod.jp/articles/explain-route53-resolver-ram/)がわかりやすい
+
+#### VPC内の名前解決
+通信を行う際に、Resolverに問い合わせを行い、Resolverはhosted zoneに問い合わせを行い解決する。
+
+![](../img/chap1_route53_resolver_1.png)
+
+#### オンプレからの名前解決
+オンプレミス環境からクラウド環境に名前解決のリクエストをする際には、Route53 Resolverのインバウンドエンドポイントの設定が必要になる。インバウンドのエンドポイントが作成されると、IPが発行されるので、このIPをオンプレ側のDNSに設定する。
+
+![](../img/chap1_route53_resolver_2.png)
+
+#### オンプレへの名前解決
+クラウド側からオンプレミスのDNSで名前解決をリクエストする際には、Route53 アウトバウンドエンドポイントとRoute53 ResolverRuleを設定する必要がある。
+
+このResolver Ruleは共有が可能で、別のAWSアカウントなどで共通利用することができる。
+
+![](../img/chap1_route53_resolver_3.png)
 

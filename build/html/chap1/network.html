@@ -79,11 +79,27 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#id12">VPC同士の接続</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#id13">VPCピア接続</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#transit-gateway">Transit Gateway</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id13">VPCピア接続</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id14">設定方法</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#route53">Route53</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#transit-gateway">Transit Gateway</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id15">VPCピア接続の取りまとめ</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id16">VPN接続の取りまとめ</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#route53">Route53</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#hostezone">HosteZone</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#resolver">Resolver</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id17">VPC内の名前解決</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id18">オンプレからの名前解決</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id19">オンプレへの名前解決</a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="account.html">アカウント</a></li>
@@ -278,22 +294,107 @@ VPNを経由して、別のAWSリソースにアクセスする際はこのENI�
 <section id="direct-connect">
 <h3>Direct Connect<a class="headerlink" href="#direct-connect" title="Permalink to this heading">¶</a></h3>
 <p>ユーザーのルーター（Customer Router）からDirect Connectのルータ（DX Router）に光ファイバーケーブルを介して接続するサービス。インターネットを経由しない専用線を確保できる。</p>
+<p>通信速度に関しても最大100GBpsを確保することができるので、金額と設定の手間がかかる分、安全性と通信速度を確保できる。</p>
 <p><img alt="" src="../_images/cpah1_vpn_direct.png" /></p>
 <p>接続方法などは<a class="reference external" href="https://atbex.attokyo.co.jp/blog/detail/85/">参考サイト</a>参照。</p>
 </section>
 </section>
 <section id="id12">
 <h2>VPC同士の接続<a class="headerlink" href="#id12" title="Permalink to this heading">¶</a></h2>
-<p>VPCが他のVPCと接続するための設定。</p>
+<p>VPCが他のVPCと接続するための設定。<br />
+一対一の場合は、VPCピア接続が容易。一対多の場合はTransit GWを利用すると管理が容易になる。</p>
 <section id="id13">
 <h3>VPCピア接続<a class="headerlink" href="#id13" title="Permalink to this heading">¶</a></h3>
+<p>異なるリージョンであっても、設置を行うことでVPC-AとVPC-Bで通信を可能にする。
+ただし、VPC-AとVPC-BがVPCピア接続していても、VPC-Bとピア接続しているVPC-CからVPC-Aへの接続はできない。</p>
+<p><img alt="" src="../_images/chap1_vpc_peer_image.png" /></p>
+<section id="id14">
+<h4>設定方法<a class="headerlink" href="#id14" title="Permalink to this heading">¶</a></h4>
+<p><a class="reference external" href="https://zenn.dev/rescuenow/articles/8e21a751c828c6">参考サイト</a>がわかりやすいので確認すると良い。</p>
+<ol class="arabic simple">
+<li><p>リクエスタ(接続元)側でピア接続設定を行う</p>
+<ul class="simple">
+<li><p>接続元のVPC ID</p></li>
+<li><p>接続先のアカウント情報（同じアカウントか否か）</p></li>
+<li><p>接続先のリージョン（同一リージョンか否か）</p></li>
+<li><p>接続先のVPC ID
+<img alt="" src="../_images/chap1_vpc_peer_setting_1.png" /></p></li>
+</ul>
+</li>
+<li><p>アクセプタ(接続先)側で承認する</p>
+<ul class="simple">
+<li><p>ピア接続設定を確認すると承認待ちになっているので承認をする</p></li>
+</ul>
+</li>
+<li><p>リクエスタとアクセプタ両方でルートテーブルの設定を行う</p>
+<ul class="simple">
+<li><p>CIDRの設定を行う</p></li>
+<li><p>ターゲットにピアリング接続を行う
+<img alt="" src="../_images/chap1_vpc_peer_setting_2.png" /></p></li>
+</ul>
+</li>
+</ol>
+</section>
 </section>
 <section id="transit-gateway">
 <h3>Transit Gateway<a class="headerlink" href="#transit-gateway" title="Permalink to this heading">¶</a></h3>
+<p>最大で5000のVPC同士の接続やVPCとオンプレとの接続を管理することができる。
+Site-to-Site VPN接続やVPCピア接続について個別設定せずに、Transit GWで集中管理できる。</p>
+<p><img alt="" src="../_images/chap1_transitgw_image.png" /></p>
+<section id="id15">
+<h4>VPCピア接続の取りまとめ<a class="headerlink" href="#id15" title="Permalink to this heading">¶</a></h4>
+<p>VPCピア接続を利用して複数のVPC同士を接続すると以下のような課題がある</p>
+<ul class="simple">
+<li><p>トランジットトラフィックに対応できない</p>
+<ul>
+<li><p>VPCを跨いだ通信はできない</p></li>
+<li><p>すなわち、すべてのVPC同士の設定が必要</p></li>
+</ul>
+</li>
+<li><p>VPCを追加すると、全てに修正が入る</p></li>
+</ul>
+<p>Transit GWを利用することで、トランジットトラフィックに対応でき、追加時もTransitGWを修正するだけで良い</p>
+<p><img alt="" src="../_images/chap1_transitgw_merit_1.png" /></p>
+</section>
+<section id="id16">
+<h4>VPN接続の取りまとめ<a class="headerlink" href="#id16" title="Permalink to this heading">¶</a></h4>
+<p>VPN接続を利用して複数のVPCに接続しようとすると、それぞれのVPCに対してVPNの設定が必要。
+しかし、TransitGWを利用すれば、オンプレとTransit GWまでの設定をするだけで、後ろのVPCの追加が容易になる。</p>
+<p><img alt="" src="../_images/chap1_transitgw_merit_2.png" /></p>
+</section>
 </section>
 </section>
 <section id="route53">
 <h2>Route53<a class="headerlink" href="#route53" title="Permalink to this heading">¶</a></h2>
+<section id="hostezone">
+<h3>HosteZone<a class="headerlink" href="#hostezone" title="Permalink to this heading">¶</a></h3>
+<p>パブリックホストゾーンとプライベートホストゾーンがある。</p>
+<ul class="simple">
+<li><p>パブリック：インターネット上に公開されたDNSドメインを管理</p></li>
+<li><p>プライベート：VPC内のドメインのレコードを管理</p></li>
+</ul>
+<p><img alt="" src="../_images/chap1_route53_hostzone.png" /></p>
+</section>
+<section id="resolver">
+<h3>Resolver<a class="headerlink" href="#resolver" title="Permalink to this heading">¶</a></h3>
+<p>VPC内やオンプレからの問い合わせを解決するサービスで<a class="reference external" href="https://dev.classmethod.jp/articles/explain-route53-resolver-ram/">こちらの記事</a>がわかりやすい</p>
+<section id="id17">
+<h4>VPC内の名前解決<a class="headerlink" href="#id17" title="Permalink to this heading">¶</a></h4>
+<p>通信を行う際に、Resolverに問い合わせを行い、Resolverはhosted zoneに問い合わせを行い解決する。</p>
+<p><img alt="" src="../_images/chap1_route53_resolver_1.png" /></p>
+</section>
+<section id="id18">
+<h4>オンプレからの名前解決<a class="headerlink" href="#id18" title="Permalink to this heading">¶</a></h4>
+<p>オンプレミス環境からクラウド環境に名前解決のリクエストをする際には、Route53 Resolverのインバウンドエンドポイントの設定が必要になる。インバウンドのエンドポイントが作成されると、IPが発行されるので、このIPをオンプレ側のDNSに設定する。</p>
+<p><img alt="" src="../_images/chap1_route53_resolver_2.png" /></p>
+</section>
+<section id="id19">
+<h4>オンプレへの名前解決<a class="headerlink" href="#id19" title="Permalink to this heading">¶</a></h4>
+<p>クラウド側からオンプレミスのDNSで名前解決をリクエストする際には、Route53 アウトバウンドエンドポイントとRoute53 ResolverRuleを設定する必要がある。</p>
+<p>このResolver Ruleは共有が可能で、別のAWSアカウントなどで共通利用することができる。</p>
+<p><img alt="" src="../_images/chap1_route53_resolver_3.png" /></p>
+</section>
+</section>
 </section>
 </section>
 
