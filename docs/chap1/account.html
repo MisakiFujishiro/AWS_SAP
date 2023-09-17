@@ -47,7 +47,24 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="basic.html">複雑な組織への対応</a></li>
 <li class="toctree-l1"><a class="reference internal" href="network.html">ネットワーク設計</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">アカウント</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">アカウント</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#id2">クロスアカウント</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id3">サードパーティ製品へのクロスアカウント対応</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#aws-directory-service">AWS Directory Service</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#directory-service">Directory Serviceの種類</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#iam">IAM アイデンティティセンター</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#aws-organizations">AWS Organizations</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#organizations">Organizationsのアカウント管理</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id4">一括請求</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#aws-service-catalog">AWS Service Catalog</a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">ソリューション設計と継続的改善:</span></p>
 <ul>
@@ -91,6 +108,71 @@
              
   <section id="id1">
 <h1>アカウント<a class="headerlink" href="#id1" title="Permalink to this heading">¶</a></h1>
+<section id="id2">
+<h2>クロスアカウント<a class="headerlink" href="#id2" title="Permalink to this heading">¶</a></h2>
+<p>複数のAWSアカウントを利用している組織に対する認証を管理する方法としてクロスアカウントアクセスがある。
+これは、IAMユーザーを特定の管理アカウントで一元管理し、組織のAWSアカウントにはIAMロールを利用して、スイッチロースする方法。</p>
+<p>具体的な設定方法としては、各組織側のIAM Roleの信頼ポリシーで管理アカウントのIAMユーザーに対してのSTSのアクション許可設定をしてあげる。</p>
+<section id="id3">
+<h3>サードパーティ製品へのクロスアカウント対応<a class="headerlink" href="#id3" title="Permalink to this heading">¶</a></h3>
+<p>サードパーティに対して、自分のAWSのIAM Roleを伝えることで、サードパーティのAWSユーザーやRoleがスイッチロールをして、自分のAWSを利用することが可能になる。</p>
+<p>ただしこれには、混乱した代理問題という問題が発生する。
+これは、サードパーティを利用している別のユーザーがIAM Role名を予測したりすることで、別のユーザーが自分のIAM Role権限を利用してしまうという問題。</p>
+<p>これに対しては、サードパーティに対してIAM Roleを登録する際に、ランダム文字列などを発行して自分のAWSの信頼ポリシーの中のConditionにその文字列を追加することによって、対応する。</p>
+<p><img alt="" src="../_images/chap1_cross_account.png" /></p>
+</section>
+</section>
+<section id="aws-directory-service">
+<h2>AWS Directory Service<a class="headerlink" href="#aws-directory-service" title="Permalink to this heading">¶</a></h2>
+<p>AWSの認証については、既に組織が管理している既存のActive Directoryと統合して共通利用することができる。<br />
+ポイントは、オンプレや企業という単位でアカウントディレクトリを構築管理する点。</p>
+<p>オンプレで利用しているActive Directoryの認証をそのまま利用できるサービスであり、各AZにADConnectorを設定して、オンプレ側のADの情報を設定することで、IAM Roleが払い出されるイメージ</p>
+<p><img alt="" src="../_images/chap1_cross_account_ad.png" /></p>
+<section id="directory-service">
+<h3>Directory Serviceの種類<a class="headerlink" href="#directory-service" title="Permalink to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>AD Connector<br />
+スモールスタートやシンプルな構成で良い場合は利用する。</p></li>
+<li><p>Simple AD<br />
+5000ユーザーまでの場合は利用する。またMFAにも対応</p></li>
+<li><p>AWS Managed Microsoft AD<br />
+5000ユーザーを超える場合は利用する。</p></li>
+</ul>
+</section>
+</section>
+<section id="iam">
+<h2>IAM アイデンティティセンター<a class="headerlink" href="#iam" title="Permalink to this heading">¶</a></h2>
+<p>AWS環境でのアイデンティティ管理が主目的である。複数のAWSアカウントだけでなく、Salesforceなどの外部アプリケーションへのSSOをサポートしている。
+アカウント情報の管理は、Identity Conterでも良いが、外部のIPプロバイダーに任せることも可能</p>
+<p><a class="reference external" href="https://dev.classmethod.jp/articles/developersio-2023-osaka-aws-booth-aws-iam-identity-center/">こちらのサイト</a>がわかりやすそうなので、時間ある時に確認する。</p>
+<p><img alt="" src="../_images/chap1_identity_center.png" /></p>
+</section>
+<section id="aws-organizations">
+<h2>AWS Organizations<a class="headerlink" href="#aws-organizations" title="Permalink to this heading">¶</a></h2>
+<p>複数のアカウントを管理する以下のような手間をAWS Organizationsを利用すれば避けることができる</p>
+<ul class="simple">
+<li><p>クレジットカードや電話番号などの登録</p></li>
+<li><p>請求管理</p></li>
+<li><p>IAMロールのポリシー設定</p></li>
+<li><p>CloudTrailなどのアカウントごとの設定</p></li>
+</ul>
+<section id="organizations">
+<h3>Organizationsのアカウント管理<a class="headerlink" href="#organizations" title="Permalink to this heading">¶</a></h3>
+<p>Organizationではルートの下にOUという単位があり、その下にアカウントが管理される。
+OUやアカウントに対してSCP（サービスコントロールポリシー）を紐づけることでポリシーを適用することができる。</p>
+<p><img alt="" src="../_images/chap1_organizations.png" /></p>
+<p>OUやアカウントはCLIから作成することができる。</p>
+</section>
+<section id="id4">
+<h3>一括請求<a class="headerlink" href="#id4" title="Permalink to this heading">¶</a></h3>
+<p>Organizationsを利用することで、複数のアカウント請求を一括請求とすることができる。
+結果として、ボリュームディスカウントを受けやすくするといったメリットを受けることができる。</p>
+</section>
+<section id="aws-service-catalog">
+<h3>AWS Service Catalog<a class="headerlink" href="#aws-service-catalog" title="Permalink to this heading">¶</a></h3>
+<p>各</p>
+</section>
+</section>
 </section>
 
 
