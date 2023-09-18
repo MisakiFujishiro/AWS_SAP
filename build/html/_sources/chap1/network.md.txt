@@ -141,7 +141,7 @@ VPCエンドポイント側に設定するGW
 
 通信速度に関しても最大100GBpsを確保することができるので、金額と設定の手間がかかる分、安全性と通信速度を確保できる。
 
-![](../img/cpah1_vpn_direct.png)
+![](../img/chap1_vpn_direct.png)
 
 接続方法などは[参考サイト](https://atbex.attokyo.co.jp/blog/detail/85/)参照。
 

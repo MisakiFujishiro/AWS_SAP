@@ -52,7 +52,57 @@
 <p class="caption" role="heading"><span class="caption-text">ソリューション設計と継続的改善:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="basic.html">ソリューション設計と継続的改善</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">運用上の優秀性</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">運用上の優秀性</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#codecommit">CodeCommit</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#codebuild">CodeBuild</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id2">デプロイメントの基礎</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id3">デプロイメントパターン</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id4">ローリングデプロイ</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id5">カナリアリリース</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id6">ブルーグリーンデプロイ</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#id7">デプロイメント設定</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#codedeploy">CodeDeploy</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#ec2">EC2/オンプレミス</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ecs">ECS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#lambda">Lambda</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id8">スタックのデプロイ</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#cloudformation">CloudFormation</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id9">カスタムリソース</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id10">ヘルパースクリプト</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id11">スタックポリシー</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#deletionpolicy">DeletionPolicy</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#cdk">CDK</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#elastic-beanstalk">Elastic Beanstalk</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id12">モニタリング</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#aws-health">AWS Healthイベント</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cloudwatch">CloudWatch</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id13">メトリクスダッシュボード</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id14">アラーム</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#logs">Logs</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#vpc-flow-log">VPC Flow Log</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#aws-x-ray">AWS X-Ray</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#siem-on-amazon-opensearch-service">SIEM on Amazon OpenSearch Service</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id15">メンテナンス</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#aws-systemmanager">AWS SystemManager</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#aws-config">AWS Config</a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="security.html">セキュリティ</a></li>
 <li class="toctree-l1"><a class="reference internal" href="reliability.html">信頼性</a></li>
 <li class="toctree-l1"><a class="reference internal" href="performance.html">パフォーマンス</a></li>
@@ -91,6 +141,261 @@
              
   <section id="id1">
 <h1>運用上の優秀性<a class="headerlink" href="#id1" title="Permalink to this heading">¶</a></h1>
+<p>AWSのサービスを利用することで、リリースプロセスを自動化することができる。
+リリースプロセスの自動化は、リスクを低減し、リリース頻度を増やし、サービスの価値増大につながる。</p>
+<p><img alt="" src="../_images/chap21_cicd.png" /></p>
+<section id="codecommit">
+<h2>CodeCommit<a class="headerlink" href="#codecommit" title="Permalink to this heading">¶</a></h2>
+<p>CodeCommitは、Gitの標準機能を提供している、AWSサービス。<br />
+リポジトリのソースコードはKMSのAWSマネージドキーでサーバーサイド暗号化される。アクセスについてはIAMPolicyで制御でき、アクセスの記録もCloudTrailで追跡できるので、セキュリティ観点なども充実している。</p>
+</section>
+<section id="codebuild">
+<h2>CodeBuild<a class="headerlink" href="#codebuild" title="Permalink to this heading">¶</a></h2>
+<p>CodeBuldはビルドとテストを実行するコンテナ環境を完全なマネージドで提供してくれるAWSサービス。<br />
+CodeBuildで実行されるテストやコンパイル、パッケージ作成などはbuildspec.yamlに事前定義されたコマンドにより実行される。
+作成されたパッケージ(アーティファクト)はS3に格納したり、docker pushコマンドでECRにアップロードすることができる。</p>
+</section>
+<section id="id2">
+<h2>デプロイメントの基礎<a class="headerlink" href="#id2" title="Permalink to this heading">¶</a></h2>
+<p>デプロイについて基礎知識を整理する。
+デプロイメントパータンとデプロイメント設定の関係性について整理すると、デプロイメントパターンとはデプロイに関する方針であり、この方針を実現するための具体的な手段がデプロイメント設定である。</p>
+<section id="id3">
+<h3>デプロイメントパターン<a class="headerlink" href="#id3" title="Permalink to this heading">¶</a></h3>
+<p>以下の3種類が代表的なデプロイメントパターンである</p>
+<ul class="simple">
+<li><p>ローリングデプロイ</p></li>
+<li><p>カナリアリリース</p></li>
+<li><p>ブルーグリーンデプロイ</p></li>
+</ul>
+<section id="id4">
+<h4>ローリングデプロイ<a class="headerlink" href="#id4" title="Permalink to this heading">¶</a></h4>
+<p>指定したバッチサイズずつ、更新デプロイされるデプロイパターン。<br />
+ポイントは、同一環境内で、事前設定した割合で機械的にデプロイが進むという点。</p>
+</section>
+<section id="id5">
+<h4>カナリアリリース<a class="headerlink" href="#id5" title="Permalink to this heading">¶</a></h4>
+<p>新しいバージョンを、少数のサーバーやユーザーに対してデプロイを行い、様子を見てから残りもデプロイするデプロイパターン。<br />
+ポイントは、同一環境内で、小規模リリースをして問題ないことを確認してから、デプロイを進めていくという点。</p>
+</section>
+<section id="id6">
+<h4>ブルーグリーンデプロイ<a class="headerlink" href="#id6" title="Permalink to this heading">¶</a></h4>
+<p>現在のバージョンをブルー、新しいバージョンをグリーンとして準備して、ブルーからグリーンに切り替えるデプロイパターン。<br />
+ポイントは、別環境を準備して環境ごと切り替えるという点。</p>
+</section>
+</section>
+<section id="id7">
+<h3>デプロイメント設定<a class="headerlink" href="#id7" title="Permalink to this heading">¶</a></h3>
+<p>以下はAWSで利用できる具体的なデプロイの方法であり、それぞれのデプロイメントパターンを実現するために利用される。</p>
+<ul class="simple">
+<li><p>AllAtOnce<br />
+一度に全てのデプロイをする（ローリングデプロイ</p></li>
+<li><p>OneAtATime<br />
+一回あたり、一つのデプロイをする（ローリングデプロイ</p></li>
+<li><p>HalfAtATime<br />
+一回あたり、半分のデプロイをする（ローリングデプロイ</p></li>
+<li><p>Linear10Percent5Minutes<br />
+一回あたり、決められた割合をデプロイするものを一定時間繰り返す（ローリングデプロイ</p></li>
+<li><p>Canary10Percent5Minutes<br />
+最初に決められた割合のデプロイを行って、一定の時間を経てから残りをデプロイする（カナリアリリース</p></li>
+<li><p>Route53を利用したBlueGreen<br />
+<img alt="" src="../_images/chap21_bluegreen_route53.png" /></p></li>
+<li><p>ALBを利用したBlueGreen<br />
+<img alt="" src="../_images/chap21_bluegreen_alb.png" /></p></li>
+</ul>
+</section>
+</section>
+<section id="codedeploy">
+<h2>CodeDeploy<a class="headerlink" href="#codedeploy" title="Permalink to this heading">¶</a></h2>
+<p>CodeDeployはEC2/AutoScaling・ECS・Lambda・オンプレへのデプロイを自動化するサービス。<br />
+デプロイするためのアプリケーションのリビジョン（アプリをインストールするためのファイル群）はS3もしくは、GitHubに保存することができる。</p>
+<section id="ec2">
+<h3>EC2/オンプレミス<a class="headerlink" href="#ec2" title="Permalink to this heading">¶</a></h3>
+<p>デプロイメントパターンとしては、ローリングデプロイがサポートされており、デプロイ設定は以下</p>
+<ul class="simple">
+<li><p>AllAtOnce</p></li>
+<li><p>HalfAtATime</p></li>
+<li><p>OneAtATime</p></li>
+</ul>
+<p>EC2・オンプレミスにCodeDeployを利用してデプロイする場合は、EC2とオンプレ側にCodeDeployエージェントをインストールしておく必要がある。</p>
+<p>appspec.yamlを準備しておくことで、デプロイ処理を記述された通りに実行することができ、一連のライフサイクルに応じて、追加処理を記述できる。<a class="reference external" href="https://dev.classmethod.jp/articles/codedeploy-applicationstop-hook-not-executed-for0first-deployment/">参考サイト</a></p>
+<p><img alt="" src="../_images/chap21_codedeploy.png" /></p>
+</section>
+<section id="ecs">
+<h3>ECS<a class="headerlink" href="#ecs" title="Permalink to this heading">¶</a></h3>
+<p>CodeDeployのデプロイメントパターンとしては、線形のローリングデプロイとカナリアがサポートされており、デプロイ設定は以下</p>
+<ul class="simple">
+<li><p>ECSCanary10Percent5Minutes</p></li>
+<li><p>ECSLinear10PercentEvery1Minutes</p></li>
+<li><p>ECSAllAtOnce</p></li>
+</ul>
+<p>CodePipelineを利用したBlueGreenDeployの設定も可能である。</p>
+</section>
+<section id="lambda">
+<h3>Lambda<a class="headerlink" href="#lambda" title="Permalink to this heading">¶</a></h3>
+<p>Lambdaのエイリアスとバージョンを利用したデプロイをすることができる。
+バージョンを付与すると変更できないイミュータブルであり、バージョンにエイリアスを付与することができ、エイリアスを利用してデプロイ設定を実現する。</p>
+<p><img alt="" src="../_images/chap21_lambda.png" /></p>
+<p>CodeDeploy側でエイリアスとバージョンの紐付けを行なって、割合指定を行う。
+デプロイメントパターンとしては、線形のローリングデプロイとカナリアがサポートされており、デプロイ設定は以下</p>
+<ul class="simple">
+<li><p>LambdaCanary10Percent5Minutes</p></li>
+<li><p>LambdaLinear10PercentEvery1Minutes</p></li>
+<li><p>LambdaAllAtOnce</p></li>
+</ul>
+</section>
+</section>
+<section id="id8">
+<h2>スタックのデプロイ<a class="headerlink" href="#id8" title="Permalink to this heading">¶</a></h2>
+<section id="cloudformation">
+<h3>CloudFormation<a class="headerlink" href="#cloudformation" title="Permalink to this heading">¶</a></h3>
+<p>テンプレートを利用して、AWSリソースを作成するとともに、作成されたリソースはスタックという単位で管理する。</p>
+<section id="id9">
+<h4>カスタムリソース<a class="headerlink" href="#id9" title="Permalink to this heading">¶</a></h4>
+<p>Resourceとしてカスタムリソースを含めることで任意のLambdaを呼び出して実行させることができる。
+利用方法としては、ResourceとしてCustomeResourceを定義し、ServiceTokenとしてLambdaのARNを指定する</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">AWSTemplateFormatVersion</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;2010-09-09&#39;</span>
+<span class="nt">Resources</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">MyCustomResource</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">Type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Custom::MyCustomResource</span>
+<span class="w">    </span><span class="nt">Version</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;1.0&#39;</span>
+<span class="w">    </span><span class="nt">Properties</span><span class="p">:</span><span class="w"> </span>
+<span class="w">      </span><span class="nt">ServiceToken</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">arn:aws:lambda:your-region:your-account-id:function:YourLambdaFunctionName</span>
+<span class="w">      </span><span class="nt">MyParameter</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">MyValue</span>
+</pre></div>
+</div>
+</section>
+<section id="id10">
+<h4>ヘルパースクリプト<a class="headerlink" href="#id10" title="Permalink to this heading">¶</a></h4>
+<p>CFNスタックの作成時や更新時にAWSリソースの設定を行うためのツールセットとしていくつか準備がされている</p>
+<ul class="simple">
+<li><p>cfn-init<br />
+AWS::CloudFormation::Initで定義されたデータを読み取って、スタック作成時の初期段階でcfn-initコマンドを呼び出すことで実行することができる</p></li>
+<li><p>cfn-signal<br />
+CloudForamtionに対しての作成や更新の成功失敗を通知するコマンド<br />
+これを利用することで、ウェイトコンディションリソースを利用して、作成順序を制御することなどができる。</p></li>
+<li><p>cfn-get-metadata<br />
+テンプレートファイルのメタデータを取得するために利用</p></li>
+<li><p>cfn-hup<br />
+テンプレートファイルの更新をポーリングして、変更があるとcfn-initを実行</p></li>
+</ul>
+</section>
+<section id="id11">
+<h4>スタックポリシー<a class="headerlink" href="#id11" title="Permalink to this heading">¶</a></h4>
+<p>スタックに含まれるリソースの変更を望まない場合に、スタックポリシーを利用することで変更を避けることができる。
+以下の例では、特定のDBインスタンスに対してのUpdateを拒否している。</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+  <span class="s2">&quot;Statement&quot;</span> <span class="p">:</span> <span class="p">[</span>
+    <span class="p">{</span>
+      <span class="s2">&quot;Effect&quot;</span> <span class="p">:</span> <span class="s2">&quot;Deny&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;Action&quot;</span> <span class="p">:</span> <span class="s2">&quot;Update:*&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;Principal&quot;</span><span class="p">:</span> <span class="s2">&quot;*&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;Resource&quot;</span> <span class="p">:</span> <span class="s2">&quot;LogicalResourceId/MyDBInstance&quot;</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+      <span class="s2">&quot;Effect&quot;</span> <span class="p">:</span> <span class="s2">&quot;Allow&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;Action&quot;</span> <span class="p">:</span> <span class="s2">&quot;Update:*&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;Principal&quot;</span><span class="p">:</span> <span class="s2">&quot;*&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;Resource&quot;</span> <span class="p">:</span> <span class="s2">&quot;*&quot;</span>
+    <span class="p">}</span>
+  <span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="deletionpolicy">
+<h4>DeletionPolicy<a class="headerlink" href="#deletionpolicy" title="Permalink to this heading">¶</a></h4>
+<p>テンプレートの作成時に、DeletionPolicyを指定することで、スタックの削除時に特定リソースを保護することができる。
+例えばRetainとすれば、スタックは削除されても対象のリソースは残るし、SnapShotを指定すると、スナップショットを取得してから削除する。</p>
+</section>
+<section id="cdk">
+<h4>CDK<a class="headerlink" href="#cdk" title="Permalink to this heading">¶</a></h4>
+<p>TypeScriptやPythonやJavaなどのソースコードを利用して、テンプレートを作成することができる。
+オブジェクト指向やループ、条件分岐を利用して IaCを記述できるメリットがある。</p>
+</section>
+</section>
+<section id="elastic-beanstalk">
+<h3>Elastic Beanstalk<a class="headerlink" href="#elastic-beanstalk" title="Permalink to this heading">¶</a></h3>
+<p>開発者が素早くAWSを利用するために、クライアントからEB CLIを利用して環境を構築することができる。</p>
+<p>EC CLIを利用するカレントディレクトリに<code class="docutils literal notranslate"><span class="pre">.ebextensions</span></code>ディレクトリを作成し、configファイルを配置することで、cfn-initのようにAppのカスタマイズが可能である。</p>
+</section>
+</section>
+<section id="id12">
+<h2>モニタリング<a class="headerlink" href="#id12" title="Permalink to this heading">¶</a></h2>
+<section id="aws-health">
+<h3>AWS Healthイベント<a class="headerlink" href="#aws-health" title="Permalink to this heading">¶</a></h3>
+<p>AWSアカウトに影響する機能変更や障害といったイベントをモニタリングできる</p>
+<ul class="simple">
+<li><p>アカウント固有のイベント：使用中のリソースに影響のあるもの</p></li>
+<li><p>パブリックイベント：利用してないサービスに関する情報</p></li>
+</ul>
+<p>さらにイベントにもカテゴリーがある</p>
+<ul class="simple">
+<li><p>issue(問題)</p></li>
+<li><p>accountNortification(アカウント通知)</p></li>
+<li><p>scheduledChange(スケジュールされた変更)</p></li>
+</ul>
+<p><img alt="" src="../_images/chap21_aws_health_dashboard.png" /></p>
+</section>
+<section id="cloudwatch">
+<h3>CloudWatch<a class="headerlink" href="#cloudwatch" title="Permalink to this heading">¶</a></h3>
+<p>キーとなるアップデートに関して整理する。</p>
+<section id="id13">
+<h4>メトリクスダッシュボード<a class="headerlink" href="#id13" title="Permalink to this heading">¶</a></h4>
+<p>複数のアカウントにまた型tメトリクスやログ収集が可能</p>
+</section>
+<section id="id14">
+<h4>アラーム<a class="headerlink" href="#id14" title="Permalink to this heading">¶</a></h4>
+<p>複数のアラームのAND・OR条件を設定してアラームアクションを実行可能</p>
+</section>
+<section id="logs">
+<h4>Logs<a class="headerlink" href="#logs" title="Permalink to this heading">¶</a></h4>
+<p>収集したログに対して、特定の文字列の発生回数をフィルターして、メトリクスの値として扱うことができる。
+また、機密情報などに関してはマスクして表示することなども可能。</p>
+</section>
+</section>
+<section id="vpc-flow-log">
+<h3>VPC Flow Log<a class="headerlink" href="#vpc-flow-log" title="Permalink to this heading">¶</a></h3>
+<p>ENIへのインバウンド・アウトバンドトラフィックに関する情報をCloudWatchやS3に配信することができる。
+バケットの中身までは保存しないが、送信元と先のIPやポート、プロトコルやバケット数、バイト数、開始終了時間など全般の情報をモニタリングすることができる。</p>
+<p><img alt="" src="../_images/chap21_vpc_flowlog.png" /></p>
+</section>
+<section id="aws-x-ray">
+<h3>AWS X-Ray<a class="headerlink" href="#aws-x-ray" title="Permalink to this heading">¶</a></h3>
+<p>アプリケーションの潜在的なバグやボトルネックを抽出するためのサービス。</p>
+<p>X-Ray SDKをAppに組み込むことで実行時間やリクエストの成功失敗がX-Rayに送信される。
+結果をサービスマップやトレース情報にマッピングすることでアプリケーション全体のボトルネックなどを確認できる。</p>
+<p><img alt="" src="../_images/chap21_x-ray.png" /></p>
+</section>
+<section id="siem-on-amazon-opensearch-service">
+<h3>SIEM on Amazon OpenSearch Service<a class="headerlink" href="#siem-on-amazon-opensearch-service" title="Permalink to this heading">¶</a></h3>
+<p>SIEM(Security Information and Event Management)と呼ばれる、ログの収集、一元的なモニタリング、分析が必要なシステムをAmazon OpenSearch Serviceを利用して、構築することができる。
+CFNテンプレートがオープンソースとしてGitHubに公開されているので即時に利用を開始することができる。</p>
+<p>各種サービスへのアクセスログやWAF、VPCFlowLog、Kinesis経由のログを集約してLambdaが変換してOpenSearch Serviceにロードして、可視化してくれる。</p>
+</section>
+</section>
+<section id="id15">
+<h2>メンテナンス<a class="headerlink" href="#id15" title="Permalink to this heading">¶</a></h2>
+<section id="aws-systemmanager">
+<h3>AWS SystemManager<a class="headerlink" href="#aws-systemmanager" title="Permalink to this heading">¶</a></h3>
+<p>EC2やオンプレに対して、SSM Agentをインストールすると、マネージドインスタンスとして、SystemManagerから管理を行うことができる。</p>
+<p>以下のような観点について管理することができる</p>
+<ul class="simple">
+<li><p>SessionManager<br />
+セキュリティグループでの設定をせず、キーペアも利用せずに、SessionManagerからコマンド実行が可能</p></li>
+<li><p>Run Command<br />
+事前に定義されたコマンドを実行することができる</p></li>
+<li><p>パッチマネージャー<br />
+対象に対してまとめてパッチを当てることができる</p></li>
+<li><p>Automation<br />
+事前に設定しておいたオートメーションドキュメントを実行することができる</p></li>
+</ul>
+</section>
+<section id="aws-config">
+<h3>AWS Config<a class="headerlink" href="#aws-config" title="Permalink to this heading">¶</a></h3>
+<p>AWSリソースの設定情報を収集し、変更などを記録・追跡することができるため、AWS環境内のコンプライアンスとガバナンスを確保するためのツールとして利用される。</p>
+<p>変更などの検知もすることができるため、コンプライアンスに準拠しない場合に強制的にSystemManagerのパッチで対応することもできる。</p>
+</section>
+</section>
 </section>
 
 
