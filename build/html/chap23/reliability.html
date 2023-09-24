@@ -54,7 +54,57 @@
 <li class="toctree-l1"><a class="reference internal" href="basic.html">ソリューション設計と継続的改善</a></li>
 <li class="toctree-l1"><a class="reference internal" href="operation.html">運用上の優秀性</a></li>
 <li class="toctree-l1"><a class="reference internal" href="security.html">セキュリティ</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">信頼性</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">信頼性</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#id2">災害対策</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#rpo">RPO</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#rto">RTO</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#dr">DRと対策</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id3">バックアップ&amp;リカバリー</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#aws">オンプレからAWSへのリカバリー</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id4">AWSのマルチリージョンのリカバリー</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#id5">パイロットライト</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id6">ウォームスタンバイ</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id7">マルチサイト アクティブ/アクティブ</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#global-accelerator">Global Accelerator</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#aws-fault-injectionn-simulator">AWS Fault Injectionn Simulator</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#route53">Route53</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id8">ルーティングポリシー</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id9">フェイルオーバールーティング</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id10">位置情報ルーティング</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id11">レイテンシールーティング</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#db">DBの信頼性向上</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#rds-proxy">RDS Proxy</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#app">Appの信頼性向上</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#autoscaling">AutoScaling</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id12">スケーリングポリシー</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#sqs">SQS</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id18">SQSを利用したオートスケーリングルール</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id19">優先度を考慮したキュー</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id20">AWSの利用制限</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#service-quotas">Service Quotas</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id21">クォータモニタ</a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="performance.html">パフォーマンス</a></li>
 <li class="toctree-l1"><a class="reference internal" href="cost.html">コスト最適化</a></li>
 </ul>
@@ -91,6 +141,219 @@
              
   <section id="id1">
 <h1>信頼性<a class="headerlink" href="#id1" title="Permalink to this heading">¶</a></h1>
+<section id="id2">
+<h2>災害対策<a class="headerlink" href="#id2" title="Permalink to this heading">¶</a></h2>
+<p>重要なAppでどんな時でも事業を継続できるようにしておく必要がある。<br />
+災害などシステムに影響する障害に備えるのが災害対策（DR）</p>
+<section id="rpo">
+<h3>RPO<a class="headerlink" href="#rpo" title="Permalink to this heading">¶</a></h3>
+<p>Recovery Point Objective<br />
+障害発生によりオンラインのデータが失われた際に、バックアップから復旧したデータがいつまでの時点まで戻るかのポイント。</p>
+</section>
+<section id="rto">
+<h3>RTO<a class="headerlink" href="#rto" title="Permalink to this heading">¶</a></h3>
+<p>Recovery Time Objective<br />
+障害発生から、システムが完全復旧するまでに要する時間。</p>
+</section>
+<section id="dr">
+<h3>DRと対策<a class="headerlink" href="#dr" title="Permalink to this heading">¶</a></h3>
+<p>DRに対して4つのシナリオがあり、RPOとRTOを保証するほどコストが高くなっていく</p>
+<ul class="simple">
+<li><p>バックアップ&amp;リストア</p></li>
+<li><p>パイロットライト</p></li>
+<li><p>ウォームスタンバイ</p></li>
+<li><p>マルチサイト アクティブ/アクティブ</p></li>
+</ul>
+<p><img alt="RPOとRTOのイメージ" src="../_images/chap23_dr_rto_rpo.png" /></p>
+<p><a class="reference external" href="https://aws.amazon.com/jp/blogs/news/disaster-recovery-dr-architecture-on-aws-part-1-strategies-for-recovery-in-the-cloud/">AWSの公式</a></p>
+<p><img alt="" src="../_images/chap23_dr_4senario.png" />
+<a class="reference external" href="https://qiita.com/emiki/items/6039bc7e608a1b1afc8a">Qiiitaの記事</a></p>
+</section>
+<section id="id3">
+<h3>バックアップ&amp;リカバリー<a class="headerlink" href="#id3" title="Permalink to this heading">¶</a></h3>
+<p>完全に火を消しておいて、同じ環境を作れる道具だけ準備しておくイメージ。<br />
+定期的にバックアップを作成しておいて、障害時にバックアップから復旧を行う。</p>
+<section id="aws">
+<h4>オンプレからAWSへのリカバリー<a class="headerlink" href="#aws" title="Permalink to this heading">¶</a></h4>
+<p>オンプレで稼働しているシステムのバックアップをAWSにしておいて、障害時にはAWS内でリカバリーをするという構成。</p>
+<p>DBに関しては、S3バケットに保存し、保存期間や取り出すスピードに応じてストレージクラスを選定する。
+WebAppに関しては、AMIを作成しておいて、CloudFormationを利用して起動させる。</p>
+<section id="storage-gateway">
+<h5>Storage Gateway<a class="headerlink" href="#storage-gateway" title="Permalink to this heading">¶</a></h5>
+<p>オンプレミスのデータとAWSのデータを統合するクラウドストレージサービス。
+これにより、オンプレミスのAppからシームレスにAWS上のストレージを利用することができる。</p>
+<p>3つの利用形態と、4つのゲートウェイがある</p>
+<ul class="simple">
+<li><p>ファイルゲートウェイ</p>
+<ul>
+<li><p>S3ファイルゲートウェイ<br />
+S3に直接ファイルを保存するオンプレのファイルベースアプリでS3のオブジェクトストレージを利用する。</p></li>
+<li><p>FSxファイルゲートウェイ<br />
+オンプレからFSx for Windows File Serverへのアクセスを可能にする。</p></li>
+</ul>
+</li>
+<li><p>ボリュームゲートウェイ<br />
+iSCSIブロックプロトコルを利用してブロックストレージS3にファイルを保存し、ブロックストレージへのアクセスを提供する。</p>
+<ul>
+<li><p>キャッシュ型モード<br />
+オンプレ側は頻繁にアクセスされるデータをキャッシュとして所持しておき、実態はAWSに非同期に保存する。</p></li>
+<li><p>保管型モード<br />
+オンプレのに全てのデータが保存され、非同期にS3にバックアップが保存される。</p></li>
+</ul>
+</li>
+<li><p>テープゲートウェイ<br />
+既存のオンプレのバックアップアプリと東堂して、仮想テープライブラリとして動作する</p></li>
+</ul>
+<p><img alt="" src="../_images/chap23_storage_gw.png" />
+<a class="reference external" href="https://pages.awscloud.com/rs/112-TZM-766/images/AWS-Black-Belt_2023_AWS-Storage-Gateway_0131_v1.pdf">BlackBelt</a></p>
+</section>
+</section>
+<section id="id4">
+<h4>AWSのマルチリージョンのリカバリー<a class="headerlink" href="#id4" title="Permalink to this heading">¶</a></h4>
+<p>AWSで稼働しているシステムのバックアップを別リージョンにしておいて、障害時には別リージョンでリカバリーをするという構成。</p>
+<p>注意点として、EC2のAMIやRDSのスナップショットは復元先のリージョンへ定期的にクロスリージョンコピーする必要がある。</p>
+<section id="aws-backup">
+<h5>AWS Backup<a class="headerlink" href="#aws-backup" title="Permalink to this heading">¶</a></h5>
+<p>AWSのストレージ、DBサービスのバックアップを一元管理して自動化できるサービス。
+これまでもバックアップできたが、AWS Backupを利用すると主要サービスを一元管理、設定することができる。
+対象は以下など</p>
+<ul class="simple">
+<li><p>EC2</p></li>
+<li><p>EBS</p></li>
+<li><p>RDS</p></li>
+<li><p>DynamoDB</p></li>
+<li><p>EFS</p></li>
+</ul>
+<p>ポイントは、バックアップ管理単位を意味するバックアップボールドやバックアップに関するルールを定めるバックアッププラン。
+全体像や設定イメージについては、<a class="reference external" href="https://dev.classmethod.jp/articles/aws-backup-perfect-understand/">classmethodの記事</a>がおすすめ。</p>
+</section>
+</section>
+</section>
+<section id="id5">
+<h3>パイロットライト<a class="headerlink" href="#id5" title="Permalink to this heading">¶</a></h3>
+<p>パイロットライトは種火という意味。本当に最低限の環境を別に準備しておく。必要になったら火を大きくするイメージ。<br />
+DBは別リージョンに低いスペックのものを作成しておいてデータの同期を行う。
+アプリケーションは、停止しておいて、障害時に起動しDR用のDBを利用する。</p>
+<p>App側はAMIとCFNを作成しておき、災害時に実行することで起動するのはバックアップ&amp;リカバリーと同じ。
+RRDSやS3、DynamoDBはクロスリージョンレプリケーションをしておくことで、リアルタイムに近いコピーをしておく。</p>
+</section>
+<section id="id6">
+<h3>ウォームスタンバイ<a class="headerlink" href="#id6" title="Permalink to this heading">¶</a></h3>
+<p>完全に同じ環境を低いスペックで準備しておく。必要になったら火を大きくするイメージ。<br />
+DBとApp両方とも低いスペックのものを別リージョンに起動させておいて、障害時にDNSを切り替えて稼働させる。</p>
+<p>Appについても最小構成でスタンバイしておく。AutoScalingの設定などを行なっておくことで、DR後も本番のトラフィックに対応できるようにしておく。</p>
+</section>
+<section id="id7">
+<h3>マルチサイト アクティブ/アクティブ<a class="headerlink" href="#id7" title="Permalink to this heading">¶</a></h3>
+<p>完全に同じ環境をどうスペックで準備しておく。最初から同じ大きさの火をつけておくイメージ。<br />
+DBとApp両方とも本番と同じスペックのものを別リージョンに起動させておいて、障害時にDNSを切り替えて稼働させる。</p>
+<section id="global-accelerator">
+<h4>Global Accelerator<a class="headerlink" href="#global-accelerator" title="Permalink to this heading">¶</a></h4>
+<p>Route53を利用して、障害発生時にルーティングの切り替えを行うことができるが、キャッシュにより一部のユーザーを古い障害が発生している方へルーティングしてしまう可能性がある。GlobalAcceleratorは即時に宛先を更新するので、キャッシュの問題が発生しないため、これらを組み合わせて利用しているとキャッシュの影響を受けないで済む。</p>
+<p>Global Acceleratorは、元々はDRのフェイルオーバーではなく、マルチリージョン構成でレイテンシーを低減するために利用される。</p>
+</section>
+</section>
+<section id="aws-fault-injectionn-simulator">
+<h3>AWS Fault Injectionn Simulator<a class="headerlink" href="#aws-fault-injectionn-simulator" title="Permalink to this heading">¶</a></h3>
+<p>DRの対策が設定通り動くかのテストに利用できるサービス。<br />
+用意されたシナリオをAWSのリソースに注入することで災害をシミュレートすることができる。</p>
+</section>
+</section>
+<section id="route53">
+<h2>Route53<a class="headerlink" href="#route53" title="Permalink to this heading">¶</a></h2>
+<p>AWSのDNSサービスであり、パブリック（ウェブ上）やプライベート（VPC内）のリゾルバーを提供する。
+ヘルスチェックをRoute53で行うことができる。</p>
+<section id="id8">
+<h3>ルーティングポリシー<a class="headerlink" href="#id8" title="Permalink to this heading">¶</a></h3>
+<section id="id9">
+<h4>フェイルオーバールーティング<a class="headerlink" href="#id9" title="Permalink to this heading">¶</a></h4>
+<p>プライマリに対して、障害が発生した場合にセカンダリとして設定している宛先へルーティングにフェイルオーバーしてくれる。</p>
+</section>
+<section id="id10">
+<h4>位置情報ルーティング<a class="headerlink" href="#id10" title="Permalink to this heading">¶</a></h4>
+<p>接続元に対する、ルーティング先を設定することができる。
+接続元の位置情報は事前に準備されている大陸、国、州などから選択する。設定したルールに合わない場合はデフォルトで設定した宛先にルーティングされる。</p>
+</section>
+<section id="id11">
+<h4>レイテンシールーティング<a class="headerlink" href="#id11" title="Permalink to this heading">¶</a></h4>
+<p>複数のレコードの中から一番低いレイテンシーのレコードを返す。</p>
+</section>
+</section>
+</section>
+<section id="db">
+<h2>DBの信頼性向上<a class="headerlink" href="#db" title="Permalink to this heading">¶</a></h2>
+<p>RDSに対して大量の接続が発生する場合に、Too many connectionsというメッセージが発行され、接続拒否が発生する。
+これは、機会損失やデータの喪失につながるため、対策を打つ必要がある。</p>
+<section id="rds-proxy">
+<h3>RDS Proxy<a class="headerlink" href="#rds-proxy" title="Permalink to this heading">¶</a></h3>
+<p>RDS Proxyを利用することで、DBへの接続のスケーラビリティと可用性を確保してくれる。アプリケーションにおけるキューのような役割を担っているといえる。
+具体的には。DB接続プールを確立して効率的な接続を提供するとともに、仮に接続できない場合もProxyによって自動調整してくれる。</p>
+<p>RDS ProxyはAurora、RDS(MySQS/Postgres)に対応している。</p>
+</section>
+</section>
+<section id="app">
+<h2>Appの信頼性向上<a class="headerlink" href="#app" title="Permalink to this heading">¶</a></h2>
+<p>App側についても、処理が集中することによるボトルネックやデータ損失を避けるために、SQSを利用したキューイングやAutoScalingによる並列処理を行う必要性がある。</p>
+<section id="autoscaling">
+<h3>AutoScaling<a class="headerlink" href="#autoscaling" title="Permalink to this heading">¶</a></h3>
+<p>EC2やECSのコンテナを自動で増減し、ELBからのリクエストを分散させることで負荷分散する。</p>
+<section id="id12">
+<h4>スケーリングポリシー<a class="headerlink" href="#id12" title="Permalink to this heading">¶</a></h4>
+<section id="id13">
+<h5>スケジュールベース<a class="headerlink" href="#id13" title="Permalink to this heading">¶</a></h5>
+<p>特定の時間帯に対して、希望するインスタンス数や最大数最小数を変更することができる。<br />
+最大数、最小数の設定を変更できるのはスケジュールベースポリシーのみ。</p>
+</section>
+<section id="id14">
+<h5>シンプルスケーリング<a class="headerlink" href="#id14" title="Permalink to this heading">¶</a></h5>
+<p>CloudWatchアラームの値をトリガーとして追加削除を行う。<br />
+次に説明するステップポリシーの方が新しく、基本的にはステップポリシーを適用する。
+クールダウンと呼ばれる時間を設定することができ、オートスケールが行われてから、次のオートスケールが行われるまでの間隔を指定することができる。</p>
+</section>
+<section id="id15">
+<h5>ステップスケーリング<a class="headerlink" href="#id15" title="Permalink to this heading">¶</a></h5>
+<p>CloudWatchアラームの値をトリガーとして段階的なスケールアウトとスケールインを設定することができる。
+ウォームアップと呼ばれる時間を設定することができ、起動したインスタンスが十分な機能を発揮できるまでの時間を指定し、それまでは追加のオートスケールは行われない。</p>
+</section>
+<section id="id16">
+<h5>ターゲット追跡<a class="headerlink" href="#id16" title="Permalink to this heading">¶</a></h5>
+<p>利用するCloudWatchのメトリクスを指定し、そのメトリクスに対するターゲット値を設定することでオートスケールが行われる。
+スケールアウトは短い時間で行われ、スケールインは時間をかけて行われる。</p>
+</section>
+<section id="id17">
+<h5>予測スケーリング<a class="headerlink" href="#id17" title="Permalink to this heading">¶</a></h5>
+<p>過去のメトリクス情報を利用して、機械学習により必要な台数を事前に起動しておく。</p>
+</section>
+</section>
+</section>
+<section id="sqs">
+<h3>SQS<a class="headerlink" href="#sqs" title="Permalink to this heading">¶</a></h3>
+<p>SQSを利用することで疎結合なアプリ構成とすることができる。</p>
+<section id="id18">
+<h4>SQSを利用したオートスケーリングルール<a class="headerlink" href="#id18" title="Permalink to this heading">¶</a></h4>
+<p>SQSにはキューに溜まっているメッセージ数を示すメトリクスであるApproximateNumberOfMessagesVisibleを利用できるが、起動中のインスタンスを踏まえて起動数は定めるべきであるので、AutoScalingのInserviceのインスタンス数を取得し、1インスタンスで処理すべきキューの数をメトリクスとしてオートスケーリングルールを定めると良い。</p>
+</section>
+<section id="id19">
+<h4>優先度を考慮したキュー<a class="headerlink" href="#id19" title="Permalink to this heading">¶</a></h4>
+<p>SNSからSQSへメッセージを発行するファンアウトの構成をとって、SNS側でサブスクリプションフィルターの機能を利用することで、SNSからPublishするメッセージを優先度高いものをキューAに優先度の低いものをキューBに発行することができる。</p>
+<p><img alt="" src="../_images/chap23_sqs_priority.png" />
+<a class="reference external" href="https://dev.classmethod.jp/articles/amazon-sns-payload-based-message-filtering/">classmethodの記事</a></p>
+</section>
+</section>
+</section>
+<section id="id20">
+<h2>AWSの利用制限<a class="headerlink" href="#id20" title="Permalink to this heading">¶</a></h2>
+<p>AWSのリソースには利用制限が設定されているものがある。
+利用制限について管理・通知するサービスについてService Quotasとクォータモニタがある</p>
+<section id="service-quotas">
+<h3>Service Quotas<a class="headerlink" href="#service-quotas" title="Permalink to this heading">¶</a></h3>
+<p>利用制限の中でも調整可能な制限があるものに対して現在のAWSでどうなっているかをモニターし、変更をリクエストすることができる。</p>
+</section>
+<section id="id21">
+<h3>クォータモニタ<a class="headerlink" href="#id21" title="Permalink to this heading">¶</a></h3>
+<p>サービスの使用量が制限に近づいているモニタリングをすることができ、通知をさせることができる。</p>
+</section>
+</section>
 </section>
 
 
