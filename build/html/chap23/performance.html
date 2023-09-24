@@ -55,7 +55,65 @@
 <li class="toctree-l1"><a class="reference internal" href="operation.html">運用上の優秀性</a></li>
 <li class="toctree-l1"><a class="reference internal" href="security.html">セキュリティ</a></li>
 <li class="toctree-l1"><a class="reference internal" href="reliability.html">信頼性</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">パフォーマンス</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">パフォーマンス</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#ec2">EC2のパフォーマンス</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id2">インスタンスタイプ</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id3">インスタンスファミリー</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id4">追加機能</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#id5">バーストパフォーマンスインスタンス</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id6">ネットワークのパフォーマンス</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id7">プレスメントグループ</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id8">クラスタプレイスメントグループ</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id9">パーティションプレイスメントグループ</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id10">スプレッドプレイスメントグループ</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id11">ストレージのパフォーマンス</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#amazon-fsx">Amazon FSx</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#amazon-fsx-for-windows-server">Amazon FSx for Windows Server</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#amazon-fsx-for-lustre">Amazon FSx for Lustre</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#s3">S3</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id12">マルチパートアップロード</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#s3-transfer-acceleration">S3 Transfer Acceleration</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#db">DBのパフォーマンス</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#rds">RDS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#aurora">Aurora</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#dynamodb">DynamoDB</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#elasticache">ElastiCache</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#memcached">Memcached</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#redis">Redis</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#app">Appのパフォーマンス</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#cloudfront">CloudFront</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id13">オリジンへのアクセス制限</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id15">暗号化</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id16">エッジ関数</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#global-accelerator">Global Accelerator</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#api-gw">API GW</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id17">キャッシュ</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id18">使用量プラン</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id19">認証</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="cost.html">コスト最適化</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">移行とモダナイゼーションの加速:</span></p>
@@ -91,6 +149,245 @@
              
   <section id="id1">
 <h1>パフォーマンス<a class="headerlink" href="#id1" title="Permalink to this heading">¶</a></h1>
+<section id="ec2">
+<h2>EC2のパフォーマンス<a class="headerlink" href="#ec2" title="Permalink to this heading">¶</a></h2>
+<section id="id2">
+<h3>インスタンスタイプ<a class="headerlink" href="#id2" title="Permalink to this heading">¶</a></h3>
+<p>インスタンスタイプは4つのセクションに分類できる</p>
+<blockquote>
+<div><p>ファミリー/世代/追加機能.サイズ</p>
+</div></blockquote>
+<p>例えばm6g.largeは、</p>
+<ul class="simple">
+<li><p>m・・・・ファミリー</p></li>
+<li><p>6・・・・世代</p></li>
+<li><p>g・・・・追加機能</p></li>
+<li><p>large・・サイズ</p></li>
+</ul>
+<p>と分割できる。</p>
+<section id="id3">
+<h4>インスタンスファミリー<a class="headerlink" href="#id3" title="Permalink to this heading">¶</a></h4>
+<p>代表的なインスタンスファミリーについては理解しておく</p>
+<table class="colwidths-auto docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>用途</p></th>
+<th class="head"><p>ユースケース</p></th>
+<th class="head"><p>インスタンスファミリー</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>汎用</p></td>
+<td><p>一般アプリ</p></td>
+<td><p>T系・M系・A系</p></td>
+</tr>
+<tr class="row-odd"><td><p>コンピューティング最適化</p></td>
+<td><p>機械学習推論</p></td>
+<td><p>C系</p></td>
+</tr>
+<tr class="row-even"><td><p>メモリ最適化</p></td>
+<td><p>大規模データセット処理</p></td>
+<td><p>R系・X系</p></td>
+</tr>
+<tr class="row-odd"><td><p>高速コンピューティング</p></td>
+<td><p>機械学習推論</p></td>
+<td><p>P系・G系・F系・Tm系</p></td>
+</tr>
+<tr class="row-even"><td><p>ストレージ最適化</p></td>
+<td><p>ビックデータ処理</p></td>
+<td><p>I系・D系・H系</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="id4">
+<h4>追加機能<a class="headerlink" href="#id4" title="Permalink to this heading">¶</a></h4>
+<p>追加機能</p>
+<ul class="simple">
+<li><p>d：一時的なストレージであるインスタンスストア（エフェメラルストレージ）を使用可能</p></li>
+<li><p>n：ネットワーク強化</p></li>
+<li><p>a：AMDプロセッサ搭載</p></li>
+<li><p>g：Gravitonプロセッサ搭載</p></li>
+</ul>
+</section>
+</section>
+<section id="id5">
+<h3>バーストパフォーマンスインスタンス<a class="headerlink" href="#id5" title="Permalink to this heading">¶</a></h3>
+<p>T系のインスタンスにはCPUバーストパフォーマンス機能がある。</p>
+<p>通常はインスタンスサイズごとに定められたCPUが使用され、ベースラインを超える場合にはCPUクレジットが消費されれる。
+消費されたクレジットは、ベースラインに戻って時間経過すると回復する。</p>
+</section>
+<section id="id6">
+<h3>ネットワークのパフォーマンス<a class="headerlink" href="#id6" title="Permalink to this heading">¶</a></h3>
+<p>EC2は基本的にはENA（Elastic Network Adaptor)がサポートされていて、高い帯域幅、パケットパフォーマンス、インスタンス間の低レイテンシーが提供されている。</p>
+<p>単一パケットで渡すデータサイズについても、全てのEC2でイーサネットのデフォルトである1500MTUが確保されている。
+さらに、ほとんどのインスタンスで9001MTU(ジャンボフレーム)がサポートされている。ただし、IGWやVPN接続で1500MTUに制限される。</p>
+</section>
+<section id="id7">
+<h3>プレスメントグループ<a class="headerlink" href="#id7" title="Permalink to this heading">¶</a></h3>
+<p>インスタンスの配置戦略により、配置を分散させることで障害発生時の影響を抑えることができる。一方で配置を集中させることでネットワークレイテンシ−を低減することができる。</p>
+<p>プレスメントグループには3パターンがある</p>
+<section id="id8">
+<h4>クラスタプレイスメントグループ<a class="headerlink" href="#id8" title="Permalink to this heading">¶</a></h4>
+<p>全て同じAZの同じネットワークセグメントに配置される。<br />
+ネットワークレイテンシーを低減させることができる
+<img alt="" src="../_images/chap24_placement_1.png" /></p>
+</section>
+<section id="id9">
+<h4>パーティションプレイスメントグループ<a class="headerlink" href="#id9" title="Permalink to this heading">¶</a></h4>
+<p>全て同じAZの中ではあるものの、ハードウェアは別にすることで障害を低減するパーティションという単位を作成する。
+これは、そもそも分散処理を想定しているユースケースにおいて、性能向上を期待することができる。
+<img alt="" src="../_images/chap24_placement_2.png" /></p>
+</section>
+<section id="id10">
+<h4>スプレッドプレイスメントグループ<a class="headerlink" href="#id10" title="Permalink to this heading">¶</a></h4>
+<p>同じAZ内ではあるものの、独自のネットワークと電源がある異なるラックに配置される。
+1つのAZ内に最大7つのスプレッドグループを配置することができる。
+<img alt="" src="../_images/chap24_placement_3.png" /></p>
+</section>
+</section>
+</section>
+<section id="id11">
+<h2>ストレージのパフォーマンス<a class="headerlink" href="#id11" title="Permalink to this heading">¶</a></h2>
+<section id="amazon-fsx">
+<h3>Amazon FSx<a class="headerlink" href="#amazon-fsx" title="Permalink to this heading">¶</a></h3>
+<section id="amazon-fsx-for-windows-server">
+<h4>Amazon FSx for Windows Server<a class="headerlink" href="#amazon-fsx-for-windows-server" title="Permalink to this heading">¶</a></h4>
+<p>SMBプロトコルをサポートしており、Windowsからのアクセスが非常に簡単。
+一方でLusterのクライアントをインストールすることでAmazon FSx for Lustreも利用できる。</p>
+</section>
+<section id="amazon-fsx-for-lustre">
+<h4>Amazon FSx for Lustre<a class="headerlink" href="#amazon-fsx-for-lustre" title="Permalink to this heading">¶</a></h4>
+<p>高性能計算や大規模ワークロードで使用されている分散ファイルシステムがLustreである。
+FSx for Lustreは効率に起動でき、S3との連携も統合されており、インポートとエクスポートがしやすいメリットがある。</p>
+</section>
+</section>
+<section id="s3">
+<h3>S3<a class="headerlink" href="#s3" title="Permalink to this heading">¶</a></h3>
+<section id="id12">
+<h4>マルチパートアップロード<a class="headerlink" href="#id12" title="Permalink to this heading">¶</a></h4>
+<p>大規模なデータについてはAWS側でアップロード時に分割してアップロードをしてくれる。</p>
+</section>
+<section id="s3-transfer-acceleration">
+<h4>S3 Transfer Acceleration<a class="headerlink" href="#s3-transfer-acceleration" title="Permalink to this heading">¶</a></h4>
+<p>グローバルなインターネットからアップロードする際に、レイテンシーが大きくなる可能性があるので、Transger Accelerationを有効化すると、エッジロケーションを経由したアップロードになるので性能が改善する。</p>
+</section>
+</section>
+</section>
+<section id="db">
+<h2>DBのパフォーマンス<a class="headerlink" href="#db" title="Permalink to this heading">¶</a></h2>
+<section id="rds">
+<h3>RDS<a class="headerlink" href="#rds" title="Permalink to this heading">¶</a></h3>
+<p>インスタンスクラスがあり、考え方はEC2と同様である。<br />
+ストレージは汎用SSD・プロビジョンどIOPSとマグネティックから選択できる。<br />
+リードレプリカと呼ばれる、読み取り専用のDBとエンドポイントを発行することができる。</p>
+</section>
+<section id="aurora">
+<h3>Aurora<a class="headerlink" href="#aurora" title="Permalink to this heading">¶</a></h3>
+<p>MySQSとPostgreSQLと互換性のある高パフォーマンスDBエンジンAuroraが利用できる。
+AWSがクラウドの特性を利用した分散型のアーキテクチャを検討した形になっている。</p>
+</section>
+<section id="dynamodb">
+<h3>DynamoDB<a class="headerlink" href="#dynamodb" title="Permalink to this heading">¶</a></h3>
+<p>パーティションキーはアクセスが分散するようにすることで性能が改善する。
+日付などをパーティションキーにするとアクセス集中する可能性があるので、適当なサフィックスをつけるなど工夫をする。</p>
+</section>
+<section id="elasticache">
+<h3>ElastiCache<a class="headerlink" href="#elasticache" title="Permalink to this heading">¶</a></h3>
+<p>マネージドなインメモリサービスであり、データの読み取り速度を高速化させることができる。
+高頻度で利用されるクエリの結果や複雑な計算を要する計算処理結果の負荷を低減することができる</p>
+<section id="memcached">
+<h4>Memcached<a class="headerlink" href="#memcached" title="Permalink to this heading">¶</a></h4>
+<p>単純なキーバリュー形式でのペアを保存することに特化しているため、シンプルかつ費用対効果が高いようなイメージ。</p>
+</section>
+<section id="redis">
+<h4>Redis<a class="headerlink" href="#redis" title="Permalink to this heading">¶</a></h4>
+<p>単純なキーバリュー形式だけでなく、リスト・セット・ハッシュ・ビットマップなど高度なデータ構造をサポートしている。
+さまざまなタイプのデータ構造を高速に操作したい需要に応えることができ、例えばソートセットという順番付きのデータをメモリー上に保存することができるので、ゲームのリーダーボードなどのユースケース例が有名。</p>
+</section>
+</section>
+</section>
+<section id="app">
+<h2>Appのパフォーマンス<a class="headerlink" href="#app" title="Permalink to this heading">¶</a></h2>
+<section id="cloudfront">
+<h3>CloudFront<a class="headerlink" href="#cloudfront" title="Permalink to this heading">¶</a></h3>
+<p>コンテンツ配信サービスで、キャッシュ機能によりオリジンへの負荷を低減することもできる。</p>
+<p>配信設定をディストリビューション、パスパターンに応じたルーティングのルールのことをビヘイビアとして指定することができる。</p>
+<section id="id13">
+<h4>オリジンへのアクセス制限<a class="headerlink" href="#id13" title="Permalink to this heading">¶</a></h4>
+<p>オリジンへの負荷を低減するためにCloudFrontを利用するため、オリジンへの直接アクセスは制御する必要がある。</p>
+<section id="oac-origin-access-control">
+<h5>OAC(Origin Access Control)<a class="headerlink" href="#oac-origin-access-control" title="Permalink to this heading">¶</a></h5>
+<p>S3がオリジンの場合に設定することができる。</p>
+<p>CloudFront側でOICを作成し、S3側のバケットポリシーでOICからのアクセスを許可する。
+バケットポリシーだけの制限も可能であるものの、シンプルかつ一貫性のあるルール設定ができるため推奨とのこと。</p>
+</section>
+<section id="id14">
+<h5>カスタムヘッダー<a class="headerlink" href="#id14" title="Permalink to this heading">¶</a></h5>
+<p>ALBがオリジンの場合に利用すると有効。<br />
+ディストリビューションのオリジン設定に任意のキーと値をカスタムヘッダーに追加する。
+リクエストヘッダーにこの値があることを確認しあって通信を許可する。</p>
+</section>
+<section id="ip">
+<h5>IP制限<a class="headerlink" href="#ip" title="Permalink to this heading">¶</a></h5>
+<p>オリジン側のセキュリティグループにおいてCloudFrontからのアクセスを許可する方法。<br />
+ただし、マネージドプレフィックスリストを使用する形になり、SGの制限すう60のうち55を利用してしまう。</p>
+</section>
+<section id="url">
+<h5>署名付きURL<a class="headerlink" href="#url" title="Permalink to this heading">¶</a></h5>
+<p>上記の3つとは異なり、ログイン後のユーザーだけが特定のリソースにアクセスできるようにするようなユースケースで利用する。
+例えばS3へのアクセスをログインユーザーに絞る場合は、CloufFrontのビヘイビアの設定で署名付きURLだけの許可に絞り、インスタンスでログイン処理をした後に、署名付きURLを発行する。</p>
+<p><img alt="" src="../_images/chap24_cloudfront_url.png" />
+<a class="reference external" href="https://dev.classmethod.jp/articles/cf-s3-deliveries-use-signurl/">classmethodの記事</a></p>
+</section>
+</section>
+<section id="id15">
+<h4>暗号化<a class="headerlink" href="#id15" title="Permalink to this heading">¶</a></h4>
+<p>CloudFront側に公開鍵を設定しておくことで、フィールド上のデータを暗号化することができる。
+秘密鍵は SecretsManagerに登録しておき、Lambdaなどで複合してアクションを起こすことで秘密情報を人目に触れることなく処理させることができる。</p>
+</section>
+<section id="id16">
+<h4>エッジ関数<a class="headerlink" href="#id16" title="Permalink to this heading">¶</a></h4>
+<p>軽い処理の<code class="docutils literal notranslate"><span class="pre">CloudFront</span> <span class="pre">Functions</span></code>とLambdaの拡張である<code class="docutils literal notranslate"><span class="pre">Lambda&#64;Edge</span></code>がある。</p>
+</section>
+</section>
+<section id="global-accelerator">
+<h3>Global Accelerator<a class="headerlink" href="#global-accelerator" title="Permalink to this heading">¶</a></h3>
+<p>ユーザーからのリクエストに対して、最適なAWSエンドポイントを返すことができるサービス。
+統一的なIP（エニーキャストIP）を利用して、適切なエンドポイントへのアクセスを提供するため、ユーザーはいつでも同じIPにアクセスすることができるようになる。</p>
+<p>また、TTLの設定がないため、フェイルオーバーの際には変更後即時に新規のポイントへルーティングがされるメリットがある。</p>
+</section>
+<section id="api-gw">
+<h3>API GW<a class="headerlink" href="#api-gw" title="Permalink to this heading">¶</a></h3>
+<section id="id17">
+<h4>キャッシュ<a class="headerlink" href="#id17" title="Permalink to this heading">¶</a></h4>
+<p>API GWのAPIステージの中でキャッシュを有効化することができる。
+指定したキャッシュインスタンスが作成されることになる。費用はキャッシュした容量と時間に応じた費用になる。</p>
+</section>
+<section id="id18">
+<h4>使用量プラン<a class="headerlink" href="#id18" title="Permalink to this heading">¶</a></h4>
+<p>APIキーごとに1sec/1day/1week/1monthの単位でAPI利用料を設定することができる。
+ユーザーに提供するAPIキーに値を設定することで異常な数のリクエストに制限をかけることができる。</p>
+</section>
+<section id="id19">
+<h4>認証<a class="headerlink" href="#id19" title="Permalink to this heading">¶</a></h4>
+<p>API GWで認証制限をするためには3つの方法がある</p>
+<section id="iam">
+<h5>IAM<a class="headerlink" href="#iam" title="Permalink to this heading">¶</a></h5>
+<p>クライアント側は実行許可ポリシーを作成し、ユーザーに付与する。
+そのユーザーのアクセスキーやシークレット情報を利用して署名を作成し、この署名をリクエストに含める。</p>
+<p>クロスアカウントの場合は、API GWでリソースベース許可として、クライアント側のユーザーを指定して許可してあげる。</p>
+</section>
+<section id="cognito">
+<h5>Cognito<a class="headerlink" href="#cognito" title="Permalink to this heading">¶</a></h5>
+<p>Cognito認証で取得したJWTをヘッダーに含めて実行することでAPIの実行権を発行することができる。</p>
+</section>
+<section id="lambda">
+<h5>Lambda<a class="headerlink" href="#lambda" title="Permalink to this heading">¶</a></h5>
+<p>カスタムで認証したり、サードパーティの認証を検証する</p>
+</section>
+</section>
+</section>
+</section>
 </section>
 
 
