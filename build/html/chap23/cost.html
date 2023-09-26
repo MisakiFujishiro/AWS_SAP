@@ -73,9 +73,9 @@
 <li class="toctree-l3"><a class="reference internal" href="#id4">S3リクエスタ支払い</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#dynamodb">DynamoDBのこすと</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#dynamodb">DynamoDBのコスト</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#id5">オンデマンドモード</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id6">プロビジョンどキャパシティモード</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id6">プロビジョンドキャパシティモード</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#dax">DAX</a></li>
 </ul>
 </li>
@@ -238,45 +238,76 @@
 </section>
 </section>
 <section id="dynamodb">
-<h2>DynamoDBのこすと<a class="headerlink" href="#dynamodb" title="Permalink to this heading">¶</a></h2>
+<h2>DynamoDBのコスト<a class="headerlink" href="#dynamodb" title="Permalink to this heading">¶</a></h2>
+<p>DynamoDBのアイテム読み込みと書き込みには2つのモードがあり、それぞれでコストが異なる。<br />
+継続的なリクエスト、緩やかな需要であれば、プロビジョンドキャパシティモードが良い。</p>
 <section id="id5">
 <h3>オンデマンドモード<a class="headerlink" href="#id5" title="Permalink to this heading">¶</a></h3>
+<p>書き込みリクエストが発生するたびに料金が発生する。<br />
+利用されていないタイミングでは、費用がかからないが、1回あたりの費用はプロビジョンドキャパシティモードより高い。
+急なリクエスト増加にも対応可能。</p>
 </section>
 <section id="id6">
-<h3>プロビジョンどキャパシティモード<a class="headerlink" href="#id6" title="Permalink to this heading">¶</a></h3>
+<h3>プロビジョンドキャパシティモード<a class="headerlink" href="#id6" title="Permalink to this heading">¶</a></h3>
+<p>1秒間の書き込み・読み込み回数・容量に対して設定するWCUとRCUを定義して時間当たりの費用が発生する。
+利用されてない場合でも費用がかかる。WCUとRCUで捌き切れる範囲なら費用は安いが、急なリクエスト増加には耐えられない。</p>
 </section>
 <section id="dax">
 <h3>DAX<a class="headerlink" href="#dax" title="Permalink to this heading">¶</a></h3>
+<p>VPC内部でDynamoDBのキャッシュとして利用することができ、数マイクロの応答が可能になる。
+作成されるノード単位で課金がかかる。</p>
 </section>
 </section>
 <section id="id7">
 <h2>その他<a class="headerlink" href="#id7" title="Permalink to this heading">¶</a></h2>
 <section id="id8">
 <h3>リザーブドオプション<a class="headerlink" href="#id8" title="Permalink to this heading">¶</a></h3>
+<p>リザーブドオプションのあるサービス</p>
+<ul class="simple">
+<li><p>RDS</p></li>
+<li><p>ElastiCache</p></li>
+<li><p>Redshift</p></li>
+<li><p>OpenSearch Service</p></li>
+</ul>
 </section>
 <section id="id9">
 <h3>コスト配分タグ<a class="headerlink" href="#id9" title="Permalink to this heading">¶</a></h3>
+<p>タグをサポートしているリソースに対してタグを適切に付与することで、Cost Explorerを利用した費用分析にタグを利用することができる。
+タグの運用を正しくするために、OrganizationsタグポリシーやSCPを利用する。</p>
 </section>
 </section>
 <section id="id10">
 <h2>コスト管理<a class="headerlink" href="#id10" title="Permalink to this heading">¶</a></h2>
 <section id="aws-compute-optimizer">
 <h3>AWS Compute Optimizer<a class="headerlink" href="#aws-compute-optimizer" title="Permalink to this heading">¶</a></h3>
+<p>EC2インスタンス、Auto Scalingグループ、ECSボリューム、Lambda関数、Fargateについて、使用しているメトリクスを分析して、リソースサイズが適切かをレポートしてくれる。<br />
+コスト削減とパフォーマンスに関する推奨を提供してくれる。</p>
 </section>
 <section id="cost-explorer">
 <h3>Cost Explorer<a class="headerlink" href="#cost-explorer" title="Permalink to this heading">¶</a></h3>
+<p>コストの使用状況に関して、グラフ分析することができる。
+費用の予測をしてくれるので未来日まで含めてグラフを提示できる。</p>
+<p>また、RIなどの使用状況と過去の実績に基づいた推奨事項を確認できる。</p>
 </section>
 <section id="anomaly-detection">
 <h3>Anomaly Detection<a class="headerlink" href="#anomaly-detection" title="Permalink to this heading">¶</a></h3>
+<p>支払いパターンをモニタリングしながら異常なコストを検出することができる。</p>
+<p>AWSサービス別やアカウント別、タグ別に対して異常値の検出をすることができる。</p>
 </section>
 <section id="aws-cost-and-usage-reports">
 <h3>AWS Cost and Usage Reports<a class="headerlink" href="#aws-cost-and-usage-reports" title="Permalink to this heading">¶</a></h3>
+<p>コストと使用状況のレポートを有効化することで、詳細な課金情報をS3に書き出してくれる。
+S3の情報をAthenaやQuickSightを利用して分析する。</p>
 </section>
 <section id="aws-budgets">
 <h3>AWS Budgets<a class="headerlink" href="#aws-budgets" title="Permalink to this heading">¶</a></h3>
+<p>アカウントやOrganizationsの予算を作成することができる
+予算を超える見通しや実際に肥えた場合にアラートを発進することができる。</p>
 </section>
 <section id="id11">
 <h3>請求アラーム<a class="headerlink" href="#id11" title="Permalink to this heading">¶</a></h3>
+<p>請求アラームを受け取るぷションを有効にすると、us-east-1のCloudWatchで請求アラームを設定できる。
+請求額メトリクスに対してアラームを設定し通知を行うことができる。</p>
 </section>
 </section>
 </section>
