@@ -61,7 +61,87 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="basic.html">移行とモダナイゼーションの加速</a></li>
 <li class="toctree-l1"><a class="reference internal" href="approach.html">移行評価とアプローチ</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">移行後アーキテクチャとアーキテクチャとモダナイゼーション</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">移行後アーキテクチャとアーキテクチャとモダナイゼーション</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#id2">クラウドジャーニー</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id3">コンテナ</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#ecs">ECS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#eks">EKS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#amazon-apprunner">Amazon AppRunner</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#amazon-managed-service-for-prometheus">Amazon Managed Service for Prometheus</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#amazon-managed-service-for-grafana">Amazon Managed Service for Grafana</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#kinesis">Kinesis</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#kinesis-data-streams">Kinesis Data Streams</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#kinesis-data-firehose">Kinesis Data Firehose</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#kinesis-data-analytics">Kinesis Data Analytics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#kinesis-video-streams">Kinesis Video Streams</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#msk">MSK</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id4">データレイク</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id5">データレイク構築</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#lake-formation">Lake Formation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#data-exchange">Data Exchange</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#appflow">AppFlow</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#id6">データの処理</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#aws-glue">AWS Glue</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#id7">データ分析</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#athena">Athena</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#id8">データの利用</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#sagemaker">SageMaker</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#comprehend">Comprehend</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#rekognition">Rekognition</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#forecast">Forecast</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fraud-detector">Fraud Detector</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#kendra">Kendra</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#translate">Translate</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#polly">Polly</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#transcribe">Transcribe</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#textract">Textract</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#lex">Lex</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#ses">SES</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id9">SESの送受信</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#amazon-pinpoint">Amazon Pinpoint</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#transfer-family">Transfer Family</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ip">固定IPアドレス対応</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#nlb">NLB</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#eni">ENI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#egress-only-igw">Egress-Only IGW</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id10">低遅延サービス</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#aws-outposts">AWS Outposts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#local-zones">Local Zones</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#wavelongth">Wavelongth</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#db">マネージドDBサービス</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#neptune">Neptune</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#documentdb">DocumentDB</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#keyspaces">Keyspaces</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#timestream">Timestream</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id11">マネージドアプリケーションサービス</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#appsync">AppSync</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#device-farm">Device Farm</a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 
         </div>
@@ -90,6 +170,168 @@
              
   <section id="id1">
 <h1>移行後アーキテクチャとアーキテクチャとモダナイゼーション<a class="headerlink" href="#id1" title="Permalink to this heading">¶</a></h1>
+<section id="id2">
+<h2>クラウドジャーニー<a class="headerlink" href="#id2" title="Permalink to this heading">¶</a></h2>
+</section>
+<section id="id3">
+<h2>コンテナ<a class="headerlink" href="#id3" title="Permalink to this heading">¶</a></h2>
+<section id="ecs">
+<h3>ECS<a class="headerlink" href="#ecs" title="Permalink to this heading">¶</a></h3>
+</section>
+<section id="eks">
+<h3>EKS<a class="headerlink" href="#eks" title="Permalink to this heading">¶</a></h3>
+</section>
+<section id="amazon-apprunner">
+<h3>Amazon AppRunner<a class="headerlink" href="#amazon-apprunner" title="Permalink to this heading">¶</a></h3>
+</section>
+<section id="amazon-managed-service-for-prometheus">
+<h3>Amazon Managed Service for Prometheus<a class="headerlink" href="#amazon-managed-service-for-prometheus" title="Permalink to this heading">¶</a></h3>
+</section>
+<section id="amazon-managed-service-for-grafana">
+<h3>Amazon Managed Service for Grafana<a class="headerlink" href="#amazon-managed-service-for-grafana" title="Permalink to this heading">¶</a></h3>
+</section>
+</section>
+<section id="kinesis">
+<h2>Kinesis<a class="headerlink" href="#kinesis" title="Permalink to this heading">¶</a></h2>
+<section id="kinesis-data-streams">
+<h3>Kinesis Data Streams<a class="headerlink" href="#kinesis-data-streams" title="Permalink to this heading">¶</a></h3>
+</section>
+<section id="kinesis-data-firehose">
+<h3>Kinesis Data Firehose<a class="headerlink" href="#kinesis-data-firehose" title="Permalink to this heading">¶</a></h3>
+</section>
+<section id="kinesis-data-analytics">
+<h3>Kinesis Data Analytics<a class="headerlink" href="#kinesis-data-analytics" title="Permalink to this heading">¶</a></h3>
+</section>
+<section id="kinesis-video-streams">
+<h3>Kinesis Video Streams<a class="headerlink" href="#kinesis-video-streams" title="Permalink to this heading">¶</a></h3>
+</section>
+<section id="msk">
+<h3>MSK<a class="headerlink" href="#msk" title="Permalink to this heading">¶</a></h3>
+</section>
+</section>
+<section id="id4">
+<h2>データレイク<a class="headerlink" href="#id4" title="Permalink to this heading">¶</a></h2>
+<section id="id5">
+<h3>データレイク構築<a class="headerlink" href="#id5" title="Permalink to this heading">¶</a></h3>
+<section id="lake-formation">
+<h4>Lake Formation<a class="headerlink" href="#lake-formation" title="Permalink to this heading">¶</a></h4>
+</section>
+<section id="data-exchange">
+<h4>Data Exchange<a class="headerlink" href="#data-exchange" title="Permalink to this heading">¶</a></h4>
+</section>
+<section id="appflow">
+<h4>AppFlow<a class="headerlink" href="#appflow" title="Permalink to this heading">¶</a></h4>
+</section>
+</section>
+<section id="id6">
+<h3>データの処理<a class="headerlink" href="#id6" title="Permalink to this heading">¶</a></h3>
+<section id="aws-glue">
+<h4>AWS Glue<a class="headerlink" href="#aws-glue" title="Permalink to this heading">¶</a></h4>
+</section>
+</section>
+<section id="id7">
+<h3>データ分析<a class="headerlink" href="#id7" title="Permalink to this heading">¶</a></h3>
+<section id="athena">
+<h4>Athena<a class="headerlink" href="#athena" title="Permalink to this heading">¶</a></h4>
+</section>
+</section>
+<section id="id8">
+<h3>データの利用<a class="headerlink" href="#id8" title="Permalink to this heading">¶</a></h3>
+<section id="sagemaker">
+<h4>SageMaker<a class="headerlink" href="#sagemaker" title="Permalink to this heading">¶</a></h4>
+</section>
+<section id="comprehend">
+<h4>Comprehend<a class="headerlink" href="#comprehend" title="Permalink to this heading">¶</a></h4>
+</section>
+<section id="rekognition">
+<h4>Rekognition<a class="headerlink" href="#rekognition" title="Permalink to this heading">¶</a></h4>
+</section>
+<section id="forecast">
+<h4>Forecast<a class="headerlink" href="#forecast" title="Permalink to this heading">¶</a></h4>
+</section>
+<section id="fraud-detector">
+<h4>Fraud Detector<a class="headerlink" href="#fraud-detector" title="Permalink to this heading">¶</a></h4>
+</section>
+<section id="kendra">
+<h4>Kendra<a class="headerlink" href="#kendra" title="Permalink to this heading">¶</a></h4>
+</section>
+<section id="translate">
+<h4>Translate<a class="headerlink" href="#translate" title="Permalink to this heading">¶</a></h4>
+</section>
+<section id="polly">
+<h4>Polly<a class="headerlink" href="#polly" title="Permalink to this heading">¶</a></h4>
+</section>
+<section id="transcribe">
+<h4>Transcribe<a class="headerlink" href="#transcribe" title="Permalink to this heading">¶</a></h4>
+</section>
+<section id="textract">
+<h4>Textract<a class="headerlink" href="#textract" title="Permalink to this heading">¶</a></h4>
+</section>
+<section id="lex">
+<h4>Lex<a class="headerlink" href="#lex" title="Permalink to this heading">¶</a></h4>
+</section>
+</section>
+</section>
+<section id="ses">
+<h2>SES<a class="headerlink" href="#ses" title="Permalink to this heading">¶</a></h2>
+<section id="id9">
+<h3>SESの送受信<a class="headerlink" href="#id9" title="Permalink to this heading">¶</a></h3>
+</section>
+<section id="amazon-pinpoint">
+<h3>Amazon Pinpoint<a class="headerlink" href="#amazon-pinpoint" title="Permalink to this heading">¶</a></h3>
+</section>
+</section>
+<section id="transfer-family">
+<h2>Transfer Family<a class="headerlink" href="#transfer-family" title="Permalink to this heading">¶</a></h2>
+</section>
+<section id="ip">
+<h2>固定IPアドレス対応<a class="headerlink" href="#ip" title="Permalink to this heading">¶</a></h2>
+<section id="nlb">
+<h3>NLB<a class="headerlink" href="#nlb" title="Permalink to this heading">¶</a></h3>
+</section>
+<section id="eni">
+<h3>ENI<a class="headerlink" href="#eni" title="Permalink to this heading">¶</a></h3>
+</section>
+<section id="egress-only-igw">
+<h3>Egress-Only IGW<a class="headerlink" href="#egress-only-igw" title="Permalink to this heading">¶</a></h3>
+</section>
+</section>
+<section id="id10">
+<h2>低遅延サービス<a class="headerlink" href="#id10" title="Permalink to this heading">¶</a></h2>
+<section id="aws-outposts">
+<h3>AWS Outposts<a class="headerlink" href="#aws-outposts" title="Permalink to this heading">¶</a></h3>
+</section>
+<section id="local-zones">
+<h3>Local Zones<a class="headerlink" href="#local-zones" title="Permalink to this heading">¶</a></h3>
+</section>
+<section id="wavelongth">
+<h3>Wavelongth<a class="headerlink" href="#wavelongth" title="Permalink to this heading">¶</a></h3>
+</section>
+</section>
+<section id="db">
+<h2>マネージドDBサービス<a class="headerlink" href="#db" title="Permalink to this heading">¶</a></h2>
+<section id="neptune">
+<h3>Neptune<a class="headerlink" href="#neptune" title="Permalink to this heading">¶</a></h3>
+</section>
+<section id="documentdb">
+<h3>DocumentDB<a class="headerlink" href="#documentdb" title="Permalink to this heading">¶</a></h3>
+</section>
+<section id="keyspaces">
+<h3>Keyspaces<a class="headerlink" href="#keyspaces" title="Permalink to this heading">¶</a></h3>
+</section>
+<section id="timestream">
+<h3>Timestream<a class="headerlink" href="#timestream" title="Permalink to this heading">¶</a></h3>
+</section>
+</section>
+<section id="id11">
+<h2>マネージドアプリケーションサービス<a class="headerlink" href="#id11" title="Permalink to this heading">¶</a></h2>
+<section id="appsync">
+<h3>AppSync<a class="headerlink" href="#appsync" title="Permalink to this heading">¶</a></h3>
+</section>
+<section id="device-farm">
+<h3>Device Farm<a class="headerlink" href="#device-farm" title="Permalink to this heading">¶</a></h3>
+</section>
+</section>
 </section>
 
 
