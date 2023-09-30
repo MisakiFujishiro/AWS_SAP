@@ -64,7 +64,15 @@
 <li class="toctree-l1 current"><a class="current reference internal" href="#">移行後アーキテクチャとアーキテクチャとモダナイゼーション</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#id2">クラウドジャーニー</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#id3">コンテナ</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#ecs">ECS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ecs">ECS</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#ecr">ECR</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id4">クラスタ</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id5">タスク定義</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id6">サービス</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id7">ネットワークモード</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#proton">Proton</a></li>
+</ul>
+</li>
 <li class="toctree-l3"><a class="reference internal" href="#eks">EKS</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#amazon-apprunner">Amazon AppRunner</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#amazon-managed-service-for-prometheus">Amazon Managed Service for Prometheus</a></li>
@@ -76,25 +84,25 @@
 <li class="toctree-l3"><a class="reference internal" href="#kinesis-data-firehose">Kinesis Data Firehose</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#kinesis-data-analytics">Kinesis Data Analytics</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#kinesis-video-streams">Kinesis Video Streams</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#msk">MSK</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#msk-managed-streaming-for-apache-kafka">MSK(Managed Streaming for Apache Kafka)</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#id4">データレイク</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#id5">データレイク構築</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#id8">データレイク</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id9">データレイク構築</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#lake-formation">Lake Formation</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#data-exchange">Data Exchange</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#appflow">AppFlow</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="#id6">データの処理</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id10">データの処理</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#aws-glue">AWS Glue</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="#id7">データ分析</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id11">データ分析</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#athena">Athena</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="#id8">データの利用</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id12">データの利用</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#sagemaker">SageMaker</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#comprehend">Comprehend</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#rekognition">Rekognition</a></li>
@@ -111,7 +119,7 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#ses">SES</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#id9">SESの送受信</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id13">SESの送受信</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#amazon-pinpoint">Amazon Pinpoint</a></li>
 </ul>
 </li>
@@ -122,7 +130,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#egress-only-igw">Egress-Only IGW</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#id10">低遅延サービス</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#id14">低遅延サービス</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#aws-outposts">AWS Outposts</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#local-zones">Local Zones</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#wavelongth">Wavelongth</a></li>
@@ -135,7 +143,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#timestream">Timestream</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#id11">マネージドアプリケーションサービス</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#id15">マネージドアプリケーションサービス</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#appsync">AppSync</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#device-farm">Device Farm</a></li>
 </ul>
@@ -172,47 +180,138 @@
 <h1>移行後アーキテクチャとアーキテクチャとモダナイゼーション<a class="headerlink" href="#id1" title="Permalink to this heading">¶</a></h1>
 <section id="id2">
 <h2>クラウドジャーニー<a class="headerlink" href="#id2" title="Permalink to this heading">¶</a></h2>
+<p>移行後に、クラウドの最適化を進め、継続的な改善していくことをクラウドジャーニーと呼ぶ</p>
 </section>
 <section id="id3">
 <h2>コンテナ<a class="headerlink" href="#id3" title="Permalink to this heading">¶</a></h2>
+<p>EC2にDockerサーバーを構築して運用することも可能だが、運用が煩雑になるため、コンテナ管理サービスを利用することが望ましい。コンテナオーケストレーションサービスとしてECSとEKS、アプリケーションをシンプルにデプロイするApp Runnerを解説する。</p>
 <section id="ecs">
 <h3>ECS<a class="headerlink" href="#ecs" title="Permalink to this heading">¶</a></h3>
+<p>ECRに保存したイメージを利用して、クラスタ、タスク定義、サービス設定を行うことでコンテナを管理することができる。</p>
+<section id="ecr">
+<h4>ECR<a class="headerlink" href="#ecr" title="Permalink to this heading">¶</a></h4>
+<p>コンテナイメージをリポジトリという単位で管理することができる。
+ECS/EKS/APpRunnerなどのコンテナ実行サービスから使用することができる。</p>
+</section>
+<section id="id4">
+<h4>クラスタ<a class="headerlink" href="#id4" title="Permalink to this heading">¶</a></h4>
+<p>コンテナを実行するサービスとタスクのグループであり、アクセス権限やコスト観点で分離する。
+EC2タイプとFargateタイプのこの時点で選択する。</p>
+</section>
+<section id="id5">
+<h4>タスク定義<a class="headerlink" href="#id5" title="Permalink to this heading">¶</a></h4>
+<p>具体的なコンテナの中身に対する設定を行う。具体的にはコンテナイメージ、タスクサイズ、ポートや起動するコンテナに対するIAM Roleなどを定義する。</p>
+</section>
+<section id="id6">
+<h4>サービス<a class="headerlink" href="#id6" title="Permalink to this heading">¶</a></h4>
+<p>コンテナをどのように起動するかの設定を行う。具体的には、実行するタスク定義やコンテナを起動するVPCやSG、スケーリング設定、ALBとの接続などを設定する。</p>
+</section>
+<section id="id7">
+<h4>ネットワークモード<a class="headerlink" href="#id7" title="Permalink to this heading">¶</a></h4>
+<section id="bridge">
+<h5>bridge (デフォルト)<a class="headerlink" href="#bridge" title="Permalink to this heading">¶</a></h5>
+<p>説明: Dockerの標準的なブリッジネットワークモードを使用します。</p>
+<p>タスク内の各コンテナはホストインスタンス上のDockerブリッジ (docker0) を経由して通信します。
+各タスクはホストインスタンス上での固有のポートマッピングを必要とします。このため、同じポートを使用する複数のタスクを同じホストインスタンス上で同時に実行することはできません。
+ただし、8080ポートが利用されている場合、別のホストポート、例えば8081をマッピングして、内部的にはコンテナの8080にルーティングするように設定することは可能です。</p>
+</section>
+<section id="host">
+<h5>host<a class="headerlink" href="#host" title="Permalink to this heading">¶</a></h5>
+<p>説明: ホストのネットワークモードを使用します。</p>
+<p>タスクのネットワークはEC2インスタンスのネットワークスタックを直接使用します。
+タコンテナはホストのネットワークスタックを直接使用するため、コンテナ内のポートとホストのポートが直接一致します。</p>
+</section>
+<section id="awsvpc">
+<h5>awsvpc<a class="headerlink" href="#awsvpc" title="Permalink to this heading">¶</a></h5>
+<p>説明: タスクごとに独自のネットワークインターフェースを持つモードです。</p>
+<p>各タスクは独自のENI (Elastic Network Interface) を持ち、プライベートIPアドレス, セキュリティグループ, ネットワークACLなどを持ちます。
+各ECSタスクには独自のElastic Network Interface (ENI)が割り当てられ、そのENIには独自のプライベートIPアドレスが与えられます。このため、ホストインスタンス上でのポートの競合を心配する必要がありません。
+Fargateでのタスク実行時や、VPC内での特定の通信ルールが必要な場合などに適しています。
+タスク内のコンテナは同じネットワークインターフェースを共有します。</p>
+</section>
+<section id="none">
+<h5>none<a class="headerlink" href="#none" title="Permalink to this heading">¶</a></h5>
+<p>説明: タスク内のコンテナは外部のネットワークと通信しないモードです。</p>
+<p>タスクが外部ネットワークと通信することはできません。
+タスク内の通信は可能です。</p>
+</section>
+</section>
+<section id="proton">
+<h4>Proton<a class="headerlink" href="#proton" title="Permalink to this heading">¶</a></h4>
+<p>コンテナのインフラ部分とサービス部分をテンプレートから作成することができるサービス。</p>
+<ul class="simple">
+<li><p>インフラ部分：環境テンプレート</p>
+<ul>
+<li><p>VPC</p></li>
+<li><p>IAM Role</p></li>
+<li><p>ECSクラスタ</p></li>
+</ul>
+</li>
+<li><p>サービス部分：サービステンプレート</p>
+<ul>
+<li><p>ALB</p></li>
+<li><p>ECSタスク</p></li>
+<li><p>ECSサービス</p></li>
+<li><p>ECR</p></li>
+<li><p>CodePipeline</p></li>
+</ul>
+</li>
+</ul>
+<p><img alt="" src="../_images/chap32_ecs_proton.png" />
+<a class="reference external" href="https://docs.aws.amazon.com/ja_jp/proton/latest/userguide/Welcome.html">公式ドキュメント</a></p>
+</section>
 </section>
 <section id="eks">
 <h3>EKS<a class="headerlink" href="#eks" title="Permalink to this heading">¶</a></h3>
+<p>コンテナのオーケストレーションサービスであるKubernetesのマネージドサービス。
+オンプレミスから移行する際に利用することができ、AWSのELBやIAM、VPC、CloudTrailなどと統合されている。</p>
 </section>
 <section id="amazon-apprunner">
 <h3>Amazon AppRunner<a class="headerlink" href="#amazon-apprunner" title="Permalink to this heading">¶</a></h3>
+<p>GithubやECRっと統合することによって、Appを継続的にデプロイ運用することができる。
+起動するためのインフラの管理が全て不要になるため、インフラの知識なく簡単にアプリ開発とデプロイができる。</p>
+<p><a class="reference external" href="https://pages.awscloud.com/rs/112-TZM-766/images/BOS22_AWS-Builders-Online-Series_2022-Q3_Presentation-Deck.pdf">参考ブログ</a></p>
 </section>
 <section id="amazon-managed-service-for-prometheus">
 <h3>Amazon Managed Service for Prometheus<a class="headerlink" href="#amazon-managed-service-for-prometheus" title="Permalink to this heading">¶</a></h3>
+<p>Prometheusというコンテナで構築されるマイクロサービス向けのモニタリングアラートサービスで、ECSとEKSと統合されている。</p>
 </section>
 <section id="amazon-managed-service-for-grafana">
 <h3>Amazon Managed Service for Grafana<a class="headerlink" href="#amazon-managed-service-for-grafana" title="Permalink to this heading">¶</a></h3>
+<p>GrafanaはKibanaのようにさまざまなデータソースを可視化するサービスであり、Prometheusもデータソースとして利用できるため、ECSやEKSから得られたデータを可視化することができる。</p>
 </section>
 </section>
 <section id="kinesis">
 <h2>Kinesis<a class="headerlink" href="#kinesis" title="Permalink to this heading">¶</a></h2>
+<p>継続的に生成され続けるストリームデータについて、扱い処理するためのサービス。</p>
 <section id="kinesis-data-streams">
 <h3>Kinesis Data Streams<a class="headerlink" href="#kinesis-data-streams" title="Permalink to this heading">¶</a></h3>
+<p>ストリームデータを収集して順番通りにリアルタイム処理させることができる。
+ConsumerはLambdaやECSなどが想定される。
+データはシャードに割り振られて、シャードにより性能が決まるが、シャードを自動でスケールしてくれるオンデマンドモードが利用できる。</p>
 </section>
 <section id="kinesis-data-firehose">
 <h3>Kinesis Data Firehose<a class="headerlink" href="#kinesis-data-firehose" title="Permalink to this heading">¶</a></h3>
+<p>大量のデータを指定した先へ配信する。AWSサービスであればS3やRedshiftなどに配信することができる。
+配信タイミングは設定ができ、サイズが溜まったら配信したり、指定した時間が経過すると配信したりすることができる。</p>
 </section>
 <section id="kinesis-data-analytics">
 <h3>Kinesis Data Analytics<a class="headerlink" href="#kinesis-data-analytics" title="Permalink to this heading">¶</a></h3>
+<p>Data StreamsやData Firehoseから配信されるデータをSQLを利用して分析し、分析結果を再度配信する。</p>
 </section>
 <section id="kinesis-video-streams">
 <h3>Kinesis Video Streams<a class="headerlink" href="#kinesis-video-streams" title="Permalink to this heading">¶</a></h3>
+<p>動画に関する配信に特化したサービスで、Rekognitionなどと統合することで、分析をリアルタイムに行うことができる。</p>
 </section>
-<section id="msk">
-<h3>MSK<a class="headerlink" href="#msk" title="Permalink to this heading">¶</a></h3>
+<section id="msk-managed-streaming-for-apache-kafka">
+<h3>MSK(Managed Streaming for Apache Kafka)<a class="headerlink" href="#msk-managed-streaming-for-apache-kafka" title="Permalink to this heading">¶</a></h3>
+<p>Kafkaのクラスターをマネージドに提供するサービス。VPCを指定して複数のAZにクラスタを起動させることができる。</p>
 </section>
 </section>
-<section id="id4">
-<h2>データレイク<a class="headerlink" href="#id4" title="Permalink to this heading">¶</a></h2>
-<section id="id5">
-<h3>データレイク構築<a class="headerlink" href="#id5" title="Permalink to this heading">¶</a></h3>
+<section id="id8">
+<h2>データレイク<a class="headerlink" href="#id8" title="Permalink to this heading">¶</a></h2>
+<section id="id9">
+<h3>データレイク構築<a class="headerlink" href="#id9" title="Permalink to this heading">¶</a></h3>
 <section id="lake-formation">
 <h4>Lake Formation<a class="headerlink" href="#lake-formation" title="Permalink to this heading">¶</a></h4>
 </section>
@@ -223,20 +322,20 @@
 <h4>AppFlow<a class="headerlink" href="#appflow" title="Permalink to this heading">¶</a></h4>
 </section>
 </section>
-<section id="id6">
-<h3>データの処理<a class="headerlink" href="#id6" title="Permalink to this heading">¶</a></h3>
+<section id="id10">
+<h3>データの処理<a class="headerlink" href="#id10" title="Permalink to this heading">¶</a></h3>
 <section id="aws-glue">
 <h4>AWS Glue<a class="headerlink" href="#aws-glue" title="Permalink to this heading">¶</a></h4>
 </section>
 </section>
-<section id="id7">
-<h3>データ分析<a class="headerlink" href="#id7" title="Permalink to this heading">¶</a></h3>
+<section id="id11">
+<h3>データ分析<a class="headerlink" href="#id11" title="Permalink to this heading">¶</a></h3>
 <section id="athena">
 <h4>Athena<a class="headerlink" href="#athena" title="Permalink to this heading">¶</a></h4>
 </section>
 </section>
-<section id="id8">
-<h3>データの利用<a class="headerlink" href="#id8" title="Permalink to this heading">¶</a></h3>
+<section id="id12">
+<h3>データの利用<a class="headerlink" href="#id12" title="Permalink to this heading">¶</a></h3>
 <section id="sagemaker">
 <h4>SageMaker<a class="headerlink" href="#sagemaker" title="Permalink to this heading">¶</a></h4>
 </section>
@@ -274,8 +373,8 @@
 </section>
 <section id="ses">
 <h2>SES<a class="headerlink" href="#ses" title="Permalink to this heading">¶</a></h2>
-<section id="id9">
-<h3>SESの送受信<a class="headerlink" href="#id9" title="Permalink to this heading">¶</a></h3>
+<section id="id13">
+<h3>SESの送受信<a class="headerlink" href="#id13" title="Permalink to this heading">¶</a></h3>
 </section>
 <section id="amazon-pinpoint">
 <h3>Amazon Pinpoint<a class="headerlink" href="#amazon-pinpoint" title="Permalink to this heading">¶</a></h3>
@@ -296,8 +395,8 @@
 <h3>Egress-Only IGW<a class="headerlink" href="#egress-only-igw" title="Permalink to this heading">¶</a></h3>
 </section>
 </section>
-<section id="id10">
-<h2>低遅延サービス<a class="headerlink" href="#id10" title="Permalink to this heading">¶</a></h2>
+<section id="id14">
+<h2>低遅延サービス<a class="headerlink" href="#id14" title="Permalink to this heading">¶</a></h2>
 <section id="aws-outposts">
 <h3>AWS Outposts<a class="headerlink" href="#aws-outposts" title="Permalink to this heading">¶</a></h3>
 </section>
@@ -323,8 +422,8 @@
 <h3>Timestream<a class="headerlink" href="#timestream" title="Permalink to this heading">¶</a></h3>
 </section>
 </section>
-<section id="id11">
-<h2>マネージドアプリケーションサービス<a class="headerlink" href="#id11" title="Permalink to this heading">¶</a></h2>
+<section id="id15">
+<h2>マネージドアプリケーションサービス<a class="headerlink" href="#id15" title="Permalink to this heading">¶</a></h2>
 <section id="appsync">
 <h3>AppSync<a class="headerlink" href="#appsync" title="Permalink to this heading">¶</a></h3>
 </section>
