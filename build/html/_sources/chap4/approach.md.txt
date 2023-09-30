@@ -1,24 +1,79 @@
 # 移行評価とアプローチ
 ## 7R
-### Refactor
+移行を検討しているシステムに対する考え方が7Rである。
+AWSが推奨する移行戦略のフレームワークである
+
+### Refactor(Re-Architect)
+アーキテクチャから抜本的に見直して、クラウドネイティブな構成にカスタマイズする。  
+全てのコードや詳細設計をやり直すことを前提にしており、大きなコストやリスクを負ってベストプラクティスを突き詰める。
 ### Replatform
-### Repurchase
+lift-tinker-and-shiftと呼ばれ、最小限のApp修正を加えることで、クラウドに適用させる。  
+大きなアーキテクチャに関しては変更を加えず、マネージドサービスを利用することでメリットを享受する。
+例えばDBをRDSに変更したり、DNSサーバーをRoute53に変更したりすることで運用のコストを削減したり、追加機能を利用したりすることができる。
 ### Rehost
+lift-and-shiftと呼ばれ、Appやデータをそのままで、クラウドに移行する。  
+物理サーバーをそのままEC2に移行するなど。
 ### Relocate
-### Retain
+VMware Cloud on AWSを利用することで、AWSに移行するもので、Rehostの一種。
+### Repurchase
+これまで組織で構築運用していたシステムをSaaSに置き換える移行。  
+RedmineやJiraを SaaSに変更する例が挙げられる。
 ### Retire
+移行を検討する段階で、不要なシステムやインフラに関しては廃止する。
+### Retain
+クラウドへの移行が難しい場合には現行のシステムに維持する。
 
 ## 移行評価支援サービス
-### AWS Cloud Adoption Readiness Tool
+### AWS Cloud Adoption Readiness Tool(CART)
+"Adoption Readiness"とは、新しい技術を受け入れる準備度合いを示す単語である。  
+Webに公開されており、質問に答えていくことでクラウド導入に向けた準備に向けた推奨レポートを生成してくれる。
+エンジニア向けだけでなく、組織としての準備プロセスを提示する上流向けの準備サービスと言える。
 ### AWS Application Discovery Service
+オンプレミスのサーバーの使用状況や設定データを収集して、AWSへの移行準備をサポートする。
+
 
 ## データの移行サービス
 ### AWS Snowファミリー
-### AWS DataSync
+物理的な筐体を利用して、運送することでデータを移行できる。
+データの移行だけではなく、エッジ側にEC2インスタンスをホストして分析することができるため、次のような利用方法も可能
+- DR対策
+- エッジでのデータ処理
+- 移動しながらのデータ収集分析処理
+- S3からオンプレからのデータ移行
+Snowball Edgeなどは防水防塵対策はもちろんのこと、KMSを設定して暗号化することも可能。  
+配送には1週間ほどかかり、SNSを利用して、配送状況のステータスなどを確認することができる。
 
+具体的なSnowデバイスは以下のようなものがある。
+- Snowcone  
+    8TBのHDDストレージ、4GBのメモリ、2vCPUを搭載した一番小さなデバイス
+- Snowball Edge Storage Optimized  
+    80TBのHDDストレージ、32GBのメモリ、24vCPUを搭載したデバイス。
+- Snowball Edge Compute Optimized  
+    39.5TBのHDDストレージ、7.68TBのSSDストレージ。208GBのメモリ52vCPUを搭載したデバイス。  
+    EC2をホストしたデータ処理が可能
+- Snowball Edge Compute Optimized  with GPU  
+    Cumpute Optimizedに加えて、GPUを搭載したデバイスで、MLの推論などが可能なデバイス。  
+    EC2をホストしたデータ処理が可能
+- Snowmobile  
+    選択画面にはないが、エクサバイト規模のデータ移送をサポートする。トラックレベル。
+### AWS DataSync
+データをS3、EFS、FSxへ安全かつ高速に転送するサービス。  
+オンプレミスからAWSサービスの移行だけでなく、AWSサービス間の移行もサポートしている。
+データの転送は、DataSyncエージェントをスケジュールすることで定期実行する。
 
 ## Appの移行サービス
-### AWS Application Migration Service
+### AWS Application Migration Service(MGN)
+オンプレサーバーをAWSに移行するためのサービス。  
+AWS  Replication Agentをオンプレ側のサーバーにインストールすることで、継続的に同期が行われソースサーバーの停止を必要としない。
+EBSボリュームにコピー元のAMIが作成され、起動テンプレートからEC2を起動させることができる。
 
 ## DBの移行サービス
-### AWS Database Migration Service
+### AWS Database Migration Service(DMS)
+オンプレからAWSの移行も、AWSからオンプレへの移行もサポートしている。  
+一度だけの移行や継続的な差分移行が可能であり、継続的な移行ではCDC（変更データキャプチャ）と呼ばれるソースDBの変更をリアルタイムにキャプチャし、移行先に反映させる機能を利用する。
+
+### スキーマ変更
+DMSにおいては、DMSスキーマ変換機能がリリースされておりOracleなどのソースからMySQLやPostgresへの移行が自動で行われる。
+
+また、DMSスキーマ変換機能でサポートされていない場合は、AWS Schema Conversion Toolを利用してスキーマ変換する。
+大規模なデータであれば、Snowball EdgeにSCTをインストールしておき、変換をさせる。

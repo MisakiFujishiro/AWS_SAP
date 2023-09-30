@@ -63,17 +63,17 @@
 <li class="toctree-l1"><a class="reference internal" href="basic.html">移行とモダナイゼーションの加速</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">移行評価とアプローチ</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#r">7R</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#refactor">Refactor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#refactor-re-architect">Refactor(Re-Architect)</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#replatform">Replatform</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#repurchase">Repurchase</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#rehost">Rehost</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#relocate">Relocate</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#retain">Retain</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#repurchase">Repurchase</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#retire">Retire</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#retain">Retain</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#id2">移行評価支援サービス</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#aws-cloud-adoption-readiness-tool">AWS Cloud Adoption Readiness Tool</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#aws-cloud-adoption-readiness-tool-cart">AWS Cloud Adoption Readiness Tool(CART)</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#aws-application-discovery-service">AWS Application Discovery Service</a></li>
 </ul>
 </li>
@@ -83,11 +83,12 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#app">Appの移行サービス</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#aws-application-migration-service">AWS Application Migration Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#aws-application-migration-service-mgn">AWS Application Migration Service(MGN)</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#db">DBの移行サービス</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#aws-database-migration-service">AWS Database Migration Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#aws-database-migration-service-dms">AWS Database Migration Service(DMS)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id4">スキーマ変更</a></li>
 </ul>
 </li>
 </ul>
@@ -123,56 +124,113 @@
 <h1>移行評価とアプローチ<a class="headerlink" href="#id1" title="Permalink to this heading">¶</a></h1>
 <section id="r">
 <h2>7R<a class="headerlink" href="#r" title="Permalink to this heading">¶</a></h2>
-<section id="refactor">
-<h3>Refactor<a class="headerlink" href="#refactor" title="Permalink to this heading">¶</a></h3>
+<p>移行を検討しているシステムに対する考え方が7Rである。
+AWSが推奨する移行戦略のフレームワークである</p>
+<section id="refactor-re-architect">
+<h3>Refactor(Re-Architect)<a class="headerlink" href="#refactor-re-architect" title="Permalink to this heading">¶</a></h3>
+<p>アーキテクチャから抜本的に見直して、クラウドネイティブな構成にカスタマイズする。<br />
+全てのコードや詳細設計をやり直すことを前提にしており、大きなコストやリスクを負ってベストプラクティスを突き詰める。</p>
 </section>
 <section id="replatform">
 <h3>Replatform<a class="headerlink" href="#replatform" title="Permalink to this heading">¶</a></h3>
-</section>
-<section id="repurchase">
-<h3>Repurchase<a class="headerlink" href="#repurchase" title="Permalink to this heading">¶</a></h3>
+<p>lift-tinker-and-shiftと呼ばれ、最小限のApp修正を加えることで、クラウドに適用させる。<br />
+大きなアーキテクチャに関しては変更を加えず、マネージドサービスを利用することでメリットを享受する。
+例えばDBをRDSに変更したり、DNSサーバーをRoute53に変更したりすることで運用のコストを削減したり、追加機能を利用したりすることができる。</p>
 </section>
 <section id="rehost">
 <h3>Rehost<a class="headerlink" href="#rehost" title="Permalink to this heading">¶</a></h3>
+<p>lift-and-shiftと呼ばれ、Appやデータをそのままで、クラウドに移行する。<br />
+物理サーバーをそのままEC2に移行するなど。</p>
 </section>
 <section id="relocate">
 <h3>Relocate<a class="headerlink" href="#relocate" title="Permalink to this heading">¶</a></h3>
+<p>VMware Cloud on AWSを利用することで、AWSに移行するもので、Rehostの一種。</p>
 </section>
-<section id="retain">
-<h3>Retain<a class="headerlink" href="#retain" title="Permalink to this heading">¶</a></h3>
+<section id="repurchase">
+<h3>Repurchase<a class="headerlink" href="#repurchase" title="Permalink to this heading">¶</a></h3>
+<p>これまで組織で構築運用していたシステムをSaaSに置き換える移行。<br />
+RedmineやJiraを SaaSに変更する例が挙げられる。</p>
 </section>
 <section id="retire">
 <h3>Retire<a class="headerlink" href="#retire" title="Permalink to this heading">¶</a></h3>
+<p>移行を検討する段階で、不要なシステムやインフラに関しては廃止する。</p>
+</section>
+<section id="retain">
+<h3>Retain<a class="headerlink" href="#retain" title="Permalink to this heading">¶</a></h3>
+<p>クラウドへの移行が難しい場合には現行のシステムに維持する。</p>
 </section>
 </section>
 <section id="id2">
 <h2>移行評価支援サービス<a class="headerlink" href="#id2" title="Permalink to this heading">¶</a></h2>
-<section id="aws-cloud-adoption-readiness-tool">
-<h3>AWS Cloud Adoption Readiness Tool<a class="headerlink" href="#aws-cloud-adoption-readiness-tool" title="Permalink to this heading">¶</a></h3>
+<section id="aws-cloud-adoption-readiness-tool-cart">
+<h3>AWS Cloud Adoption Readiness Tool(CART)<a class="headerlink" href="#aws-cloud-adoption-readiness-tool-cart" title="Permalink to this heading">¶</a></h3>
+<p>“Adoption Readiness”とは、新しい技術を受け入れる準備度合いを示す単語である。<br />
+Webに公開されており、質問に答えていくことでクラウド導入に向けた準備に向けた推奨レポートを生成してくれる。
+エンジニア向けだけでなく、組織としての準備プロセスを提示する上流向けの準備サービスと言える。</p>
 </section>
 <section id="aws-application-discovery-service">
 <h3>AWS Application Discovery Service<a class="headerlink" href="#aws-application-discovery-service" title="Permalink to this heading">¶</a></h3>
+<p>オンプレミスのサーバーの使用状況や設定データを収集して、AWSへの移行準備をサポートする。</p>
 </section>
 </section>
 <section id="id3">
 <h2>データの移行サービス<a class="headerlink" href="#id3" title="Permalink to this heading">¶</a></h2>
 <section id="aws-snow">
 <h3>AWS Snowファミリー<a class="headerlink" href="#aws-snow" title="Permalink to this heading">¶</a></h3>
+<p>物理的な筐体を利用して、運送することでデータを移行できる。
+データの移行だけではなく、エッジ側にEC2インスタンスをホストして分析することができるため、次のような利用方法も可能</p>
+<ul class="simple">
+<li><p>DR対策</p></li>
+<li><p>エッジでのデータ処理</p></li>
+<li><p>移動しながらのデータ収集分析処理</p></li>
+<li><p>S3からオンプレからのデータ移行
+Snowball Edgeなどは防水防塵対策はもちろんのこと、KMSを設定して暗号化することも可能。<br />
+配送には1週間ほどかかり、SNSを利用して、配送状況のステータスなどを確認することができる。</p></li>
+</ul>
+<p>具体的なSnowデバイスは以下のようなものがある。</p>
+<ul class="simple">
+<li><p>Snowcone<br />
+8TBのHDDストレージ、4GBのメモリ、2vCPUを搭載した一番小さなデバイス</p></li>
+<li><p>Snowball Edge Storage Optimized<br />
+80TBのHDDストレージ、32GBのメモリ、24vCPUを搭載したデバイス。</p></li>
+<li><p>Snowball Edge Compute Optimized<br />
+39.5TBのHDDストレージ、7.68TBのSSDストレージ。208GBのメモリ52vCPUを搭載したデバイス。<br />
+EC2をホストしたデータ処理が可能</p></li>
+<li><p>Snowball Edge Compute Optimized  with GPU<br />
+Cumpute Optimizedに加えて、GPUを搭載したデバイスで、MLの推論などが可能なデバイス。<br />
+EC2をホストしたデータ処理が可能</p></li>
+<li><p>Snowmobile<br />
+選択画面にはないが、エクサバイト規模のデータ移送をサポートする。トラックレベル。</p></li>
+</ul>
 </section>
 <section id="aws-datasync">
 <h3>AWS DataSync<a class="headerlink" href="#aws-datasync" title="Permalink to this heading">¶</a></h3>
+<p>データをS3、EFS、FSxへ安全かつ高速に転送するサービス。<br />
+オンプレミスからAWSサービスの移行だけでなく、AWSサービス間の移行もサポートしている。
+データの転送は、DataSyncエージェントをスケジュールすることで定期実行する。</p>
 </section>
 </section>
 <section id="app">
 <h2>Appの移行サービス<a class="headerlink" href="#app" title="Permalink to this heading">¶</a></h2>
-<section id="aws-application-migration-service">
-<h3>AWS Application Migration Service<a class="headerlink" href="#aws-application-migration-service" title="Permalink to this heading">¶</a></h3>
+<section id="aws-application-migration-service-mgn">
+<h3>AWS Application Migration Service(MGN)<a class="headerlink" href="#aws-application-migration-service-mgn" title="Permalink to this heading">¶</a></h3>
+<p>オンプレサーバーをAWSに移行するためのサービス。<br />
+AWS  Replication Agentをオンプレ側のサーバーにインストールすることで、継続的に同期が行われソースサーバーの停止を必要としない。
+EBSボリュームにコピー元のAMIが作成され、起動テンプレートからEC2を起動させることができる。</p>
 </section>
 </section>
 <section id="db">
 <h2>DBの移行サービス<a class="headerlink" href="#db" title="Permalink to this heading">¶</a></h2>
-<section id="aws-database-migration-service">
-<h3>AWS Database Migration Service<a class="headerlink" href="#aws-database-migration-service" title="Permalink to this heading">¶</a></h3>
+<section id="aws-database-migration-service-dms">
+<h3>AWS Database Migration Service(DMS)<a class="headerlink" href="#aws-database-migration-service-dms" title="Permalink to this heading">¶</a></h3>
+<p>オンプレからAWSの移行も、AWSからオンプレへの移行もサポートしている。<br />
+一度だけの移行や継続的な差分移行が可能であり、継続的な移行ではCDC（変更データキャプチャ）と呼ばれるソースDBの変更をリアルタイムにキャプチャし、移行先に反映させる機能を利用する。</p>
+</section>
+<section id="id4">
+<h3>スキーマ変更<a class="headerlink" href="#id4" title="Permalink to this heading">¶</a></h3>
+<p>DMSにおいては、DMSスキーマ変換機能がリリースされておりOracleなどのソースからMySQLやPostgresへの移行が自動で行われる。</p>
+<p>また、DMSスキーマ変換機能でサポートされていない場合は、AWS Schema Conversion Toolを利用してスキーマ変換する。
+大規模なデータであれば、Snowball EdgeにSCTをインストールしておき、変換をさせる。</p>
 </section>
 </section>
 </section>
