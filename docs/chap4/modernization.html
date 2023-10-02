@@ -104,30 +104,30 @@
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#id12">データの利用</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#sagemaker">SageMaker</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#comprehend">Comprehend</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#rekognition">Rekognition</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#forecast">Forecast</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#fraud-detector">Fraud Detector</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#comprehend">Comprehend（理解する）</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#rekognition">Rekognition（認識）</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#forecast">Forecast（予報）</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fraud-detector">Fraud Detector(詐欺)</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#kendra">Kendra</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#translate">Translate</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#polly">Polly</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#transcribe">Transcribe</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#transcribe">Transcribe(書き起こす)</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#textract">Textract</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#lex">Lex</a></li>
 </ul>
 </li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="#transfer-family">Transfer Family</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#ses">SES</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#id13">SESの送受信</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#amazon-pinpoint">Amazon Pinpoint</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#transfer-family">Transfer Family</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#egress-only-igw">Egress-Only IGW</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#ip">固定IPアドレス対応</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#nlb">NLB</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#eni">ENI</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#egress-only-igw">Egress-Only IGW</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#id14">低遅延サービス</a><ul>
@@ -310,125 +310,174 @@ ConsumerはLambdaやECSなどが想定される。
 </section>
 <section id="id8">
 <h2>データレイク<a class="headerlink" href="#id8" title="Permalink to this heading">¶</a></h2>
+<p>データを大量に保存して、抽出分析することでビジネス戦略を得る必要があるが、その際のデータの保存先はメンテナンスが必要なく高い耐久性を求められる。
+S3はこの要件を満たしていることに加えて様々なETLサービスや機械学習サービスと統合されているため、分析時に複製をする必要がなく、１データソース１データリソースにすることができるため、データレイクとして適切である。</p>
 <section id="id9">
 <h3>データレイク構築<a class="headerlink" href="#id9" title="Permalink to this heading">¶</a></h3>
 <section id="lake-formation">
 <h4>Lake Formation<a class="headerlink" href="#lake-formation" title="Permalink to this heading">¶</a></h4>
+<p>RDSやALB、CloudTrailからS3に配信するデータの内容に関しての制御を行うことができる。</p>
 </section>
 <section id="data-exchange">
 <h4>Data Exchange<a class="headerlink" href="#data-exchange" title="Permalink to this heading">¶</a></h4>
+<p>データプロバイダが配信しているデータをS3にインポートするためにデータの変換を行なってくれる。</p>
 </section>
 <section id="appflow">
 <h4>AppFlow<a class="headerlink" href="#appflow" title="Permalink to this heading">¶</a></h4>
+<p>Salesfores/Slack/DatadogなどのデータをS3にインポートすることができる。</p>
 </section>
 </section>
 <section id="id10">
 <h3>データの処理<a class="headerlink" href="#id10" title="Permalink to this heading">¶</a></h3>
 <section id="aws-glue">
 <h4>AWS Glue<a class="headerlink" href="#aws-glue" title="Permalink to this heading">¶</a></h4>
+<p>フルマネージドのETLツールであり、データソースからターゲットに対してデータを変換して格納することができる。</p>
+<p>データソース(RDSやS3など)からクローラーがデータの構造を認識し、データカタログとしてまとめる。ジョブはデータカタログにまとめられたデータに対して処理を行い、ターゲット（S3など）に格納する。このプロセスによって、データレイクから分析しやすいデータ形式に変換することができる。
+<img alt="" src="../_images/chap32_glue.png" />
+<a class="reference external" href="https://and-engineer.com/articles/ZE8bQBEAAGqmqjHd">参考サイト</a></p>
 </section>
 </section>
 <section id="id11">
 <h3>データ分析<a class="headerlink" href="#id11" title="Permalink to this heading">¶</a></h3>
 <section id="athena">
 <h4>Athena<a class="headerlink" href="#athena" title="Permalink to this heading">¶</a></h4>
+<p>S3に格納されたJSONやCSVのデータに対して、SQLを利用して分析を行うことができるサービス。
+分析した、結果は事前指定したS3に格納され、その結果をQuickSightなどで可視化することもできる。</p>
 </section>
 </section>
 <section id="id12">
 <h3>データの利用<a class="headerlink" href="#id12" title="Permalink to this heading">¶</a></h3>
 <section id="sagemaker">
 <h4>SageMaker<a class="headerlink" href="#sagemaker" title="Permalink to this heading">¶</a></h4>
+<p>S3に蓄積されたデータを利用して独自のモデルを構築するための環境を提供するのがSageMakerである。<br />
+Codingを行うためのJupter環境やラベリング支援のGound Truthなど、学習のためのサポートを受けることができる。<br />
+構築したモデルはECRにPushされる</p>
 </section>
 <section id="comprehend">
-<h4>Comprehend<a class="headerlink" href="#comprehend" title="Permalink to this heading">¶</a></h4>
+<h4>Comprehend（理解する）<a class="headerlink" href="#comprehend" title="Permalink to this heading">¶</a></h4>
+<p>文章を入力として、キーワード抽出やポジネガ判定をしてくれる。</p>
 </section>
 <section id="rekognition">
-<h4>Rekognition<a class="headerlink" href="#rekognition" title="Permalink to this heading">¶</a></h4>
+<h4>Rekognition（認識）<a class="headerlink" href="#rekognition" title="Permalink to this heading">¶</a></h4>
+<p>動画を入力として、顔認証や物体認識をおこなってくれる。</p>
 </section>
 <section id="forecast">
-<h4>Forecast<a class="headerlink" href="#forecast" title="Permalink to this heading">¶</a></h4>
+<h4>Forecast（予報）<a class="headerlink" href="#forecast" title="Permalink to this heading">¶</a></h4>
+<p>時系列データを入力として、将来予測をおこなってくれる。</p>
 </section>
 <section id="fraud-detector">
-<h4>Fraud Detector<a class="headerlink" href="#fraud-detector" title="Permalink to this heading">¶</a></h4>
+<h4>Fraud Detector(詐欺)<a class="headerlink" href="#fraud-detector" title="Permalink to this heading">¶</a></h4>
+<p>不正アカウントやクレジットの不正利用を検知してくれる。</p>
 </section>
 <section id="kendra">
 <h4>Kendra<a class="headerlink" href="#kendra" title="Permalink to this heading">¶</a></h4>
+<p>S3やFSxを入力として、NLPによるラベリングを行なって検索を可能にしてくれる。</p>
 </section>
 <section id="translate">
 <h4>Translate<a class="headerlink" href="#translate" title="Permalink to this heading">¶</a></h4>
+<p>翻訳を行うサービス。</p>
 </section>
 <section id="polly">
 <h4>Polly<a class="headerlink" href="#polly" title="Permalink to this heading">¶</a></h4>
+<p>テキストを音声に変換するサービスで、男性や女性、ささやき声など様々なパターンに変換することができる。</p>
 </section>
 <section id="transcribe">
-<h4>Transcribe<a class="headerlink" href="#transcribe" title="Permalink to this heading">¶</a></h4>
+<h4>Transcribe(書き起こす)<a class="headerlink" href="#transcribe" title="Permalink to this heading">¶</a></h4>
+<p>音声をテキストに変換することができるサービス。</p>
 </section>
 <section id="textract">
 <h4>Textract<a class="headerlink" href="#textract" title="Permalink to this heading">¶</a></h4>
+<p>OCR技術を利用して、画像からテキストを抽出する。</p>
 </section>
 <section id="lex">
 <h4>Lex<a class="headerlink" href="#lex" title="Permalink to this heading">¶</a></h4>
+<p>AIのチャットbotを提供するサービスで、Kendraと連携してFAQを構築することができる。</p>
 </section>
 </section>
+</section>
+<section id="transfer-family">
+<h2>Transfer Family<a class="headerlink" href="#transfer-family" title="Permalink to this heading">¶</a></h2>
+<p>S3やEFSのデータをクライアントからSFTPなどを利用してDLしたい場合にはTransfer Familyを利用する。
+<img alt="" src="../_images/chap32_transfer_family.png" />
+<a class="reference external" href="https://docs.aws.amazon.com/ja_jp/transfer/latest/userguide/transfer-workflows.html">公式ドキュメント</a></p>
 </section>
 <section id="ses">
 <h2>SES<a class="headerlink" href="#ses" title="Permalink to this heading">¶</a></h2>
 <section id="id13">
 <h3>SESの送受信<a class="headerlink" href="#id13" title="Permalink to this heading">¶</a></h3>
+<p>Route53と組み合わせてMXレコードをSESに設定することでメッセージ受信することができる。
+送信はLambdaからキックするような構成にすることで自動化することができる。</p>
 </section>
 <section id="amazon-pinpoint">
 <h3>Amazon Pinpoint<a class="headerlink" href="#amazon-pinpoint" title="Permalink to this heading">¶</a></h3>
+<p>マーケティング分析に活用することができる。送信したメールに関して、届いた、見られた、リンクを踏まれたなどの情報を収集することができる。</p>
 </section>
 </section>
-<section id="transfer-family">
-<h2>Transfer Family<a class="headerlink" href="#transfer-family" title="Permalink to this heading">¶</a></h2>
+<section id="egress-only-igw">
+<h2>Egress-Only IGW<a class="headerlink" href="#egress-only-igw" title="Permalink to this heading">¶</a></h2>
+<p>VPCではIPv6を使用することができる。IPv4ではインターネットに出て行くときはIGWを経由する。
+IPv6ではEgress-Only IGWヲリヨウスル。</p>
 </section>
 <section id="ip">
 <h2>固定IPアドレス対応<a class="headerlink" href="#ip" title="Permalink to this heading">¶</a></h2>
+<p>外部接続先にIPのホワイトリスト設定があり、AWSからの接続についてIPを限定する必要がある場合の対応。</p>
 <section id="nlb">
 <h3>NLB<a class="headerlink" href="#nlb" title="Permalink to this heading">¶</a></h3>
+<p>EIPを取得したり、事前にホワイトリストに登録済みのIPをBYO IPとしてAWSに持ち込むことができます。
+NLBには、AZごとにElasticIPを指定することができる。</p>
 </section>
 <section id="eni">
 <h3>ENI<a class="headerlink" href="#eni" title="Permalink to this heading">¶</a></h3>
-</section>
-<section id="egress-only-igw">
-<h3>Egress-Only IGW<a class="headerlink" href="#egress-only-igw" title="Permalink to this heading">¶</a></h3>
+<p>ENIにはプライベートIPやMACアドレス、セキュリティグループ、EIPなどを紐づけることができる。
+事前にENIを作成し、必要情報を設定した後にEC2にアタッチさせることができる。</p>
 </section>
 </section>
 <section id="id14">
 <h2>低遅延サービス<a class="headerlink" href="#id14" title="Permalink to this heading">¶</a></h2>
 <section id="aws-outposts">
 <h3>AWS Outposts<a class="headerlink" href="#aws-outposts" title="Permalink to this heading">¶</a></h3>
+<p>AWSで利用しているハードウェア機器をオンプレミスに設定することができるサービス。
+オンプレミス内でAWSサービスを利用することができるため、低遅延を実現できる。</p>
 </section>
 <section id="local-zones">
 <h3>Local Zones<a class="headerlink" href="#local-zones" title="Permalink to this heading">¶</a></h3>
+<p>リージョンの拡張にあたる。主要なリージョンから物理的に離れた場所に位置する小さなデータセンターのようなもので、特定地域で利用することができる。</p>
 </section>
 <section id="wavelongth">
 <h3>Wavelongth<a class="headerlink" href="#wavelongth" title="Permalink to this heading">¶</a></h3>
+<p>5Gネットワークへ直接データの送受信を行うことで低遅延を実現する。</p>
 </section>
 </section>
 <section id="db">
 <h2>マネージドDBサービス<a class="headerlink" href="#db" title="Permalink to this heading">¶</a></h2>
 <section id="neptune">
 <h3>Neptune<a class="headerlink" href="#neptune" title="Permalink to this heading">¶</a></h3>
+<p>グラフの扱いに特化したDB</p>
 </section>
 <section id="documentdb">
 <h3>DocumentDB<a class="headerlink" href="#documentdb" title="Permalink to this heading">¶</a></h3>
+<p>MongoDBとの互換性があり、DMSを利用してMongoDBからDocDBに移行することができる。
+Jsonをそのまま格納できるといったメリットがある。</p>
 </section>
 <section id="keyspaces">
 <h3>Keyspaces<a class="headerlink" href="#keyspaces" title="Permalink to this heading">¶</a></h3>
+<p>Apache Cassandra互換のDBで、Cassandraから移行する場合は選択肢に上がる。</p>
 </section>
 <section id="timestream">
 <h3>Timestream<a class="headerlink" href="#timestream" title="Permalink to this heading">¶</a></h3>
+<p>時系列のデータを管理するのに特化したDBサービス。</p>
 </section>
 </section>
 <section id="id15">
 <h2>マネージドアプリケーションサービス<a class="headerlink" href="#id15" title="Permalink to this heading">¶</a></h2>
 <section id="appsync">
 <h3>AppSync<a class="headerlink" href="#appsync" title="Permalink to this heading">¶</a></h3>
+<p>GraphQL APIを高速に開発することができる</p>
 </section>
 <section id="device-farm">
 <h3>Device Farm<a class="headerlink" href="#device-farm" title="Permalink to this heading">¶</a></h3>
+<p>アプリケーションに対する複数のブラウザやデバイスからのテストを実行することができる。
+アプリ開発をしていると複数のブラウザにおけるテストやモバイル（iphone/ipad/android)などからのテストが必要であるので、工数を削減できる。</p>
 </section>
 </section>
 </section>
