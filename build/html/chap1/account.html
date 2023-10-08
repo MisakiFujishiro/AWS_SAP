@@ -53,7 +53,8 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#aws-directory-service">AWS Directory Service</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#directory-service">Directory Serviceの種類</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ad-connector">AD Connector</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#simple-admanaged-microsoft-ad">Simple ADとManaged Microsoft AD</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#iam">IAM アイデンティティセンター</a></li>
@@ -127,13 +128,16 @@
 <h2>AWS Directory Service<a class="headerlink" href="#aws-directory-service" title="Permalink to this heading">¶</a></h2>
 <p>AWSの認証については、既に組織が管理している既存のActive Directoryと統合して共通利用することができる。<br />
 ポイントは、オンプレや企業という単位でアカウントディレクトリを構築管理する点。</p>
-<p>オンプレで利用しているActive Directoryの認証をそのまま利用できるサービスであり、各AZにADConnectorを設定して、オンプレ側のADの情報を設定することで、IAM Roleが払い出されるイメージ</p>
+<section id="ad-connector">
+<h3>AD Connector<a class="headerlink" href="#ad-connector" title="Permalink to this heading">¶</a></h3>
+<p>ポイントはオンプレで利用しているActive Directoryの認証をそのまま利用できる点。
+各AZにADConnectorを設定して、オンプレ側のADの情報を設定することで、IAM Roleが払い出されるイメージ</p>
 <p><img alt="" src="../_images/chap1_cross_account_ad.png" /></p>
-<section id="directory-service">
-<h3>Directory Serviceの種類<a class="headerlink" href="#directory-service" title="Permalink to this heading">¶</a></h3>
+</section>
+<section id="simple-admanaged-microsoft-ad">
+<h3>Simple ADとManaged Microsoft AD<a class="headerlink" href="#simple-admanaged-microsoft-ad" title="Permalink to this heading">¶</a></h3>
+<p>ポイントは、AWSへActive Directoryを移行する場合に利用することができる</p>
 <ul class="simple">
-<li><p>AD Connector<br />
-スモールスタートやシンプルな構成で良い場合は利用する。</p></li>
 <li><p>Simple AD<br />
 5000ユーザーまでの場合は利用する。またMFAにも対応</p></li>
 <li><p>AWS Managed Microsoft AD<br />

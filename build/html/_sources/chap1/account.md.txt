@@ -19,13 +19,16 @@
 AWSの認証については、既に組織が管理している既存のActive Directoryと統合して共通利用することができる。  
 ポイントは、オンプレや企業という単位でアカウントディレクトリを構築管理する点。
 
-オンプレで利用しているActive Directoryの認証をそのまま利用できるサービスであり、各AZにADConnectorを設定して、オンプレ側のADの情報を設定することで、IAM Roleが払い出されるイメージ
+
+
+### AD Connector
+ポイントはオンプレで利用しているActive Directoryの認証をそのまま利用できる点。
+各AZにADConnectorを設定して、オンプレ側のADの情報を設定することで、IAM Roleが払い出されるイメージ
 
 ![](../img/chap1_cross_account_ad.png)
 
-### Directory Serviceの種類
-- AD Connector  
-    スモールスタートやシンプルな構成で良い場合は利用する。
+### Simple ADとManaged Microsoft AD
+ポイントは、AWSへActive Directoryを移行する場合に利用することができる
 - Simple AD  
     5000ユーザーまでの場合は利用する。またMFAにも対応
 - AWS Managed Microsoft AD  

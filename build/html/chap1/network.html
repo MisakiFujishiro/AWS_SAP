@@ -62,40 +62,41 @@
 <li class="toctree-l4"><a class="reference internal" href="#id7">認証タイプ</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="#aws-site-to-site-vpn">AWS Site-to-Site VPN</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#gw">仮想プライベートGW</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#id8">設定方法</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#aws-site-to-site-vpn">AWS Site-to-Site VPN</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#cloud-hub">Cloud Hub設計</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#gw">仮想プライベートGW</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id9">カスタマーGW</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#vpn">VPN接続の確立</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id12">接続時の機能</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="#id9">カスタマーGW</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#id10">設定方法</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#direct-connect">Direct Connect</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id13">接続方法</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id16">冗長性</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id20">仮想インターフェース</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="#vpn">VPN接続の確立</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#id11">設定方法</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="#direct-connect">Direct Connect</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="#id12">VPC同士の接続</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#id13">VPCピア接続</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#id14">設定方法</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id23">VPC同士の接続</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id24">VPCピア接続</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id25">設定方法</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#transit-gateway">Transit Gateway</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#id15">VPCピア接続の取りまとめ</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#id16">VPN接続の取りまとめ</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id26">VPCピア接続の取りまとめ</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id27">VPN接続の取りまとめ</a></li>
 </ul>
 </li>
+<li class="toctree-l3"><a class="reference internal" href="#id28">VPNまとめ</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#route53">Route53</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#hostezone">HosteZone</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#resolver">Resolver</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#id17">VPC内の名前解決</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#id18">オンプレからの名前解決</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#id19">オンプレへの名前解決</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id29">VPC内の名前解決</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id30">オンプレからの名前解決</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id31">オンプレへの名前解決</a></li>
 </ul>
 </li>
 </ul>
@@ -177,8 +178,8 @@
 <h3>インターフェース型(PrivateLink型)<a class="headerlink" href="#privatelink" title="Permalink to this heading">¶</a></h3>
 <p>50種類以上のサービスが対応しており、S3はインターフェース型の接続も可能。<br />
 データの転送とサービス利用時間に応じて課金する必要がある。<br />
-VPC内のサブネットにENIを払い出し、ENIにアクセスすることで対象のAWSサービスにアクセスする。
-AWS PrivateLinkという技術が利用される。</p>
+AWSのインターフェースエンドポイントは、VPC内の特定のサブネットにElastic Network Interface (ENI) を提供することで、プライベートな接続を介してAWSサービスにアクセスするためのエンドポイントを作成します。このENIはVPC内のプライベートIPアドレスを持ち、このENIを経由してAWSサービスに接続します。この技術全体がAWS PrivateLinkと呼ばれています。</p>
+<p>要するに、VPC内にプライベートIPアドレスを持つエンドポイントインターフェース（ENI）が提供され、このENIを通じてAWSのリソースにアクセスするのは、インターフェース型のVPCエンドポイントの特徴です。</p>
 <p><img alt="" src="../_images/chap1_vpc_endpoint_if.png" /></p>
 <p>作成としては以下の手順を踏む</p>
 <ol class="arabic simple">
@@ -218,7 +219,8 @@ GW型では通信を設定し合ったVPCのみで通信が可能であり、そ
 </ul>
 <section id="aws-vpn">
 <h3>AWS クライアントVPN<a class="headerlink" href="#aws-vpn" title="Permalink to this heading">¶</a></h3>
-<p>VPCの外部のクライアントから、VPCに接続する技術</p>
+<p>VPCの外部のクライアントから、VPCに接続する技術。
+データセンターなどではなく、単独のクライアントなどと接続する際に利用する。</p>
 <p><img alt="" src="../_images/chap1_vpn_client.png" /></p>
 <section id="id6">
 <h4>設定方法<a class="headerlink" href="#id6" title="Permalink to this heading">¶</a></h4>
@@ -253,14 +255,17 @@ VPNを経由して、別のAWSリソースにアクセスする際はこのENI�
 <section id="aws-site-to-site-vpn">
 <h3>AWS Site-to-Site VPN<a class="headerlink" href="#aws-site-to-site-vpn" title="Permalink to this heading">¶</a></h3>
 <p>VPCに仮想プライベートゲートウェイをアタッチして、データセンターなどのオンプレのルーターと、IPsec VPN接続を可能にする。
-自動的に2つの接続が設定され、高可用性が担保される。</p>
-<p><img alt="" src="../_images/chap1_vpn_site2site.png" /></p>
+自動的に2つの接続が設定され、高可用性が担保される。
+<img alt="" src="../_images/chap1_vpn_site2site.png" /></p>
+<section id="cloud-hub">
+<h4>Cloud Hub設計<a class="headerlink" href="#cloud-hub" title="Permalink to this heading">¶</a></h4>
+<p>複数のオンプレミスが1つのVPCに接続するような設計をCloudHub設計と呼ぶ</p>
 </section>
 <section id="gw">
-<h3>仮想プライベートGW<a class="headerlink" href="#gw" title="Permalink to this heading">¶</a></h3>
+<h4>仮想プライベートGW<a class="headerlink" href="#gw" title="Permalink to this heading">¶</a></h4>
 <p>VPCエンドポイント側に設定するGW</p>
 <section id="id8">
-<h4>設定方法<a class="headerlink" href="#id8" title="Permalink to this heading">¶</a></h4>
+<h5>設定方法<a class="headerlink" href="#id8" title="Permalink to this heading">¶</a></h5>
 <ol class="arabic simple">
 <li><p>VPCの画面から仮想プライベートGWを選択</p></li>
 <li><p>名前とASNの設定</p></li>
@@ -270,10 +275,10 @@ VPNを経由して、別のAWSリソースにアクセスする際はこのENI�
 </section>
 </section>
 <section id="id9">
-<h3>カスタマーGW<a class="headerlink" href="#id9" title="Permalink to this heading">¶</a></h3>
+<h4>カスタマーGW<a class="headerlink" href="#id9" title="Permalink to this heading">¶</a></h4>
 <p>カスタマーのルーター側で設定するGW</p>
 <section id="id10">
-<h4>設定方法<a class="headerlink" href="#id10" title="Permalink to this heading">¶</a></h4>
+<h5>設定方法<a class="headerlink" href="#id10" title="Permalink to this heading">¶</a></h5>
 <ol class="arabic simple">
 <li><p>VPCの画面からカスタマーGWを選択</p></li>
 <li><p>名前、ルーティングタイプ、ASN、ルーターのIPを設定</p></li>
@@ -281,9 +286,9 @@ VPNを経由して、別のAWSリソースにアクセスする際はこのENI�
 </section>
 </section>
 <section id="vpn">
-<h3>VPN接続の確立<a class="headerlink" href="#vpn" title="Permalink to this heading">¶</a></h3>
+<h4>VPN接続の確立<a class="headerlink" href="#vpn" title="Permalink to this heading">¶</a></h4>
 <section id="id11">
-<h4>設定方法<a class="headerlink" href="#id11" title="Permalink to this heading">¶</a></h4>
+<h5>設定方法<a class="headerlink" href="#id11" title="Permalink to this heading">¶</a></h5>
 <ol class="arabic simple">
 <li><p>VPCの画面からSite-to-site VPN接続を選択</p></li>
 <li><p>仮想プライベートGWとカスタマーGWを選択</p></li>
@@ -291,25 +296,88 @@ VPNを経由して、別のAWSリソースにアクセスする際はこのENI�
 </ol>
 </section>
 </section>
+<section id="id12">
+<h4>接続時の機能<a class="headerlink" href="#id12" title="Permalink to this heading">¶</a></h4>
+<ul class="simple">
+<li><p>Internet Key Exchange<br />
+暗号化のために共通鍵を交換することができる</p></li>
+<li><p>デッドピア検出<br />
+接続先のデバイスが有効か否かを確認できる</p></li>
+<li><p>NATトラバーサル<br />
+オンプレ側でNATルーターを介したVPNが可能</p></li>
+</ul>
+</section>
+</section>
 <section id="direct-connect">
 <h3>Direct Connect<a class="headerlink" href="#direct-connect" title="Permalink to this heading">¶</a></h3>
-<p>ユーザーのルーター（Customer Router）からDirect Connectのルータ（DX Router）に光ファイバーケーブルを介して接続するサービス。インターネットを経由しない専用線を確保できる。</p>
-<p>通信速度に関しても最大100GBpsを確保することができるので、金額と設定の手間がかかる分、安全性と通信速度を確保できる。</p>
-<p><img alt="" src="../_images/chap1_vpn_direct.png" /></p>
+<p>ユーザーのルーター（Customer Router）からDirect Connectのルータ（DX Router）に光ファイバーケーブルを介して接続するサービス。インターネットを経由しない専用線を確保できる。<br />
+通信速度に関しても最大100GBpsを確保することができるので、金額と設定の手間がかかる分、安全性と通信速度を確保できる。</p>
+<p>下図のようにAWSのDirectConnectロケーションを経由してオンプレミス環境やDBとAWS内の通信を確立する。
+<img alt="" src="../_images/chap11_directconnect.png" />
+<a class="reference external" href="https://docs.aws.amazon.com/ja_jp/directconnect/latest/UserGuide/Welcome.html">公式ドキュメント</a></p>
 <p>接続方法などは<a class="reference external" href="https://atbex.attokyo.co.jp/blog/detail/85/">参考サイト</a>参照。</p>
+<section id="id13">
+<h4>接続方法<a class="headerlink" href="#id13" title="Permalink to this heading">¶</a></h4>
+<p>専用接続とホスト接続がある</p>
+<section id="id14">
+<h5>専用接続<a class="headerlink" href="#id14" title="Permalink to this heading">¶</a></h5>
+<p>単一アカウントに専用の物理線を引きます。主要なデータセンターなどを経由して線を引くことになる。
+1G以上の(1Gbps/10Gbps/100Gbps)帯域幅を確約できる。</p>
+</section>
+<section id="id15">
+<h5>ホスト接続<a class="headerlink" href="#id15" title="Permalink to this heading">¶</a></h5>
+<p>AWS Direct Partner(NTT東日本など）を利用して提供されるため、複数のお客さんと共有をする。
+そのため、帯域幅もMbps(50Mbps-500Mbps)という比較的小さいサイズで契約することができる。</p>
 </section>
 </section>
-<section id="id12">
-<h2>VPC同士の接続<a class="headerlink" href="#id12" title="Permalink to this heading">¶</a></h2>
+<section id="id16">
+<h4>冗長性<a class="headerlink" href="#id16" title="Permalink to this heading">¶</a></h4>
+<section id="id17">
+<h5>VPNバックアップ<a class="headerlink" href="#id17" title="Permalink to this heading">¶</a></h5>
+<p>AWS Direct ConnectとVPNを併用して、VPNをバックアップにすることができる。
+VPNは1.25Gbpsまでをサポートしているので1Gを超える場合は、別のバックアップを検討する必要がある。</p>
+</section>
+<section id="id18">
+<h5>高い回復性<a class="headerlink" href="#id18" title="Permalink to this heading">¶</a></h5>
+<p>Direct Connect Location自体は冗長構成をとるが、Direct Connect Locationの内部は冗長構成にしない。
+つまり、ロケーションに障害が発生すると、別のロケーション経由の通信を行うが、障害が発生したロケーション自体は利用できない。
+<img alt="" src="../_images/chap11_directConnect_1.png" /></p>
+</section>
+<section id="id19">
+<h5>最大回復性<a class="headerlink" href="#id19" title="Permalink to this heading">¶</a></h5>
+<p>高い回復性に加えて、ロケーション内の冗長構成もとる
+<img alt="" src="../_images/chap11_directConnect_2.png" /></p>
+</section>
+</section>
+<section id="id20">
+<h4>仮想インターフェース<a class="headerlink" href="#id20" title="Permalink to this heading">¶</a></h4>
+<p>Direct Connectでは、仮想インターフェース（VIF)を利用して通信を行う</p>
+<section id="vif">
+<h5>プライベート仮想インターフェース（プライベートVIF）<a class="headerlink" href="#vif" title="Permalink to this heading">¶</a></h5>
+<p>DirectConnectを経由してVPCに接続する際に利用される。</p>
+</section>
+<section id="id21">
+<h5>パブリック仮想インターフェース（パブリックVIF）<a class="headerlink" href="#id21" title="Permalink to this heading">¶</a></h5>
+<p>DirectConnectを経由してパブリックなAWSサービス（S3やDynamoDB）に対して接続することができる。</p>
+</section>
+<section id="id22">
+<h5>トランジット仮想インターフェース（トランジットVIF）<a class="headerlink" href="#id22" title="Permalink to this heading">¶</a></h5>
+<p>DirectConnectを経由してTransitGWに対してアクセスすることができる。</p>
+</section>
+</section>
+</section>
+</section>
+<section id="id23">
+<h2>VPC同士の接続<a class="headerlink" href="#id23" title="Permalink to this heading">¶</a></h2>
 <p>VPCが他のVPCと接続するための設定。<br />
 一対一の場合は、VPCピア接続が容易。一対多の場合はTransit GWを利用すると管理が容易になる。</p>
-<section id="id13">
-<h3>VPCピア接続<a class="headerlink" href="#id13" title="Permalink to this heading">¶</a></h3>
+<section id="id24">
+<h3>VPCピア接続<a class="headerlink" href="#id24" title="Permalink to this heading">¶</a></h3>
 <p>異なるリージョンであっても、設置を行うことでVPC-AとVPC-Bで通信を可能にする。
 ただし、VPC-AとVPC-BがVPCピア接続していても、VPC-Bとピア接続しているVPC-CからVPC-Aへの接続はできない。</p>
 <p><img alt="" src="../_images/chap1_vpc_peer_image.png" /></p>
-<section id="id14">
-<h4>設定方法<a class="headerlink" href="#id14" title="Permalink to this heading">¶</a></h4>
+<section id="id25">
+<h4>設定方法<a class="headerlink" href="#id25" title="Permalink to this heading">¶</a></h4>
 <p><a class="reference external" href="https://zenn.dev/rescuenow/articles/8e21a751c828c6">参考サイト</a>がわかりやすいので確認すると良い。</p>
 <ol class="arabic simple">
 <li><p>リクエスタ(接続元)側でピア接続設定を行う</p>
@@ -340,9 +408,10 @@ VPNを経由して、別のAWSリソースにアクセスする際はこのENI�
 <h3>Transit Gateway<a class="headerlink" href="#transit-gateway" title="Permalink to this heading">¶</a></h3>
 <p>最大で5000のVPC同士の接続やVPCとオンプレとの接続を管理することができる。
 Site-to-Site VPN接続やVPCピア接続について個別設定せずに、Transit GWで集中管理できる。</p>
-<p><img alt="" src="../_images/chap1_transitgw_image.png" /></p>
-<section id="id15">
-<h4>VPCピア接続の取りまとめ<a class="headerlink" href="#id15" title="Permalink to this heading">¶</a></h4>
+<p><img alt="" src="../_images/chap11_transitgw.jpeg" />
+<img alt="" src="../_images/chap1_transitgw_image.png" /></p>
+<section id="id26">
+<h4>VPCピア接続の取りまとめ<a class="headerlink" href="#id26" title="Permalink to this heading">¶</a></h4>
 <p>VPCピア接続を利用して複数のVPC同士を接続すると以下のような課題がある</p>
 <ul class="simple">
 <li><p>トランジットトラフィックに対応できない</p>
@@ -354,14 +423,54 @@ Site-to-Site VPN接続やVPCピア接続について個別設定せずに、Tran
 <li><p>VPCを追加すると、全てに修正が入る</p></li>
 </ul>
 <p>Transit GWを利用することで、トランジットトラフィックに対応でき、追加時もTransitGWを修正するだけで良い</p>
-<p><img alt="" src="../_images/chap1_transitgw_merit_1.png" /></p>
-</section>
-<section id="id16">
-<h4>VPN接続の取りまとめ<a class="headerlink" href="#id16" title="Permalink to this heading">¶</a></h4>
-<p>VPN接続を利用して複数のVPCに接続しようとすると、それぞれのVPCに対してVPNの設定が必要。
-しかし、TransitGWを利用すれば、オンプレとTransit GWまでの設定をするだけで、後ろのVPCの追加が容易になる。</p>
 <p><img alt="" src="../_images/chap1_transitgw_merit_2.png" /></p>
 </section>
+<section id="id27">
+<h4>VPN接続の取りまとめ<a class="headerlink" href="#id27" title="Permalink to this heading">¶</a></h4>
+<p>VPN接続を利用して複数のVPCに接続しようとすると、それぞれのVPCに対してVPNの設定が必要。
+しかし、TransitGWを利用すれば、オンプレとTransit GWまでの設定をするだけで、後ろのVPCの追加が容易になる。
+DirectConnect GWを利用することで専用線経由のVPNにも対応できる</p>
+<p><img alt="" src="../_images/chap1_transitgw_merit_1.png" /></p>
+</section>
+</section>
+<section id="id28">
+<h3>VPNまとめ<a class="headerlink" href="#id28" title="Permalink to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>オンプレ 1:VPC 1</p>
+<ul>
+<li><p>クライアントVPN</p>
+<ul>
+<li><p>クライアントVPNエンドポイント</p></li>
+</ul>
+</li>
+<li><p>サイト:Site2Site VPN</p>
+<ul>
+<li><p>仮想プライベートGW</p></li>
+</ul>
+</li>
+<li><p>専用線:DX</p>
+<ul>
+<li><p>DX Location</p></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>オンプレ N:VPC 1</p>
+<ul>
+<li><p>Cloud Hub</p></li>
+</ul>
+</li>
+<li><p>オンプレ 1:VPC N</p>
+<ul>
+<li><p>一般回線: TransitGW</p></li>
+<li><p>専用線(N&lt;10): DXGW(DirectConnect GW)</p></li>
+<li><p>専用線(N&gt;10): DXGW+TransitGW</p></li>
+</ul>
+</li>
+</ul>
+<p><img alt="" src="../_images/chap11_vpn_1.jpeg" />
+<img alt="" src="../_images/chap11_vpn_2.jpeg" />
+<img alt="" src="../_images/chap11_vpn_3.jpeg" /></p>
 </section>
 </section>
 <section id="route53">
@@ -378,18 +487,18 @@ Site-to-Site VPN接続やVPCピア接続について個別設定せずに、Tran
 <section id="resolver">
 <h3>Resolver<a class="headerlink" href="#resolver" title="Permalink to this heading">¶</a></h3>
 <p>VPC内やオンプレからの問い合わせを解決するサービスで<a class="reference external" href="https://dev.classmethod.jp/articles/explain-route53-resolver-ram/">こちらの記事</a>がわかりやすい</p>
-<section id="id17">
-<h4>VPC内の名前解決<a class="headerlink" href="#id17" title="Permalink to this heading">¶</a></h4>
+<section id="id29">
+<h4>VPC内の名前解決<a class="headerlink" href="#id29" title="Permalink to this heading">¶</a></h4>
 <p>通信を行う際に、Resolverに問い合わせを行い、Resolverはhosted zoneに問い合わせを行い解決する。</p>
 <p><img alt="" src="../_images/chap1_route53_resolver_1.png" /></p>
 </section>
-<section id="id18">
-<h4>オンプレからの名前解決<a class="headerlink" href="#id18" title="Permalink to this heading">¶</a></h4>
+<section id="id30">
+<h4>オンプレからの名前解決<a class="headerlink" href="#id30" title="Permalink to this heading">¶</a></h4>
 <p>オンプレミス環境からクラウド環境に名前解決のリクエストをする際には、Route53 Resolverのインバウンドエンドポイントの設定が必要になる。インバウンドのエンドポイントが作成されると、IPが発行されるので、このIPをオンプレ側のDNSに設定する。</p>
 <p><img alt="" src="../_images/chap1_route53_resolver_2.png" /></p>
 </section>
-<section id="id19">
-<h4>オンプレへの名前解決<a class="headerlink" href="#id19" title="Permalink to this heading">¶</a></h4>
+<section id="id31">
+<h4>オンプレへの名前解決<a class="headerlink" href="#id31" title="Permalink to this heading">¶</a></h4>
 <p>クラウド側からオンプレミスのDNSで名前解決をリクエストする際には、Route53 アウトバウンドエンドポイントとRoute53 ResolverRuleを設定する必要がある。</p>
 <p>このResolver Ruleは共有が可能で、別のAWSアカウントなどで共通利用することができる。</p>
 <p><img alt="" src="../_images/chap1_route53_resolver_3.png" /></p>

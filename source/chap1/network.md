@@ -30,8 +30,9 @@ S3とDynamo DBが対応しており、料金がかからない特徴がある。
 ### インターフェース型(PrivateLink型)
 50種類以上のサービスが対応しており、S3はインターフェース型の接続も可能。  
 データの転送とサービス利用時間に応じて課金する必要がある。  
-VPC内のサブネットにENIを払い出し、ENIにアクセスすることで対象のAWSサービスにアクセスする。
-AWS PrivateLinkという技術が利用される。
+AWSのインターフェースエンドポイントは、VPC内の特定のサブネットにElastic Network Interface (ENI) を提供することで、プライベートな接続を介してAWSサービスにアクセスするためのエンドポイントを作成します。このENIはVPC内のプライベートIPアドレスを持ち、このENIを経由してAWSサービスに接続します。この技術全体がAWS PrivateLinkと呼ばれています。
+
+要するに、VPC内にプライベートIPアドレスを持つエンドポイントインターフェース（ENI）が提供され、このENIを通じてAWSのリソースにアクセスするのは、インターフェース型のVPCエンドポイントの特徴です。
 
 
 ![](../img/chap1_vpc_endpoint_if.png)
@@ -75,7 +76,8 @@ AWS外部からVPCへの接続を行う方法について、大きく3パター�
 - Direct Connect: 物理線を引いての接続設定
 
 ### AWS クライアントVPN
-VPCの外部のクライアントから、VPCに接続する技術
+VPCの外部のクライアントから、VPCに接続する技術。
+データセンターなどではなく、単独のクライアントなどと接続する際に利用する。
 
 ![](../img/chap1_vpn_client.png)
 
@@ -107,44 +109,79 @@ AWSクライアントがVPNに接続する際の認証は以下の3パターン�
 ### AWS Site-to-Site VPN
 VPCに仮想プライベートゲートウェイをアタッチして、データセンターなどのオンプレのルーターと、IPsec VPN接続を可能にする。
 自動的に2つの接続が設定され、高可用性が担保される。
-
 ![](../img/chap1_vpn_site2site.png)
 
+#### Cloud Hub設計
+複数のオンプレミスが1つのVPCに接続するような設計をCloudHub設計と呼ぶ
 
-### 仮想プライベートGW
+#### 仮想プライベートGW
 VPCエンドポイント側に設定するGW
-
-#### 設定方法
+##### 設定方法
 1. VPCの画面から仮想プライベートGWを選択
 2. 名前とASNの設定
 3. 対象のVPCにアタッチ
 4. ルートテーブルに対して、仮想プライベートGWへのルーティングを設定
-
-
-### カスタマーGW
+#### カスタマーGW
 カスタマーのルーター側で設定するGW
-
-#### 設定方法
+##### 設定方法
 1. VPCの画面からカスタマーGWを選択
 2. 名前、ルーティングタイプ、ASN、ルーターのIPを設定
-
-
-### VPN接続の確立
-#### 設定方法
+#### VPN接続の確立
+##### 設定方法
 1. VPCの画面からSite-to-site VPN接続を選択
 2. 仮想プライベートGWとカスタマーGWを選択
 3. ルーター側に導入するconfigファイルをDLして、ルーターに導入する
+#### 接続時の機能
+- Internet Key Exchange  
+    暗号化のために共通鍵を交換することができる
+- デッドピア検出  
+    接続先のデバイスが有効か否かを確認できる
+- NATトラバーサル  
+    オンプレ側でNATルーターを介したVPNが可能
+
+
+
 
 
 ### Direct Connect
-ユーザーのルーター（Customer Router）からDirect Connectのルータ（DX Router）に光ファイバーケーブルを介して接続するサービス。インターネットを経由しない専用線を確保できる。
-
+ユーザーのルーター（Customer Router）からDirect Connectのルータ（DX Router）に光ファイバーケーブルを介して接続するサービス。インターネットを経由しない専用線を確保できる。  
 通信速度に関しても最大100GBpsを確保することができるので、金額と設定の手間がかかる分、安全性と通信速度を確保できる。
 
-![](../img/chap1_vpn_direct.png)
+下図のようにAWSのDirectConnectロケーションを経由してオンプレミス環境やDBとAWS内の通信を確立する。
+![](../img/chap11_directconnect.png)
+[公式ドキュメント](https://docs.aws.amazon.com/ja_jp/directconnect/latest/UserGuide/Welcome.html)
 
 接続方法などは[参考サイト](https://atbex.attokyo.co.jp/blog/detail/85/)参照。
 
+#### 接続方法
+専用接続とホスト接続がある
+##### 専用接続
+単一アカウントに専用の物理線を引きます。主要なデータセンターなどを経由して線を引くことになる。
+1G以上の(1Gbps/10Gbps/100Gbps)帯域幅を確約できる。
+##### ホスト接続
+AWS Direct Partner(NTT東日本など）を利用して提供されるため、複数のお客さんと共有をする。
+そのため、帯域幅もMbps(50Mbps-500Mbps)という比較的小さいサイズで契約することができる。
+
+#### 冗長性
+##### VPNバックアップ
+AWS Direct ConnectとVPNを併用して、VPNをバックアップにすることができる。
+VPNは1.25Gbpsまでをサポートしているので1Gを超える場合は、別のバックアップを検討する必要がある。
+##### 高い回復性
+Direct Connect Location自体は冗長構成をとるが、Direct Connect Locationの内部は冗長構成にしない。
+つまり、ロケーションに障害が発生すると、別のロケーション経由の通信を行うが、障害が発生したロケーション自体は利用できない。
+![](../img/chap11_directConnect_1.png)
+
+##### 最大回復性
+高い回復性に加えて、ロケーション内の冗長構成もとる
+![](../img/chap11_directConnect_2.png)
+#### 仮想インターフェース
+Direct Connectでは、仮想インターフェース（VIF)を利用して通信を行う
+##### プライベート仮想インターフェース（プライベートVIF）
+DirectConnectを経由してVPCに接続する際に利用される。
+##### パブリック仮想インターフェース（パブリックVIF）
+DirectConnectを経由してパブリックなAWSサービス（S3やDynamoDB）に対して接続することができる。
+##### トランジット仮想インターフェース（トランジットVIF）
+DirectConnectを経由してTransitGWに対してアクセスすることができる。
 
 
 
@@ -181,8 +218,9 @@ VPCが他のVPCと接続するための設定。
 最大で5000のVPC同士の接続やVPCとオンプレとの接続を管理することができる。
 Site-to-Site VPN接続やVPCピア接続について個別設定せずに、Transit GWで集中管理できる。
 
-![](../img/chap1_transitgw_image.png)
 
+![](../img/chap11_transitgw.jpeg)
+![](../img/chap1_transitgw_image.png)
 #### VPCピア接続の取りまとめ
 VPCピア接続を利用して複数のVPC同士を接続すると以下のような課題がある
 - トランジットトラフィックに対応できない
@@ -192,18 +230,37 @@ VPCピア接続を利用して複数のVPC同士を接続すると以下のよ�
 
 Transit GWを利用することで、トランジットトラフィックに対応でき、追加時もTransitGWを修正するだけで良い
 
-![](../img/chap1_transitgw_merit_1.png)
-
-
-#### VPN接続の取りまとめ
-VPN接続を利用して複数のVPCに接続しようとすると、それぞれのVPCに対してVPNの設定が必要。
-しかし、TransitGWを利用すれば、オンプレとTransit GWまでの設定をするだけで、後ろのVPCの追加が容易になる。
-
 ![](../img/chap1_transitgw_merit_2.png)
 
 
 
 
+#### VPN接続の取りまとめ
+VPN接続を利用して複数のVPCに接続しようとすると、それぞれのVPCに対してVPNの設定が必要。
+しかし、TransitGWを利用すれば、オンプレとTransit GWまでの設定をするだけで、後ろのVPCの追加が容易になる。
+DirectConnect GWを利用することで専用線経由のVPNにも対応できる
+
+
+![](../img/chap1_transitgw_merit_1.png)
+
+### VPNまとめ
+- オンプレ 1:VPC 1
+    - クライアントVPN
+        - クライアントVPNエンドポイント
+    - サイト:Site2Site VPN
+        - 仮想プライベートGW
+    - 専用線:DX
+        - DX Location
+- オンプレ N:VPC 1
+    - Cloud Hub
+- オンプレ 1:VPC N
+    - 一般回線: TransitGW
+    - 専用線(N<10): DXGW(DirectConnect GW)
+    - 専用線(N>10): DXGW+TransitGW
+
+![](../img/chap11_vpn_1.jpeg)
+![](../img/chap11_vpn_2.jpeg)
+![](../img/chap11_vpn_3.jpeg)
 
 ## Route53
 ### HosteZone
