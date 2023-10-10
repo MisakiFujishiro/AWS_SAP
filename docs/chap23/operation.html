@@ -92,12 +92,14 @@
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#vpc-flow-log">VPC Flow Log</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id15">トラフィックミラーリング</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#aws-x-ray">AWS X-Ray</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#siem-on-amazon-opensearch-service">SIEM on Amazon OpenSearch Service</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#id15">メンテナンス</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#id16">メンテナンス</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#aws-systemmanager">AWS SystemManager</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#s3">S3バッチオペレーション</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#aws-config">AWS Config</a></li>
 </ul>
 </li>
@@ -335,6 +337,7 @@ CloudForamtionに対しての作成や更新の成功失敗を通知するコマ
 <li><p>scheduledChange(スケジュールされた変更)</p></li>
 </ul>
 <p><img alt="" src="../_images/chap21_aws_health_dashboard.png" /></p>
+<p>具体的な利用例としては、EC2がリタイア予定であることを通知すAWS_EC2_PERSISTENT_INSTANCE_RETIREMENT_SCHEDULEDを検知するEventBridgeを作成して、自動で、EC2のRestartを設定することもできる。</p>
 </section>
 <section id="cloudwatch">
 <h3>CloudWatch<a class="headerlink" href="#cloudwatch" title="Permalink to this heading">¶</a></h3>
@@ -357,7 +360,12 @@ CloudForamtionに対しての作成や更新の成功失敗を通知するコマ
 <h3>VPC Flow Log<a class="headerlink" href="#vpc-flow-log" title="Permalink to this heading">¶</a></h3>
 <p>ENIへのインバウンド・アウトバンドトラフィックに関する情報をCloudWatchやS3に配信することができる。
 バケットの中身までは保存しないが、送信元と先のIPやポート、プロトコルやバケット数、バイト数、開始終了時間など全般の情報をモニタリングすることができる。</p>
+<p>送信に関するメタ的なデータを収集することができるが、パケットの中身までは確認できず、中身を確認したい場合はトラフィックミラーリングが必要。</p>
 <p><img alt="" src="../_images/chap21_vpc_flowlog.png" /></p>
+</section>
+<section id="id15">
+<h3>トラフィックミラーリング<a class="headerlink" href="#id15" title="Permalink to this heading">¶</a></h3>
+<p>トラフィックのパケットの中身を含めて配信することができる。EC2のENIをターゲットとして配信し、そのまま分析を行うことができる。</p>
 </section>
 <section id="aws-x-ray">
 <h3>AWS X-Ray<a class="headerlink" href="#aws-x-ray" title="Permalink to this heading">¶</a></h3>
@@ -373,21 +381,44 @@ CFNテンプレートがオープンソースとしてGitHubに公開されて�
 <p>各種サービスへのアクセスログやWAF、VPCFlowLog、Kinesis経由のログを集約してLambdaが変換してOpenSearch Serviceにロードして、可視化してくれる。</p>
 </section>
 </section>
-<section id="id15">
-<h2>メンテナンス<a class="headerlink" href="#id15" title="Permalink to this heading">¶</a></h2>
+<section id="id16">
+<h2>メンテナンス<a class="headerlink" href="#id16" title="Permalink to this heading">¶</a></h2>
 <section id="aws-systemmanager">
 <h3>AWS SystemManager<a class="headerlink" href="#aws-systemmanager" title="Permalink to this heading">¶</a></h3>
 <p>EC2やオンプレに対して、SSM Agentをインストールすると、マネージドインスタンスとして、SystemManagerから管理を行うことができる。</p>
 <p>以下のような観点について管理することができる</p>
 <ul class="simple">
 <li><p>SessionManager<br />
-セキュリティグループでの設定をせず、キーペアも利用せずに、SessionManagerからコマンド実行が可能</p></li>
+セキュリティグループでの設定をせず、キーペアも利用せずに、SessionManagerからコマンド実行が可能<br />
+EC2 Instance Connectと呼ばれる技術でも接続できるが、こちらはSSHを利用している。SSMは特殊なためポートの解放なども不要。設定は具体的には、以下の手順を踏む</p>
+<ul>
+<li><p>SSMエージェントをインスタンスに設定</p></li>
+<li><p>EC2インスタンスがSSMサービスにアクセスできるネットワーク設定</p></li>
+<li><p>EC2インスタンスのRole設定してSSM Coreポリシーをアタッチ</p></li>
+<li><p>IAMユーザーにRole設定してセッションマネージャーを使用できるポリシーをアタッチ</p></li>
+</ul>
+</li>
 <li><p>Run Command<br />
-事前に定義されたコマンドを実行することができる</p></li>
+事前に定義されたコマンドを実行することができる。AWSが事前準備している定番コマンド~カスタマイズも可能、</p></li>
 <li><p>パッチマネージャー<br />
-対象に対してまとめてパッチを当てることができる</p></li>
+対象に対してまとめてパッチを当てることができる。パッチ適用ルールがカスタマイズすることができるので、どのインスタンスにパッチを当てて、どのインスタンスにパッチを当てないかまでベースラインによりコントロールできる、</p></li>
 <li><p>Automation<br />
 事前に設定しておいたオートメーションドキュメントを実行することができる</p></li>
+<li><p>Opt Center<br />
+運用で発生した問題の確認やステータスを一元管理可能。</p></li>
+</ul>
+</section>
+<section id="s3">
+<h3>S3バッチオペレーション<a class="headerlink" href="#s3" title="Permalink to this heading">¶</a></h3>
+<p>S3のオブジェクトに対して、一括した処理をサポートする</p>
+<ul class="simple">
+<li><p>オブジェクトのコピー</p></li>
+<li><p>アーカイブオブジェクトの復元</p></li>
+<li><p>アクセスコントロールリストの設定。置き換え</p></li>
+<li><p>オブジェクトロックの保持期間の設定</p></li>
+<li><p>オブジェクトロックのリーガルホールドの有効化・かいじょ</p></li>
+<li><p>タグの一括削除/置き換え</p></li>
+<li><p>Lambda関数の呼び出し</p></li>
 </ul>
 </section>
 <section id="aws-config">
