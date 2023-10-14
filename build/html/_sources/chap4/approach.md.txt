@@ -64,8 +64,10 @@ Snowball Edgeなどは防水防塵対策はもちろんのこと、KMSを設定�
 ## Appの移行サービス
 ### AWS Application Migration Service(MGN)
 オンプレサーバーをAWSに移行するためのサービス。  
-AWS  Replication Agentをオンプレ側のサーバーにインストールすることで、継続的に同期が行われソースサーバーの停止を必要としない。
+AWS Replication Agentをオンプレ側のサーバーにインストールすることで、継続的に同期が行われソースサーバーの停止を必要としない。
 EBSボリュームにコピー元のAMIが作成され、起動テンプレートからEC2を起動させることができる。
+
+移行したEC2などが問題なく起動することができるかについては、テストとカットオーバーのための起動設定を構成することができ、テストインスタンをApplication Migration Serviceの中で設定することができる。
 
 ## DBの移行サービス
 ### AWS Database Migration Service(DMS)
@@ -73,7 +75,7 @@ EBSボリュームにコピー元のAMIが作成され、起動テンプレー�
 一度だけの移行や継続的な差分移行が可能であり、継続的な移行ではCDC（変更データキャプチャ）と呼ばれるソースDBの変更をリアルタイムにキャプチャし、移行先に反映させる機能を利用する。
 
 ### スキーマ変更
-DMSにおいては、DMSスキーマ変換機能がリリースされておりOracleなどのソースからMySQLやPostgresへの移行が自動で行われる。
+DMSにおいては、DMSスキーマ変換機能がリリースされておりOracle,Microsoft SQSからMySQLやPostgresへの移行が自動で行われる。
 
-また、DMSスキーマ変換機能でサポートされていない場合は、AWS Schema Conversion Toolを利用してスキーマ変換する。
+また、DMSスキーマ変換機能でサポートされていない場合は、AWS Schema Conversion ToolをEC2などのクライアントにインストールしてスキーマ変換する。
 大規模なデータであれば、Snowball EdgeにSCTをインストールしておき、変換をさせる。

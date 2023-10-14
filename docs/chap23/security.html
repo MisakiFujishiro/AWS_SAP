@@ -56,25 +56,29 @@
 <li class="toctree-l1 current"><a class="current reference internal" href="#">セキュリティ</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#id2">ユーザー関連のセキュリティ</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#id3">ルートユーザー</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id4">最小権限の適用</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id4">最小権限の適用</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id5">アクセス許可の境界</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#iam-access-analyzer">IAM Access Analyzer</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#vpc">VPC関連のセキュリティ</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#id5">セキュリティグループ</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id6">セキュリティグループ</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#acl">ネットワークACL</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#kms">KMS</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#id6">鍵の種類</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id7">鍵の管理</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#id8">キーのローテーション</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#id9">キーのエイリアス</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#id10">キーのインポート</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#id11">カスタムキーストア</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id7">鍵の種類</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id8">鍵の管理</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id9">キーのローテーション</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id10">キーのエイリアス</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id11">キーのインポート</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id12">カスタムキーストア</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="#id12">エンベロープ暗号化</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id13">KMSと関連するサービス</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id13">エンベロープ暗号化</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id14">KMSと関連するサービス</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#s3">S3の暗号化</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#cse-c">CSE-C</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#cse-kms">CSE-KMS</a></li>
@@ -87,26 +91,28 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#cognito">Cognito</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#id14">ユーザープール</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id15">ユーザープール</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#id">IDプール</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#waf">WAF</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#id15">マネージドルール</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#id16">ベースラインルールグループ</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id16">マネージドルール</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id17">ベースラインルールグループ</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#ip">IP評価ルールグループ</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#aws-waf">AWS WAFボットコントロールルールグループ</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#id17">AWS WAFカスタムルール</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id18">AWS WAFカスタムルール</a></li>
 </ul>
 </li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#acm">ACM</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#aws-shield">AWS Shield</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#id18">その他</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#id19">その他</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#cloudtrail">CloudTrail</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#aws-network-firewall">AWS Network Firewall</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#firewall-manager">Firewall Manager</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#secretsmanager">SecretsManager</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id19">パラメータストア</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id20">パラメータストア</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#amazon-macie">Amazon Macie</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#amazon-inspector">Amazon Inspector</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#amazon-guard-duty">Amazon Guard Duty</a></li>
@@ -114,7 +120,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#aws-security-hub">AWS Security Hub</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#id20">実装踏まえて理解したい点</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id21">実装踏まえて理解したい点</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="reliability.html">信頼性</a></li>
@@ -167,10 +173,15 @@
 <section id="id4">
 <h3>最小権限の適用<a class="headerlink" href="#id4" title="Permalink to this heading">¶</a></h3>
 <p>IAM Policyを作成したり付与する場合には必要以上のアクションやリソースを与えると余分なリスクが発生してしまう。</p>
+<section id="id5">
+<h4>アクセス許可の境界<a class="headerlink" href="#id5" title="Permalink to this heading">¶</a></h4>
 <p>最小権限を守るためにアクセス許可の境界（Permissions boundarie)という機能がある。
 これは、IAMユーザー、ロールに設定することができ、自分自身のポリシーを超えて新しいIAMの権限を作成することができないという機能。
 すなわちS3にアクセス許可のないIAM RoleがS3にアクセス許可のあるポリシーなどを作成することができない機能。
 OUに対するSCPの考え方に似ている。</p>
+</section>
+<section id="iam-access-analyzer">
+<h4>IAM Access Analyzer<a class="headerlink" href="#iam-access-analyzer" title="Permalink to this heading">¶</a></h4>
 <p>最小権限の原則を適用するために便利なサービスとしてIAM Access Analyzerがある。<br />
 IAM Access Analyzerの機能は3つ</p>
 <ul class="simple">
@@ -180,12 +191,13 @@ IAM Access Analyzerの機能は3つ</p>
 </ul>
 </section>
 </section>
+</section>
 <section id="vpc">
 <h2>VPC関連のセキュリティ<a class="headerlink" href="#vpc" title="Permalink to this heading">¶</a></h2>
 <p>セキュリティグループとネットワークACLの違いを認識しておく
 <img alt="" src="../_images/chap21_sg_acl.png" /></p>
-<section id="id5">
-<h3>セキュリティグループ<a class="headerlink" href="#id5" title="Permalink to this heading">¶</a></h3>
+<section id="id6">
+<h3>セキュリティグループ<a class="headerlink" href="#id6" title="Permalink to this heading">¶</a></h3>
 <p>ENI(Elastic Network Interface)を保護するのがセキュリティグループ</p>
 <p>ステートフルであるので、インバウンドで許可したルールは自動でアウトバウンドで許可されます。<br />
 デフォルトで、インバウンドは全て拒否されており、アウトバウンドは全て許可されています。</p>
@@ -201,8 +213,8 @@ IAM Access Analyzerの機能は3つ</p>
 <h2>KMS<a class="headerlink" href="#kms" title="Permalink to this heading">¶</a></h2>
 <p>鍵の管理や鍵を利用したデータの暗号化を行うことができるサービス。
 様々なAWSサービスと統合されており、簡単に暗号化を適用することもできる。</p>
-<section id="id6">
-<h3>鍵の種類<a class="headerlink" href="#id6" title="Permalink to this heading">¶</a></h3>
+<section id="id7">
+<h3>鍵の種類<a class="headerlink" href="#id7" title="Permalink to this heading">¶</a></h3>
 <p>KMSで利用される鍵をざっくり分類すると以下</p>
 <ul class="simple">
 <li><p>カスタマー管理キー<br />
@@ -218,32 +230,32 @@ IAM Access Analyzerの機能は3つ</p>
 AWSが作成・管理するキーで、カスタマーは基本的に意識することがないキーで、SSE-S3で利用される</p></li>
 </ul>
 </section>
-<section id="id7">
-<h3>鍵の管理<a class="headerlink" href="#id7" title="Permalink to this heading">¶</a></h3>
 <section id="id8">
-<h4>キーのローテーション<a class="headerlink" href="#id8" title="Permalink to this heading">¶</a></h4>
+<h3>鍵の管理<a class="headerlink" href="#id8" title="Permalink to this heading">¶</a></h3>
+<section id="id9">
+<h4>キーのローテーション<a class="headerlink" href="#id9" title="Permalink to this heading">¶</a></h4>
 <p>KMSで管理されているキーはローテションされる。
 具体的には、毎年新しいキーマテリアル（暗号化キー本体の複雑な文字列）が再生成される。
 キーIDやプロパティなどはそのままで、中身のマテリアルだけが入れ替わっている。
 古いマテリアルで暗号化されたものは古いマテリアルで複合されるため、古いキーマテリアルも保存されている。</p>
 <p>なお、KMSで作成されたキーマテリアルについてはユーザーは確認することができないのでユーザー側の過失で流出することはない。</p>
 </section>
-<section id="id9">
-<h4>キーのエイリアス<a class="headerlink" href="#id9" title="Permalink to this heading">¶</a></h4>
+<section id="id10">
+<h4>キーのエイリアス<a class="headerlink" href="#id10" title="Permalink to this heading">¶</a></h4>
 <p>手動でのローテーションや命名することによる管理を行うためにエイリアスを設定することができる。
 キーを利用する際に、エイリアスを指定してキーを指定することも可能</p>
 </section>
-<section id="id10">
-<h4>キーのインポート<a class="headerlink" href="#id10" title="Permalink to this heading">¶</a></h4>
+<section id="id11">
+<h4>キーのインポート<a class="headerlink" href="#id11" title="Permalink to this heading">¶</a></h4>
 <p>カスタマー管理キーはAWS側で作成することも、キーの作成時にインポート数rこともできる。</p>
 </section>
-<section id="id11">
-<h4>カスタムキーストア<a class="headerlink" href="#id11" title="Permalink to this heading">¶</a></h4>
+<section id="id12">
+<h4>カスタムキーストア<a class="headerlink" href="#id12" title="Permalink to this heading">¶</a></h4>
 <p>カスタムキーストアを利用するとAWS CloudHSMクラスター(キー保存と暗号化を実行するハードウェアを物理的に占有するサービス)に保管することができる。</p>
 </section>
 </section>
-<section id="id12">
-<h3>エンベロープ暗号化<a class="headerlink" href="#id12" title="Permalink to this heading">¶</a></h3>
+<section id="id13">
+<h3>エンベロープ暗号化<a class="headerlink" href="#id13" title="Permalink to this heading">¶</a></h3>
 <p>KMSのAPIを利用して暗号化する場合、容量の制限があるので、その制限を避けるためにエンベロープ暗号化が行われる。</p>
 <ol class="arabic simple">
 <li><p>データキー(緑色のキー)とマスターキー（赤色のキー）で暗号化したデータキーを発行する</p></li>
@@ -254,8 +266,8 @@ AWSが作成・管理するキーで、カスタマーは基本的に意識す�
 </ol>
 <p><img alt="" src="../_images/chap22_envelope_key.png" /></p>
 </section>
-<section id="id13">
-<h3>KMSと関連するサービス<a class="headerlink" href="#id13" title="Permalink to this heading">¶</a></h3>
+<section id="id14">
+<h3>KMSと関連するサービス<a class="headerlink" href="#id14" title="Permalink to this heading">¶</a></h3>
 <ul class="simple">
 <li><p>Parameter Store<br />
 格納するパラメータを暗号化することができる。<br />
@@ -318,8 +330,8 @@ KMSのキーストアとしてCloudHSMを利用することでFIPS 140-2レベ�
 <section id="cognito">
 <h2>Cognito<a class="headerlink" href="#cognito" title="Permalink to this heading">¶</a></h2>
 <p>Webアプリケーションやモバイルアプリケーションに対して認証を提供するサービス</p>
-<section id="id14">
-<h3>ユーザープール<a class="headerlink" href="#id14" title="Permalink to this heading">¶</a></h3>
+<section id="id15">
+<h3>ユーザープール<a class="headerlink" href="#id15" title="Permalink to this heading">¶</a></h3>
 <p>アプリからのサインアップ・サインインのために利用することが可能。
 Cognito側で認証情報を管理することもできるが、SAMLやOIDCを利用して外部の認証情報と連携することもできる。</p>
 <p>また、サインアップやサインインをトリガーにしてLambdaを起動させることができる。</p>
@@ -334,11 +346,11 @@ Cognito側で認証情報を管理することもできるが、SAMLやOIDCを�
 <h2>WAF<a class="headerlink" href="#waf" title="Permalink to this heading">¶</a></h2>
 <p>Web Application Firewallであり、CloudFront・APIGW・ALB・AppSync・Cognitoユーザープールなどに対するリクエストに対応することができる。
 それぞれのサービスに対してWebACLを作成し、アタッチすることでAppに影響なく開始することができる。</p>
-<section id="id15">
-<h3>マネージドルール<a class="headerlink" href="#id15" title="Permalink to this heading">¶</a></h3>
-<p>よくある攻撃に対する対策としてはマネージドルールが準備されており、簡単に設定が可能</p>
 <section id="id16">
-<h4>ベースラインルールグループ<a class="headerlink" href="#id16" title="Permalink to this heading">¶</a></h4>
+<h3>マネージドルール<a class="headerlink" href="#id16" title="Permalink to this heading">¶</a></h3>
+<p>よくある攻撃に対する対策としてはマネージドルールが準備されており、簡単に設定が可能</p>
+<section id="id17">
+<h4>ベースラインルールグループ<a class="headerlink" href="#id17" title="Permalink to this heading">¶</a></h4>
 <p>一般的な脅威に対する保護ルール</p>
 </section>
 <section id="ip">
@@ -349,8 +361,8 @@ Cognito側で認証情報を管理することもできるが、SAMLやOIDCを�
 <h4>AWS WAFボットコントロールルールグループ<a class="headerlink" href="#aws-waf" title="Permalink to this heading">¶</a></h4>
 <p>ぼっとからのリクエストをブロック管理するルール</p>
 </section>
-<section id="id17">
-<h4>AWS WAFカスタムルール<a class="headerlink" href="#id17" title="Permalink to this heading">¶</a></h4>
+<section id="id18">
+<h4>AWS WAFカスタムルール<a class="headerlink" href="#id18" title="Permalink to this heading">¶</a></h4>
 <p>カスタムルーづで使用できるプロパティが豊富に準備されている</p>
 </section>
 </section>
@@ -366,11 +378,27 @@ CloudFront・ELB・APIGWと連携してユーザー所有のドメインの証�
 Standardは無料で、攻撃を自動的に緩和してくれる。<br />
 Advancedは月3000USDのサービスで、Organizationで利用できる。</p>
 </section>
-<section id="id18">
-<h2>その他<a class="headerlink" href="#id18" title="Permalink to this heading">¶</a></h2>
+<section id="id19">
+<h2>その他<a class="headerlink" href="#id19" title="Permalink to this heading">¶</a></h2>
+<section id="cloudtrail">
+<h3>CloudTrail<a class="headerlink" href="#cloudtrail" title="Permalink to this heading">¶</a></h3>
+<p>AWSのアクティビティに関するログを残してくれる。<br />
+整合性検証のオプションを有効化することで、改ざんへの検証を行うことができる。</p>
+</section>
 <section id="aws-network-firewall">
 <h3>AWS Network Firewall<a class="headerlink" href="#aws-network-firewall" title="Permalink to this heading">¶</a></h3>
 <p>VPC向けのFirewallで、トラフィックに応じて自動的にスケールしたり、SGだけでは設定できないカスタマイズルールを設定できる。</p>
+</section>
+<section id="firewall-manager">
+<h3>Firewall Manager<a class="headerlink" href="#firewall-manager" title="Permalink to this heading">¶</a></h3>
+<p>複数アカウントで以下のサービスを一元管理する。</p>
+<ul class="simple">
+<li><p>AWS Network Firewall</p></li>
+<li><p>WAF</p></li>
+<li><p>SG</p></li>
+<li><p>Route53
+AWS CongigやOrganizationと連携して、非準拠のリソースを抽出することができる</p></li>
+</ul>
 </section>
 <section id="secretsmanager">
 <h3>SecretsManager<a class="headerlink" href="#secretsmanager" title="Permalink to this heading">¶</a></h3>
@@ -379,8 +407,8 @@ Advancedは月3000USDのサービスで、Organizationで利用できる。</p>
 RDSの認証情報のローテションは、RDS作成時に SecretsManagerとの統合を選択することができ、デフォルトのLambdaでAWS側で自動でローテションをしてくれる。オンプレ対応する場合はLambdaの開発が必要。</p>
 <p>RDSの認証情報を変更する際に、1つのユーザーの認証情報をローテーションするとダウンタイムが発生してしまうので、二人のユーザーを切り替えることでダウンタイムを減らす交代ユーザーローテーションという機能がある。</p>
 </section>
-<section id="id19">
-<h3>パラメータストア<a class="headerlink" href="#id19" title="Permalink to this heading">¶</a></h3>
+<section id="id20">
+<h3>パラメータストア<a class="headerlink" href="#id20" title="Permalink to this heading">¶</a></h3>
 <p>パラメータを暗号化して、保持することができ、利用は無料。<br />
 SecretsManagerと比較して、ローテーションなどのメリットを享受することができないがシンプルなパラメータ保持と暗号化を利用したい場合は利用価値ある。</p>
 </section>
@@ -400,6 +428,7 @@ S3バケットに保存された機密データを機械学習を利用して検
 <p>Guard Dutyは見張り役という意味の単語。
 単語の意味の通り、CloudTrail、S3データログ、DSNクエリログ、VPC Flow Logsを分析して脅威を抽出することができるサービス。<br />
 Guard Dutyを利用することで、EC2インスタンスがDDos攻撃に利用されていたり、マイニングに利用されていることを検出することができる。</p>
+<p>また、CloudTrailの出力であるRootCredentialUsageを検知することでRoot Userの利用を検出することができる。</p>
 </section>
 <section id="amazon-detective">
 <h3>Amazon Detective<a class="headerlink" href="#amazon-detective" title="Permalink to this heading">¶</a></h3>
@@ -415,8 +444,8 @@ Guard Dutyを利用することで、EC2インスタンスがDDos攻撃に利用
 <p><a class="reference external" href="https://pages.awscloud.com/rs/112-TZM-766/images/20201013_AWS-BlackBelt-AWSSecurityHub.pdf">BLACK BELT</a></p>
 </section>
 </section>
-<section id="id20">
-<h2>実装踏まえて理解したい点<a class="headerlink" href="#id20" title="Permalink to this heading">¶</a></h2>
+<section id="id21">
+<h2>実装踏まえて理解したい点<a class="headerlink" href="#id21" title="Permalink to this heading">¶</a></h2>
 <ul class="simple">
 <li><p>AWS Certificate Manager</p></li>
 <li><p>WAF</p></li>

@@ -84,6 +84,7 @@
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#transit-gateway">Transit Gateway</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#transit-gw">Transit GW同士を接続する</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#id26">VPCピア接続の取りまとめ</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#id27">VPN接続の取りまとめ</a></li>
 </ul>
@@ -95,8 +96,8 @@
 <li class="toctree-l3"><a class="reference internal" href="#hostezone">HosteZone</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#resolver">Resolver</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#id29">VPC内の名前解決</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#id30">オンプレからの名前解決</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#id31">オンプレへの名前解決</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id30">オンプレからの名前解決(インバウンドエンドポイント)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id31">オンプレへの名前解決（アウトバウンドエンドポイント）</a></li>
 </ul>
 </li>
 </ul>
@@ -410,6 +411,10 @@ VPNは1.25Gbpsまでをサポートしているので1Gを超える場合は、�
 Site-to-Site VPN接続やVPCピア接続について個別設定せずに、Transit GWで集中管理できる。</p>
 <p><img alt="" src="../_images/chap11_transitgw.jpeg" />
 <img alt="" src="../_images/chap1_transitgw_image.png" /></p>
+<section id="transit-gw">
+<h4>Transit GW同士を接続する<a class="headerlink" href="#transit-gw" title="Permalink to this heading">¶</a></h4>
+<p>Transit GW同士のピア接続も可能であり、利用する場合は、Resource Access Managerを利用して、Transit GW接続のリクエストとアクセプトを行う。</p>
+</section>
 <section id="id26">
 <h4>VPCピア接続の取りまとめ<a class="headerlink" href="#id26" title="Permalink to this heading">¶</a></h4>
 <p>VPCピア接続を利用して複数のVPC同士を接続すると以下のような課題がある</p>
@@ -493,12 +498,12 @@ DirectConnect GWを利用することで専用線経由のVPNにも対応でき�
 <p><img alt="" src="../_images/chap1_route53_resolver_1.png" /></p>
 </section>
 <section id="id30">
-<h4>オンプレからの名前解決<a class="headerlink" href="#id30" title="Permalink to this heading">¶</a></h4>
+<h4>オンプレからの名前解決(インバウンドエンドポイント)<a class="headerlink" href="#id30" title="Permalink to this heading">¶</a></h4>
 <p>オンプレミス環境からクラウド環境に名前解決のリクエストをする際には、Route53 Resolverのインバウンドエンドポイントの設定が必要になる。インバウンドのエンドポイントが作成されると、IPが発行されるので、このIPをオンプレ側のDNSに設定する。</p>
 <p><img alt="" src="../_images/chap1_route53_resolver_2.png" /></p>
 </section>
 <section id="id31">
-<h4>オンプレへの名前解決<a class="headerlink" href="#id31" title="Permalink to this heading">¶</a></h4>
+<h4>オンプレへの名前解決（アウトバウンドエンドポイント）<a class="headerlink" href="#id31" title="Permalink to this heading">¶</a></h4>
 <p>クラウド側からオンプレミスのDNSで名前解決をリクエストする際には、Route53 アウトバウンドエンドポイントとRoute53 ResolverRuleを設定する必要がある。</p>
 <p>このResolver Ruleは共有が可能で、別のAWSアカウントなどで共通利用することができる。</p>
 <p><img alt="" src="../_images/chap1_route53_resolver_3.png" /></p>

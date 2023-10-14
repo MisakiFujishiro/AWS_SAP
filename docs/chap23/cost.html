@@ -241,6 +241,7 @@
 <h2>DynamoDBのコスト<a class="headerlink" href="#dynamodb" title="Permalink to this heading">¶</a></h2>
 <p>DynamoDBのアイテム読み込みと書き込みには2つのモードがあり、それぞれでコストが異なる。<br />
 継続的なリクエスト、緩やかな需要であれば、プロビジョンドキャパシティモードが良い。</p>
+<p>プロビジョンドキャパシティモードで設定された数値を超えるリクエストが来てしまうとスロットリングが発生してしまいProvisionedThroughputExceededExceptionエラーが返される。</p>
 <section id="id5">
 <h3>オンデマンドモード<a class="headerlink" href="#id5" title="Permalink to this heading">¶</a></h3>
 <p>書き込みリクエストが発生するたびに料金が発生する。<br />
@@ -255,6 +256,7 @@
 <section id="dax">
 <h3>DAX<a class="headerlink" href="#dax" title="Permalink to this heading">¶</a></h3>
 <p>VPC内部でDynamoDBのキャッシュとして利用することができ、数マイクロの応答が可能になる。
+GETの処理に関して速度の改善とリクエスト数の低減の効果が期待できる。
 作成されるノード単位で課金がかかる。</p>
 </section>
 </section>

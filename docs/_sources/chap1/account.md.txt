@@ -18,15 +18,10 @@
 ## AWS Directory Service
 AWSの認証については、既に組織が管理している既存のActive Directoryと統合して共通利用することができる。  
 ポイントは、オンプレや企業という単位でアカウントディレクトリを構築管理する点。
-
-
-
 ### AD Connector
 ポイントはオンプレで利用しているActive Directoryの認証をそのまま利用できる点。
 各AZにADConnectorを設定して、オンプレ側のADの情報を設定することで、IAM Roleが払い出されるイメージ
-
 ![](../img/chap1_cross_account_ad.png)
-
 ### Simple ADとManaged Microsoft AD
 ポイントは、AWSへActive Directoryを移行する場合に利用することができる
 - Simple AD  
@@ -34,10 +29,11 @@ AWSの認証については、既に組織が管理している既存のActive D
 - AWS Managed Microsoft AD  
     5000ユーザーを超える場合は利用する。
 
-
 ## IAM アイデンティティセンター
 AWS環境でのアイデンティティ管理が主目的である。複数のAWSアカウントだけでなく、Salesforceなどの外部アプリケーションへのSSOをサポートしている。
-アカウント情報の管理は、Identity Conterでも良いが、外部のIPプロバイダーに任せることも可能
+アカウント情報の管理は、Identity Centerでも良いが、外部のIPプロバイダーに任せることも可能
+
+AD ConnectorとIdentity Centerを組み合わせることで既存のADサービスを活用しながらAWSと SaaSアカウントのSSOを実現することができる。
 
 [こちらのサイト](https://dev.classmethod.jp/articles/developersio-2023-osaka-aws-booth-aws-iam-identity-center/)がわかりやすそうなので、時間ある時に確認する。
 

@@ -159,7 +159,8 @@ Route53と組み合わせてMXレコードをSESに設定することでメッ�
 
 ## Egress-Only IGW
 VPCではIPv6を使用することができる。IPv4ではインターネットに出て行くときはIGWを経由する。
-IPv6ではEgress-Only IGWヲリヨウスル。
+IPv6ではEgress-Only IGWを利用する。  
+Egressを利用する場合はVPCを新規作成し、IGWのようにVPCにアタッチして、ルートテーブルを設定する。
 
 ## 固定IPアドレス対応
 外部接続先にIPのホワイトリスト設定があり、AWSからの接続についてIPを限定する必要がある場合の対応。

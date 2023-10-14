@@ -13,12 +13,13 @@
 ### 最小権限の適用
 IAM Policyを作成したり付与する場合には必要以上のアクションやリソースを与えると余分なリスクが発生してしまう。
 
+#### アクセス許可の境界
 最小権限を守るためにアクセス許可の境界（Permissions boundarie)という機能がある。
 これは、IAMユーザー、ロールに設定することができ、自分自身のポリシーを超えて新しいIAMの権限を作成することができないという機能。
 すなわちS3にアクセス許可のないIAM RoleがS3にアクセス許可のあるポリシーなどを作成することができない機能。
 OUに対するSCPの考え方に似ている。
 
-
+#### IAM Access Analyzer
 最小権限の原則を適用するために便利なサービスとしてIAM Access Analyzerがある。  
 IAM Access Analyzerの機能は3つ
 - 外部共有リソースの識別：意図しない外部共有を検知することができる
@@ -178,9 +179,21 @@ Advancedは月3000USDのサービスで、Organizationで利用できる。
 
 
 ## その他
+### CloudTrail
+AWSのアクティビティに関するログを残してくれる。  
+整合性検証のオプションを有効化することで、改ざんへの検証を行うことができる。
+
+
 ### AWS Network Firewall
 VPC向けのFirewallで、トラフィックに応じて自動的にスケールしたり、SGだけでは設定できないカスタマイズルールを設定できる。
 
+### Firewall Manager
+複数アカウントで以下のサービスを一元管理する。
+- AWS Network Firewall
+- WAF 
+- SG
+- Route53
+AWS CongigやOrganizationと連携して、非準拠のリソースを抽出することができる
 
 ### SecretsManager
 DBなどの認証情報を保持、アプリは SecretsManagerに認証情報をリクエストする。
@@ -208,6 +221,8 @@ Inspectorは検査官という意味の単語。
 Guard Dutyは見張り役という意味の単語。
 単語の意味の通り、CloudTrail、S3データログ、DSNクエリログ、VPC Flow Logsを分析して脅威を抽出することができるサービス。  
 Guard Dutyを利用することで、EC2インスタンスがDDos攻撃に利用されていたり、マイニングに利用されていることを検出することができる。
+
+また、CloudTrailの出力であるRootCredentialUsageを検知することでRoot Userの利用を検出することができる。
 
 ### Amazon Detective
 Detectiveは探偵という意味の単語。

@@ -215,8 +215,9 @@ EC2をホストしたデータ処理が可能</p></li>
 <section id="aws-application-migration-service-mgn">
 <h3>AWS Application Migration Service(MGN)<a class="headerlink" href="#aws-application-migration-service-mgn" title="Permalink to this heading">¶</a></h3>
 <p>オンプレサーバーをAWSに移行するためのサービス。<br />
-AWS  Replication Agentをオンプレ側のサーバーにインストールすることで、継続的に同期が行われソースサーバーの停止を必要としない。
+AWS Replication Agentをオンプレ側のサーバーにインストールすることで、継続的に同期が行われソースサーバーの停止を必要としない。
 EBSボリュームにコピー元のAMIが作成され、起動テンプレートからEC2を起動させることができる。</p>
+<p>移行したEC2などが問題なく起動することができるかについては、テストとカットオーバーのための起動設定を構成することができ、テストインスタンをApplication Migration Serviceの中で設定することができる。</p>
 </section>
 </section>
 <section id="db">
@@ -228,8 +229,8 @@ EBSボリュームにコピー元のAMIが作成され、起動テンプレー�
 </section>
 <section id="id4">
 <h3>スキーマ変更<a class="headerlink" href="#id4" title="Permalink to this heading">¶</a></h3>
-<p>DMSにおいては、DMSスキーマ変換機能がリリースされておりOracleなどのソースからMySQLやPostgresへの移行が自動で行われる。</p>
-<p>また、DMSスキーマ変換機能でサポートされていない場合は、AWS Schema Conversion Toolを利用してスキーマ変換する。
+<p>DMSにおいては、DMSスキーマ変換機能がリリースされておりOracle,Microsoft SQSからMySQLやPostgresへの移行が自動で行われる。</p>
+<p>また、DMSスキーマ変換機能でサポートされていない場合は、AWS Schema Conversion ToolをEC2などのクライアントにインストールしてスキーマ変換する。
 大規模なデータであれば、Snowball EdgeにSCTをインストールしておき、変換をさせる。</p>
 </section>
 </section>
