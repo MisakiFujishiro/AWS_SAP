@@ -287,8 +287,9 @@ DBとApp両方とも本番と同じスペックのものを別リージョンに
 <section id="rds-proxy">
 <h3>RDS Proxy<a class="headerlink" href="#rds-proxy" title="Permalink to this heading">¶</a></h3>
 <p>RDS Proxyを利用することで、DBへの接続のスケーラビリティと可用性を確保してくれる。アプリケーションにおけるキューのような役割を担っているといえる。
-具体的には。DB接続プールを確立して効率的な接続を提供するとともに、仮に接続できない場合もProxyによって自動調整してくれる。</p>
-<p>RDS ProxyはAurora、RDS(MySQS/Postgres)に対応している。</p>
+具体的には。DB接続プールを確立して効率的な接続を提供するとともに、仮に接続できない場合もProxyによって自動調整してくれる。<br />
+RDS ProxyはAurora、RDS(MySQS/Postgres)に対応している。<br />
+利用する場合は、RDS Proxyを作成し、エンドポイントへアプリからリクエストを送信する。その際に、DBのユーザー名とパスワード用に SecretsManagerが必要。App→RDS Proxyの許可とRDS Proxy→RDSへの許可をSGで設定する。</p>
 </section>
 </section>
 <section id="app">

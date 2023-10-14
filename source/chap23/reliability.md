@@ -129,9 +129,10 @@ RDSに対して大量の接続が発生する場合に、Too many connectionsと
 
 ### RDS Proxy
 RDS Proxyを利用することで、DBへの接続のスケーラビリティと可用性を確保してくれる。アプリケーションにおけるキューのような役割を担っているといえる。
-具体的には。DB接続プールを確立して効率的な接続を提供するとともに、仮に接続できない場合もProxyによって自動調整してくれる。
+具体的には。DB接続プールを確立して効率的な接続を提供するとともに、仮に接続できない場合もProxyによって自動調整してくれる。  
+RDS ProxyはAurora、RDS(MySQS/Postgres)に対応している。  
+利用する場合は、RDS Proxyを作成し、エンドポイントへアプリからリクエストを送信する。その際に、DBのユーザー名とパスワード用に SecretsManagerが必要。App→RDS Proxyの許可とRDS Proxy→RDSへの許可をSGで設定する。
 
-RDS ProxyはAurora、RDS(MySQS/Postgres)に対応している。
 
 
 

@@ -143,8 +143,17 @@ ALBがオリジンの場合に利用すると有効。
 上記の3つとは異なり、ログイン後のユーザーだけが特定のリソースにアクセスできるようにするようなユースケースで利用する。
 例えばS3へのアクセスをログインユーザーに絞る場合は、CloufFrontのビヘイビアの設定で署名付きURLだけの許可に絞り、インスタンスでログイン処理をした後に、署名付きURLを発行する。
 
+手順としては以下
+- ローカルで秘密鍵と公開鍵を作成
+- CloudFront側で公開鍵をアップロード
+- CloudFrontでキーグループを作成
+- ディストリビューションで以下を設定
+    - オリジンへのアクセス制御
+    - キーグループのでの制御
+- 認証後のポータルサイトなどで秘密鍵を利用して署名URL発行
+
 ![](../img/chap24_cloudfront_url.png)
-[classmethodの記事](https://dev.classmethod.jp/articles/cf-s3-deliveries-use-signurl/)
+[参考記事](https://www.aws-room.com/entry/presigned-cloudfront)がわかりやすい
 
 
 #### 暗号化
