@@ -230,7 +230,8 @@ Detectiveは探偵という意味の単語。
 例えば、アカウント内でAPIの呼び出しが失敗した場合、APIアクションのIAM Roleの情報などを確認してくれる。
 
 ### AWS Security Hub
-GuradDutyやMacieなどのAWSセキュリティサービスやサードパーティのサービスについての検出結果をAWS SecurityFinding形式というJSON形式に変換して統合してくれる。
+GuradDutyやMacieなどのAWSセキュリティサービスやサードパーティのサービスについての検出結果をAWS SecurityFinding形式というJSON形式に変換して統合してくれる。  
+また、Organizationと統合されているので、統一されたダッシュボードで複数のセキュリティ分析結果を確認することができる。
 
 セキュリティのベストプラクティスに基づく、セキュリティスコアをパーセント提示してくれる。
 

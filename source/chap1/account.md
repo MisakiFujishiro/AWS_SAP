@@ -64,3 +64,12 @@ Organizationsを利用することで、複数のアカウント請求を一括�
 
 ### AWS Control Tower
 複数アカウントのベストプラクティス構成でOrganization組織を構築する。
+
+## AWS SSO
+DEV/TST/PRDなどの環境を分離するためにAWSの複数のアカウントを利用する場合、各環境のスイッチロールを行う必要がある。
+ベストプラクティスでは、ログインアカウントを作成し、そこからスイッチロールするが、このスイッチロールを簡略化することができるのが、AWS SSO。
+
+![](../img/chap1_aws_sso.png)
+上図の参照元の[クラスメソッドの記事](https://dev.classmethod.jp/articles/aws-sso-wakewakame/)
+がわかりやすいので参考にすると良い。
+

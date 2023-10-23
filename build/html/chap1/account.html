@@ -65,6 +65,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#aws-control-tower">AWS Control Tower</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="#aws-sso">AWS SSO</a></li>
 </ul>
 </li>
 </ul>
@@ -183,6 +184,14 @@ OUやアカウントに対してSCP（サービスコントロールポリシー
 <h3>AWS Control Tower<a class="headerlink" href="#aws-control-tower" title="Permalink to this heading">¶</a></h3>
 <p>複数アカウントのベストプラクティス構成でOrganization組織を構築する。</p>
 </section>
+</section>
+<section id="aws-sso">
+<h2>AWS SSO<a class="headerlink" href="#aws-sso" title="Permalink to this heading">¶</a></h2>
+<p>DEV/TST/PRDなどの環境を分離するためにAWSの複数のアカウントを利用する場合、各環境のスイッチロールを行う必要がある。
+ベストプラクティスでは、ログインアカウントを作成し、そこからスイッチロールするが、このスイッチロールを簡略化することができるのが、AWS SSO。</p>
+<p><img alt="" src="../_images/chap1_aws_sso.png" />
+上図の参照元の<a class="reference external" href="https://dev.classmethod.jp/articles/aws-sso-wakewakame/">クラスメソッドの記事</a>
+がわかりやすいので参考にすると良い。</p>
 </section>
 </section>
 

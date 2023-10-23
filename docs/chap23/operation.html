@@ -89,6 +89,7 @@
 <li class="toctree-l4"><a class="reference internal" href="#id13">メトリクスダッシュボード</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#id14">アラーム</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#logs">Logs</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#synthetics">Synthetics</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#vpc-flow-log">VPC Flow Log</a></li>
@@ -115,6 +116,10 @@
 <li class="toctree-l1"><a class="reference internal" href="../chap4/basic.html">移行とモダナイゼーションの加速</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../chap4/approach.html">移行評価とアプローチ</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../chap4/modernization.html">移行後アーキテクチャとアーキテクチャとモダナイゼーション</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">基本知識:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../knowledge/knowledge.html">ITの基礎知識</a></li>
 </ul>
 
         </div>
@@ -354,6 +359,11 @@ CloudForamtionに対しての作成や更新の成功失敗を通知するコマ
 <h4>Logs<a class="headerlink" href="#logs" title="Permalink to this heading">¶</a></h4>
 <p>収集したログに対して、特定の文字列の発生回数をフィルターして、メトリクスの値として扱うことができる。
 また、機密情報などに関してはマスクして表示することなども可能。</p>
+</section>
+<section id="synthetics">
+<h4>Synthetics<a class="headerlink" href="#synthetics" title="Permalink to this heading">¶</a></h4>
+<p>WebページやAPIエンドポイントに対するSythetic Monitoringを設定、実行できるサービス<br />
+Canaryと呼ばれるリソースをLambdaを利用して作成してスクリプトを実行する。APIに対するリクエスト結果であったり、指定のタイミングでのスクリーンショットの取得も可能。</p>
 </section>
 </section>
 <section id="vpc-flow-log">

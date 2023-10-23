@@ -20,6 +20,7 @@
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="ITの基礎知識" href="../knowledge/knowledge.html" />
     <link rel="prev" title="移行評価とアプローチ" href="approach.html" /> 
 </head>
 
@@ -150,6 +151,10 @@
 </li>
 </ul>
 </li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">基本知識:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../knowledge/knowledge.html">ITの基礎知識</a></li>
 </ul>
 
         </div>
@@ -289,6 +294,7 @@ Fargateでのタスク実行時や、VPC内での特定の通信ルールが必�
 <p>ストリームデータを収集して順番通りにリアルタイム処理させることができる。
 ConsumerはLambdaやECSなどが想定される。
 データはシャードに割り振られて、シャードにより性能が決まるが、シャードを自動でスケールしてくれるオンデマンドモードが利用できる。</p>
+<p>シャードを削減することで費用を削減できるが、シャードは1MB/secの制限がある点に注意</p>
 </section>
 <section id="kinesis-data-firehose">
 <h3>Kinesis Data Firehose<a class="headerlink" href="#kinesis-data-firehose" title="Permalink to this heading">¶</a></h3>
@@ -488,6 +494,7 @@ Jsonをそのまま格納できるといったメリットがある。</p>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="approach.html" class="btn btn-neutral float-left" title="移行評価とアプローチ" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../knowledge/knowledge.html" class="btn btn-neutral float-right" title="ITの基礎知識" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

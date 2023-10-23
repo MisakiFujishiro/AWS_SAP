@@ -47,7 +47,7 @@ AWSを導入する案件の運用上の優秀性やセキュリティ、信頼�
 
 
 ## 参考問題集
-- [公式問題集10問](https://d1.awsstatic.com/ja_JP/training-and-certification/docs-sap-on-aws-specialty/SAP-on-AWS-Specialty_Sample-Questions.pdf)
-- [skill builder10問](https://explore.skillbuilder.aws/learn/course/12528/AWS%2520Certified%253A%2520SAP%2520on%2520AWS%2520-%2520Specialty%2520Official%2520Practice%2520Question%2520Set%2520%28PAS-C01%2520-%2520Japanese%29)
+- [公式問題集10問-c02](https://d1.awsstatic.com/ja_JP/training-and-certification/docs-sa-pro/AWS-Certified-Solutions-Architect-Professional_Sample-Questions.pdf)
+- [skill builder10問](https://explore.skillbuilder.aws/learn/course/13272/play/54774/aws-certified-solutions-architect-professional-official-practice-question-set-sap-c02-japanese)
 - [WS認定資格試験テキスト&問題集 AWS認定ソリューションアーキテクト - プロフェッショナル](https://www.amazon.co.jp/AWS%E8%AA%8D%E5%AE%9A%E8%B3%87%E6%A0%BC%E8%A9%A6%E9%A8%93%E3%83%86%E3%82%AD%E3%82%B9%E3%83%88-%E5%95%8F%E9%A1%8C%E9%9B%86-AWS%E8%AA%8D%E5%AE%9A%E3%82%BD%E3%83%AA%E3%83%A5%E3%83%BC%E3%82%B7%E3%83%A7%E3%83%B3%E3%82%A2%E3%83%BC%E3%82%AD%E3%83%86%E3%82%AF%E3%83%88-%E3%83%97%E3%83%AD%E3%83%95%E3%82%A7%E3%83%83%E3%82%B7%E3%83%A7%E3%83%8A%E3%83%AB-%E5%B1%B1%E4%B8%8B%E5%85%89%E6%B4%8B/dp/4815609063)
 -[AWS ソリューションアーキテクトプロフェッショナル試験模擬テスト (SAP-C02)
