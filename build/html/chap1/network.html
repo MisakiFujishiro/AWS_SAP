@@ -100,6 +100,7 @@
 <li class="toctree-l4"><a class="reference internal" href="#id31">オンプレへの名前解決（アウトバウンドエンドポイント）</a></li>
 </ul>
 </li>
+<li class="toctree-l3"><a class="reference internal" href="#id32">ルーティング</a></li>
 </ul>
 </li>
 </ul>
@@ -120,6 +121,10 @@
 <li class="toctree-l1"><a class="reference internal" href="../chap4/basic.html">移行とモダナイゼーションの加速</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../chap4/approach.html">移行評価とアプローチ</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../chap4/modernization.html">移行後アーキテクチャとアーキテクチャとモダナイゼーション</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">基本知識:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../knowledge/knowledge.html">ITの基礎知識</a></li>
 </ul>
 
         </div>
@@ -508,6 +513,16 @@ DirectConnect GWを利用することで専用線経由のVPNにも対応でき�
 <p>このResolver Ruleは共有が可能で、別のAWSアカウントなどで共通利用することができる。</p>
 <p><img alt="" src="../_images/chap1_route53_resolver_3.png" /></p>
 </section>
+</section>
+<section id="id32">
+<h3>ルーティング<a class="headerlink" href="#id32" title="Permalink to this heading">¶</a></h3>
+<p>Route53では複数のルーティング方法がある。</p>
+<ul class="simple">
+<li><p>レイテンシーベース:レイテンシーが小さくなるようなルーティング</p></li>
+<li><p>フェイルオーバー：ヘルスチェックを行なってNGになるとセカンダリにルーティング</p></li>
+</ul>
+<p>Evaluate Target Healthという機能があり、接続先のELBのヘルスチェックを行って、エラーになった場合に、別の候補にルーティングすることができる。これは、フェイルオーバールーティングでもレイテンシーベースルーティングでも利用可能。
+レイテンシーベースとEvaluate Target Healthを組み合わせれば、フェイルオーバールーティングのような挙動も可能。</p>
 </section>
 </section>
 </section>

@@ -58,6 +58,7 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#iam">IAM アイデンティティセンター</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#aws-sso">AWS SSO</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#aws-organizations">AWS Organizations</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#organizations">Organizationsのアカウント管理</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#id4">一括請求</a></li>
@@ -65,7 +66,6 @@
 <li class="toctree-l3"><a class="reference internal" href="#aws-control-tower">AWS Control Tower</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#aws-sso">AWS SSO</a></li>
 </ul>
 </li>
 </ul>
@@ -83,6 +83,10 @@
 <li class="toctree-l1"><a class="reference internal" href="../chap4/basic.html">移行とモダナイゼーションの加速</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../chap4/approach.html">移行評価とアプローチ</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../chap4/modernization.html">移行後アーキテクチャとアーキテクチャとモダナイゼーション</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">基本知識:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../knowledge/knowledge.html">ITの基礎知識</a></li>
 </ul>
 
         </div>
@@ -119,9 +123,15 @@
 <section id="id3">
 <h3>サードパーティ製品へのクロスアカウント対応<a class="headerlink" href="#id3" title="Permalink to this heading">¶</a></h3>
 <p>サードパーティに対して、自分のAWSのIAM Roleを伝えることで、サードパーティのAWSユーザーやRoleがスイッチロールをして、自分のAWSを利用することが可能になる。</p>
-<p>ただしこれには、混乱した代理問題という問題が発生する。
-これは、サードパーティを利用している別のユーザーがIAM Role名を予測したりすることで、別のユーザーが自分のIAM Role権限を利用してしまうという問題。</p>
-<p>これに対しては、サードパーティに対してIAM Roleを登録する際に、ランダム文字列などを発行して自分のAWSの信頼ポリシーの中のConditionにその文字列を追加することによって、対応する。</p>
+<p>ただしこれには、混乱した代理問題という問題が発生する。</p>
+<p>自分のAWSに対してサードパーティのAWSがアクセスすることを考える。一般的なクロスアカウント設定を行うと以下の設定をする。</p>
+<ul class="simple">
+<li><p>外部のAWSのIDを受領</p></li>
+<li><p>IAM Roleを作成し、許可ポリシーを付与</p></li>
+<li><p>信頼ポリシーにPrincipalに外部のAWS IDを設定</p></li>
+</ul>
+<p>このままだと、サードパーティを利用しようとする別の第三者が、自分のIAM RoleのARNを予測することで、自分のIAM Role権限を利用してしまうという問題。<br />
+これに対しては、サードパーティに対してIAM Roleを登録する際に、ランダム文字列などを発行して自分のAWSの信頼ポリシーの中のConditionにその文字列を追加することによって、対応する。</p>
 <p><img alt="" src="../_images/chap1_cross_account.png" /></p>
 </section>
 </section>
@@ -154,6 +164,14 @@
 <p><a class="reference external" href="https://dev.classmethod.jp/articles/developersio-2023-osaka-aws-booth-aws-iam-identity-center/">こちらのサイト</a>がわかりやすそうなので、時間ある時に確認する。</p>
 <p><img alt="" src="../_images/chap1_identity_center.png" /></p>
 </section>
+<section id="aws-sso">
+<h2>AWS SSO<a class="headerlink" href="#aws-sso" title="Permalink to this heading">¶</a></h2>
+<p>DEV/TST/PRDなどの環境を分離するためにAWSの複数のアカウントを利用する場合、各環境のスイッチロールを行う必要がある。
+ベストプラクティスでは、ログインアカウントを作成し、そこからスイッチロールするが、このスイッチロールを簡略化することができるのが、AWS SSO。</p>
+<p><img alt="" src="../_images/chap1_aws_sso.png" />
+上図の参照元の<a class="reference external" href="https://dev.classmethod.jp/articles/aws-sso-wakewakame/">クラスメソッドの記事</a>
+がわかりやすいので参考にすると良い。</p>
+</section>
 <section id="aws-organizations">
 <h2>AWS Organizations<a class="headerlink" href="#aws-organizations" title="Permalink to this heading">¶</a></h2>
 <p>複数のアカウントを管理する以下のような手間をAWS Organizationsを利用すれば避けることができる</p>
@@ -184,14 +202,6 @@ OUやアカウントに対してSCP（サービスコントロールポリシー
 <h3>AWS Control Tower<a class="headerlink" href="#aws-control-tower" title="Permalink to this heading">¶</a></h3>
 <p>複数アカウントのベストプラクティス構成でOrganization組織を構築する。</p>
 </section>
-</section>
-<section id="aws-sso">
-<h2>AWS SSO<a class="headerlink" href="#aws-sso" title="Permalink to this heading">¶</a></h2>
-<p>DEV/TST/PRDなどの環境を分離するためにAWSの複数のアカウントを利用する場合、各環境のスイッチロールを行う必要がある。
-ベストプラクティスでは、ログインアカウントを作成し、そこからスイッチロールするが、このスイッチロールを簡略化することができるのが、AWS SSO。</p>
-<p><img alt="" src="../_images/chap1_aws_sso.png" />
-上図の参照元の<a class="reference external" href="https://dev.classmethod.jp/articles/aws-sso-wakewakame/">クラスメソッドの記事</a>
-がわかりやすいので参考にすると良い。</p>
 </section>
 </section>
 

@@ -103,6 +103,12 @@
 <li class="toctree-l3"><a class="reference internal" href="#id21">クォータモニタ</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="#id22">フェイルオーバーについて</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#cloudfront">CloudFront</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#alb">ALB</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id23">Route53</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="performance.html">パフォーマンス</a></li>
@@ -113,6 +119,10 @@
 <li class="toctree-l1"><a class="reference internal" href="../chap4/basic.html">移行とモダナイゼーションの加速</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../chap4/approach.html">移行評価とアプローチ</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../chap4/modernization.html">移行後アーキテクチャとアーキテクチャとモダナイゼーション</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">基本知識:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../knowledge/knowledge.html">ITの基礎知識</a></li>
 </ul>
 
         </div>
@@ -353,6 +363,28 @@ RDS ProxyはAurora、RDS(MySQS/Postgres)に対応している。<br />
 <section id="id21">
 <h3>クォータモニタ<a class="headerlink" href="#id21" title="Permalink to this heading">¶</a></h3>
 <p>サービスの使用量が制限に近づいているモニタリングをすることができ、通知をさせることができる。</p>
+</section>
+</section>
+<section id="id22">
+<h2>フェイルオーバーについて<a class="headerlink" href="#id22" title="Permalink to this heading">¶</a></h2>
+<p>以下のサービスにはフェイルオーバーの機能があるが、特徴が微妙に異なる</p>
+<ul class="simple">
+<li><p>CloudFront</p></li>
+<li><p>ALB</p></li>
+<li><p>Route53</p></li>
+</ul>
+<section id="cloudfront">
+<h3>CloudFront<a class="headerlink" href="#cloudfront" title="Permalink to this heading">¶</a></h3>
+<p>複数のオリジンを設定することができ、リクエストに対するHTTPのステータスコードを利用してフェイルオーバーを判断する。</p>
+</section>
+<section id="alb">
+<h3>ALB<a class="headerlink" href="#alb" title="Permalink to this heading">¶</a></h3>
+<p>ヘルスチェックを利用して、異常が発生している宛先をルーティング先から外す。<br />
+CloudFrontと違って、設定した閾値を超えるエラーが発生した場合に、異常と判断する。</p>
+</section>
+<section id="id23">
+<h3>Route53<a class="headerlink" href="#id23" title="Permalink to this heading">¶</a></h3>
+<p>Evaluate Target Healthを利用してルーティング先のヘルスチェックを行う。こちらについてもALB同様に閾値を超える失敗を契機にフェイルオーバーする。</p>
 </section>
 </section>
 </section>

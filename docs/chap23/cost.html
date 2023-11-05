@@ -64,33 +64,37 @@
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#savings-plan">Savings Plan</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#id3">スポットインスタンス</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id4">スポットフリート</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#dedicated-hosts">Dedicated Hosts</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#s3">S3のコスト</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#s3-vs-ia">S3 標準 vs IA</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#s3-intelligent-tiering">S3 Intelligent-Tiering</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id4">S3リクエスタ支払い</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id5">S3リクエスタ支払い</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#dynamodb">DynamoDBのコスト</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#id5">オンデマンドモード</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id6">プロビジョンドキャパシティモード</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id6">オンデマンドモード</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id7">プロビジョンドキャパシティモード</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#dax">DAX</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#id7">その他</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#id8">リザーブドオプション</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id9">コスト配分タグ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id8">その他</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id9">リザーブドオプション</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id10">コスト配分タグ</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#id10">コスト管理</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#id11">コスト管理</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#aws-compute-optimizer">AWS Compute Optimizer</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#cost-explorer">Cost Explorer</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#anomaly-detection">Anomaly Detection</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#aws-cost-and-usage-reports">AWS Cost and Usage Reports</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#aws-budgets">AWS Budgets</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id11">請求アラーム</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id12">アラーム設定</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#aws-budgets">AWS Budgets</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id13">請求アラーム</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -101,6 +105,10 @@
 <li class="toctree-l1"><a class="reference internal" href="../chap4/basic.html">移行とモダナイゼーションの加速</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../chap4/approach.html">移行評価とアプローチ</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../chap4/modernization.html">移行後アーキテクチャとアーキテクチャとモダナイゼーション</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">基本知識:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../knowledge/knowledge.html">ITの基礎知識</a></li>
 </ul>
 
         </div>
@@ -163,6 +171,11 @@
 <p>各AZのインスタンスタイプの使用されていない量に応じて決定される料金で利用することができる。
 ただし、使用量が上がってきた場合は、中断されてしまう可能性がある。</p>
 <p>なので、中断が発生してもAppに影響がないようなユースケースで利用すること。</p>
+</section>
+<section id="id4">
+<h3>スポットフリート<a class="headerlink" href="#id4" title="Permalink to this heading">¶</a></h3>
+<p>スポットインスタンスとオンデマンドインスタンスの組み合わせでフリートを構成する仕組みのこと。
+コストを下げながら、事前に設定した構成を満たすように動く。例えばスポットインスタンスがダウンするタイミングになったら、自動でオンデマンドインスタンスを起動させて、設定した台数を満たすように動く。</p>
 </section>
 <section id="dedicated-hosts">
 <h3>Dedicated Hosts<a class="headerlink" href="#dedicated-hosts" title="Permalink to this heading">¶</a></h3>
@@ -230,8 +243,8 @@
 <h3>S3 Intelligent-Tiering<a class="headerlink" href="#s3-intelligent-tiering" title="Permalink to this heading">¶</a></h3>
 <p>30日利用がないとIAへ、90日利用がないとアーカイブへ移動してくれる。</p>
 </section>
-<section id="id4">
-<h3>S3リクエスタ支払い<a class="headerlink" href="#id4" title="Permalink to this heading">¶</a></h3>
+<section id="id5">
+<h3>S3リクエスタ支払い<a class="headerlink" href="#id5" title="Permalink to this heading">¶</a></h3>
 <p>S3へのリクエストした側にリクエスト料金とデータ転送料金を請求することができる。</p>
 <p>支払いが関連するのでAWSアカウントからしかアクセスできなくなる。
 リクエストヘッダーに必ず<code class="docutils literal notranslate"><span class="pre">x-amz-request-payer</span></code>を追加する必要があり、このリクエストヘッダーを持って支払いに了承したとして扱う。</p>
@@ -242,14 +255,14 @@
 <p>DynamoDBのアイテム読み込みと書き込みには2つのモードがあり、それぞれでコストが異なる。<br />
 継続的なリクエスト、緩やかな需要であれば、プロビジョンドキャパシティモードが良い。</p>
 <p>プロビジョンドキャパシティモードで設定された数値を超えるリクエストが来てしまうとスロットリングが発生してしまいProvisionedThroughputExceededExceptionエラーが返される。</p>
-<section id="id5">
-<h3>オンデマンドモード<a class="headerlink" href="#id5" title="Permalink to this heading">¶</a></h3>
+<section id="id6">
+<h3>オンデマンドモード<a class="headerlink" href="#id6" title="Permalink to this heading">¶</a></h3>
 <p>書き込みリクエストが発生するたびに料金が発生する。<br />
 利用されていないタイミングでは、費用がかからないが、1回あたりの費用はプロビジョンドキャパシティモードより高い。
 急なリクエスト増加にも対応可能。</p>
 </section>
-<section id="id6">
-<h3>プロビジョンドキャパシティモード<a class="headerlink" href="#id6" title="Permalink to this heading">¶</a></h3>
+<section id="id7">
+<h3>プロビジョンドキャパシティモード<a class="headerlink" href="#id7" title="Permalink to this heading">¶</a></h3>
 <p>1秒間の書き込み・読み込み回数・容量に対して設定するWCUとRCUを定義して時間当たりの費用が発生する。
 利用されてない場合でも費用がかかる。WCUとRCUで捌き切れる範囲なら費用は安いが、急なリクエスト増加には耐えられない。</p>
 </section>
@@ -260,10 +273,10 @@ GETの処理に関して速度の改善とリクエスト数の低減の効果�
 作成されるノード単位で課金がかかる。</p>
 </section>
 </section>
-<section id="id7">
-<h2>その他<a class="headerlink" href="#id7" title="Permalink to this heading">¶</a></h2>
 <section id="id8">
-<h3>リザーブドオプション<a class="headerlink" href="#id8" title="Permalink to this heading">¶</a></h3>
+<h2>その他<a class="headerlink" href="#id8" title="Permalink to this heading">¶</a></h2>
+<section id="id9">
+<h3>リザーブドオプション<a class="headerlink" href="#id9" title="Permalink to this heading">¶</a></h3>
 <p>リザーブドオプションのあるサービス</p>
 <ul class="simple">
 <li><p>RDS</p></li>
@@ -272,14 +285,14 @@ GETの処理に関して速度の改善とリクエスト数の低減の効果�
 <li><p>OpenSearch Service</p></li>
 </ul>
 </section>
-<section id="id9">
-<h3>コスト配分タグ<a class="headerlink" href="#id9" title="Permalink to this heading">¶</a></h3>
+<section id="id10">
+<h3>コスト配分タグ<a class="headerlink" href="#id10" title="Permalink to this heading">¶</a></h3>
 <p>タグをサポートしているリソースに対してタグを適切に付与することで、Cost Explorerを利用した費用分析にタグを利用することができる。
 タグの運用を正しくするために、OrganizationsタグポリシーやSCPを利用する。</p>
 </section>
 </section>
-<section id="id10">
-<h2>コスト管理<a class="headerlink" href="#id10" title="Permalink to this heading">¶</a></h2>
+<section id="id11">
+<h2>コスト管理<a class="headerlink" href="#id11" title="Permalink to this heading">¶</a></h2>
 <section id="aws-compute-optimizer">
 <h3>AWS Compute Optimizer<a class="headerlink" href="#aws-compute-optimizer" title="Permalink to this heading">¶</a></h3>
 <p>EC2インスタンス、Auto Scalingグループ、ECSボリューム、Lambda関数、Fargateについて、使用しているメトリクスを分析して、リソースサイズが適切かをレポートしてくれる。<br />
@@ -301,15 +314,23 @@ GETの処理に関して速度の改善とリクエスト数の低減の効果�
 <p>コストと使用状況のレポートを有効化することで、詳細な課金情報をS3に書き出してくれる。
 S3の情報をAthenaやQuickSightを利用して分析する。</p>
 </section>
+<section id="id12">
+<h3>アラーム設定<a class="headerlink" href="#id12" title="Permalink to this heading">¶</a></h3>
+<p>アラーム設定は以下二つのサービスどちらかを利用することで設定することができる</p>
+<ul class="simple">
+<li><p>Budgets</p></li>
+<li><p>CloudWatch</p></li>
+</ul>
 <section id="aws-budgets">
-<h3>AWS Budgets<a class="headerlink" href="#aws-budgets" title="Permalink to this heading">¶</a></h3>
+<h4>AWS Budgets<a class="headerlink" href="#aws-budgets" title="Permalink to this heading">¶</a></h4>
 <p>アカウントやOrganizationsの予算を作成することができる
 予算を超える見通しや実際に肥えた場合にアラートを発進することができる。</p>
 </section>
-<section id="id11">
-<h3>請求アラーム<a class="headerlink" href="#id11" title="Permalink to this heading">¶</a></h3>
+<section id="id13">
+<h4>請求アラーム<a class="headerlink" href="#id13" title="Permalink to this heading">¶</a></h4>
 <p>請求アラームを受け取るぷションを有効にすると、us-east-1のCloudWatchで請求アラームを設定できる。
 請求額メトリクスに対してアラームを設定し通知を行うことができる。</p>
+</section>
 </section>
 </section>
 </section>

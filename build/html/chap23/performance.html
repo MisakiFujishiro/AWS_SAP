@@ -100,16 +100,17 @@
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#app">Appのパフォーマンス</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#cloudfront">CloudFront</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#id14">オリジンへのアクセス制限</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#id16">暗号化</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#id17">エッジ関数</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id14">セキュリティ</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id15">オリジンへのアクセス制限</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id17">暗号化</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id18">エッジ関数</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#global-accelerator">Global Accelerator</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#api-gw">API GW</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#id18">キャッシュ</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#id19">使用量プラン</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#id20">認証</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id19">キャッシュ</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id20">使用量プラン</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id21">認証</a></li>
 </ul>
 </li>
 </ul>
@@ -123,6 +124,10 @@
 <li class="toctree-l1"><a class="reference internal" href="../chap4/basic.html">移行とモダナイゼーションの加速</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../chap4/approach.html">移行評価とアプローチ</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../chap4/modernization.html">移行後アーキテクチャとアーキテクチャとモダナイゼーション</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">基本知識:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../knowledge/knowledge.html">ITの基礎知識</a></li>
 </ul>
 
         </div>
@@ -220,6 +225,7 @@
 </section>
 <section id="id6">
 <h3>ネットワークのパフォーマンス<a class="headerlink" href="#id6" title="Permalink to this heading">¶</a></h3>
+<p>ネットワーク帯域(クライアントからEC2)については、インスタンスタイプによって定まる。ネットワーク帯域がボトルネックになっている場合は、インスタンスタイプを大きくする必要がある。</p>
 <p>EC2は基本的にはENA（Elastic Network Adaptor)がサポートされていて、高い帯域幅、パケットパフォーマンス、インスタンス間の低レイテンシーが提供されている。</p>
 <p>単一パケットで渡すデータサイズについても、全てのEC2でイーサネットのデフォルトである1500MTUが確保されている。
 さらに、ほとんどのインスタンスで9001MTU(ジャンボフレーム)がサポートされている。ただし、IGWやVPN接続で1500MTUに制限される。</p>
@@ -330,7 +336,11 @@ AWSがクラウドの特性を利用した分散型のアーキテクチャを�
 <p>コンテンツ配信サービスで、キャッシュ機能によりオリジンへの負荷を低減することもできる。</p>
 <p>配信設定をディストリビューション、パスパターンに応じたルーティングのルールのことをビヘイビアとして指定することができる。</p>
 <section id="id14">
-<h4>オリジンへのアクセス制限<a class="headerlink" href="#id14" title="Permalink to this heading">¶</a></h4>
+<h4>セキュリティ<a class="headerlink" href="#id14" title="Permalink to this heading">¶</a></h4>
+<p>デフォルトで、AWS Shieldが有効になっているので、DDos攻撃を緩和可能。</p>
+</section>
+<section id="id15">
+<h4>オリジンへのアクセス制限<a class="headerlink" href="#id15" title="Permalink to this heading">¶</a></h4>
 <p>オリジンへの負荷を低減するためにCloudFrontを利用するため、オリジンへの直接アクセスは制御する必要がある。</p>
 <section id="oac-origin-access-control">
 <h5>OAC(Origin Access Control)<a class="headerlink" href="#oac-origin-access-control" title="Permalink to this heading">¶</a></h5>
@@ -338,8 +348,8 @@ AWSがクラウドの特性を利用した分散型のアーキテクチャを�
 <p>CloudFront側でOICを作成し、S3側のバケットポリシーでOICからのアクセスを許可する。
 バケットポリシーだけの制限も可能であるものの、シンプルかつ一貫性のあるルール設定ができるため推奨とのこと。</p>
 </section>
-<section id="id15">
-<h5>カスタムヘッダー<a class="headerlink" href="#id15" title="Permalink to this heading">¶</a></h5>
+<section id="id16">
+<h5>カスタムヘッダー<a class="headerlink" href="#id16" title="Permalink to this heading">¶</a></h5>
 <p>ALBがオリジンの場合に利用すると有効。<br />
 ディストリビューションのオリジン設定に任意のキーと値をカスタムヘッダーに追加する。
 リクエストヘッダーにこの値があることを確認しあって通信を許可する。</p>
@@ -370,13 +380,13 @@ AWSがクラウドの特性を利用した分散型のアーキテクチャを�
 <a class="reference external" href="https://www.aws-room.com/entry/presigned-cloudfront">参考記事</a>がわかりやすい</p>
 </section>
 </section>
-<section id="id16">
-<h4>暗号化<a class="headerlink" href="#id16" title="Permalink to this heading">¶</a></h4>
+<section id="id17">
+<h4>暗号化<a class="headerlink" href="#id17" title="Permalink to this heading">¶</a></h4>
 <p>CloudFront側に公開鍵を設定しておくことで、フィールド上のデータを暗号化することができる。
 秘密鍵は SecretsManagerに登録しておき、Lambdaなどで複合してアクションを起こすことで秘密情報を人目に触れることなく処理させることができる。</p>
 </section>
-<section id="id17">
-<h4>エッジ関数<a class="headerlink" href="#id17" title="Permalink to this heading">¶</a></h4>
+<section id="id18">
+<h4>エッジ関数<a class="headerlink" href="#id18" title="Permalink to this heading">¶</a></h4>
 <p>軽い処理の<code class="docutils literal notranslate"><span class="pre">CloudFront</span> <span class="pre">Functions</span></code>とLambdaの拡張である<code class="docutils literal notranslate"><span class="pre">Lambda&#64;Edge</span></code>がある。</p>
 </section>
 </section>
@@ -388,19 +398,19 @@ AWSがクラウドの特性を利用した分散型のアーキテクチャを�
 </section>
 <section id="api-gw">
 <h3>API GW<a class="headerlink" href="#api-gw" title="Permalink to this heading">¶</a></h3>
-<section id="id18">
-<h4>キャッシュ<a class="headerlink" href="#id18" title="Permalink to this heading">¶</a></h4>
+<section id="id19">
+<h4>キャッシュ<a class="headerlink" href="#id19" title="Permalink to this heading">¶</a></h4>
 <p>API GWのAPIステージの中でキャッシュを有効化することができる。<br />
 GETに対しては速度の改善とオリジンへのリクエストの低減という効果がある。
 指定したキャッシュインスタンスが作成されることになる。費用はキャッシュした容量と時間に応じた費用になる。</p>
 </section>
-<section id="id19">
-<h4>使用量プラン<a class="headerlink" href="#id19" title="Permalink to this heading">¶</a></h4>
+<section id="id20">
+<h4>使用量プラン<a class="headerlink" href="#id20" title="Permalink to this heading">¶</a></h4>
 <p>APIキーごとに1sec/1day/1week/1monthの単位でAPI利用料を設定することができる。
 ユーザーに提供するAPIキーに値を設定することで異常な数のリクエストに制限をかけることができる。</p>
 </section>
-<section id="id20">
-<h4>認証<a class="headerlink" href="#id20" title="Permalink to this heading">¶</a></h4>
+<section id="id21">
+<h4>認証<a class="headerlink" href="#id21" title="Permalink to this heading">¶</a></h4>
 <p>API GWで認証制限をするためには3つの方法がある</p>
 <section id="iam">
 <h5>IAM<a class="headerlink" href="#iam" title="Permalink to this heading">¶</a></h5>
