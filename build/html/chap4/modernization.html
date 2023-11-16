@@ -298,7 +298,7 @@ ConsumerはLambdaやECSなどが想定される。
 </section>
 <section id="kinesis-data-firehose">
 <h3>Kinesis Data Firehose<a class="headerlink" href="#kinesis-data-firehose" title="Permalink to this heading">¶</a></h3>
-<p>大量のデータを指定した先へ配信する。AWSサービスであればS3やRedshiftなどに配信することができる。
+<p>大量のデータを指定した先へ配信する。AWSサービスであればS3、Redshift、Elastic Serviceなどに配信することができる。
 配信タイミングは設定ができ、サイズが溜まったら配信したり、指定した時間が経過すると配信したりすることができる。</p>
 </section>
 <section id="kinesis-data-analytics">
@@ -349,6 +349,7 @@ S3はこの要件を満たしていることに加えて様々なETLサービス
 <h4>Athena<a class="headerlink" href="#athena" title="Permalink to this heading">¶</a></h4>
 <p>S3に格納されたJSONやCSVのデータに対して、SQLを利用して分析を行うことができるサービス。
 分析した、結果は事前指定したS3に格納され、その結果をQuickSightなどで可視化することもできる。</p>
+<p>注意点として、Glacierに移動するとAthenaで検索できなくなるので注意</p>
 </section>
 </section>
 <section id="id12">

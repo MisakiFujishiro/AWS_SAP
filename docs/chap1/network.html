@@ -87,20 +87,39 @@
 <li class="toctree-l4"><a class="reference internal" href="#transit-gw">Transit GW同士を接続する</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#id26">VPCピア接続の取りまとめ</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#id27">VPN接続の取りまとめ</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#transitgw">TransitGWの補足</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="#id28">VPNまとめ</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id28">VPCとの接続まとめ</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id29">クライアントVPN</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#site2site-vpn">Site2Site VPN</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#directconnect-dx">DirectConnect(DX)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#dx-gw">DX GW</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id30">VPCピアリング</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id31">TransitGW</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#transigw">TransiGWピアリング</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#route53">Route53</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#hostezone">HosteZone</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#resolver">Resolver</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#id29">VPC内の名前解決</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#id30">オンプレからの名前解決(インバウンドエンドポイント)</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#id31">オンプレへの名前解決（アウトバウンドエンドポイント）</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id32">VPC内の名前解決</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id33">オンプレからの名前解決(インバウンドエンドポイント)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id34">オンプレへの名前解決（アウトバウンドエンドポイント）</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id35">VPC間での名前解決</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="#id32">ルーティング</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id36">レコード</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id37">ルーティング</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#ipv6">IPv6対応</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id38">初期設定</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id39">パブリックサブネットの設定</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id40">プライベートサブネットの設定</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id41">セキュリティグループの設定</a></li>
 </ul>
 </li>
 </ul>
@@ -184,9 +203,12 @@
 <h3>インターフェース型(PrivateLink型)<a class="headerlink" href="#privatelink" title="Permalink to this heading">¶</a></h3>
 <p>50種類以上のサービスが対応しており、S3はインターフェース型の接続も可能。<br />
 データの転送とサービス利用時間に応じて課金する必要がある。<br />
-AWSのインターフェースエンドポイントは、VPC内の特定のサブネットにElastic Network Interface (ENI) を提供することで、プライベートな接続を介してAWSサービスにアクセスするためのエンドポイントを作成します。このENIはVPC内のプライベートIPアドレスを持ち、このENIを経由してAWSサービスに接続します。この技術全体がAWS PrivateLinkと呼ばれています。</p>
+AWSのインターフェースエンドポイントは、VPC内の特定のサブネットにElastic Network Interface (ENI) を提供することで、プライベートな接続を介してAWSサービスにアクセスするためのエンドポイントを作成します。このENIはVPC内のプライベートIPアドレスを持ち、このENIを経由してAWSサービスに接続します。</p>
 <p>要するに、VPC内にプライベートIPアドレスを持つエンドポイントインターフェース（ENI）が提供され、このENIを通じてAWSのリソースにアクセスするのは、インターフェース型のVPCエンドポイントの特徴です。</p>
 <p><img alt="" src="../_images/chap1_vpc_endpoint_if.png" /></p>
+<p>VPCエンドポイントを利用して、プライベート接続を介したサービスを提供する技術をAWS PrivateLinkと呼ぶ。</p>
+<p><img alt="" src="../_images/chap1_vpc_privatelink.png" />
+<a class="reference external" href="https://dev.classmethod.jp/articles/aws-vpcendpoint-privatelink-beginner/">【初心者向け】VPCエンドポイントとAWS PrivateLinkの違いを実際に構築して理解してみた</a></p>
 <p>作成としては以下の手順を踏む</p>
 <ol class="arabic simple">
 <li><p>VPCサービスのエンドポイント機能を選択</p></li>
@@ -442,45 +464,85 @@ Site-to-Site VPN接続やVPCピア接続について個別設定せずに、Tran
 DirectConnect GWを利用することで専用線経由のVPNにも対応できる</p>
 <p><img alt="" src="../_images/chap1_transitgw_merit_1.png" /></p>
 </section>
+<section id="transitgw">
+<h4>TransitGWの補足<a class="headerlink" href="#transitgw" title="Permalink to this heading">¶</a></h4>
+<p>TransitGWを利用する際に、Global Acceleratorを有効化すると、Acceleratedサイト間VPNが利用でき、エッジロケーションのGlobal Acceleratorを利用して、ネットワークの安定性が向上する。</p>
+<p>Transit GW Network Managerを利用すると、ネットワークの可視化とモニタリングが可能。</p>
+</section>
 </section>
 <section id="id28">
-<h3>VPNまとめ<a class="headerlink" href="#id28" title="Permalink to this heading">¶</a></h3>
+<h3>VPCとの接続まとめ<a class="headerlink" href="#id28" title="Permalink to this heading">¶</a></h3>
+<section id="id29">
+<h4>クライアントVPN<a class="headerlink" href="#id29" title="Permalink to this heading">¶</a></h4>
+<p>個別のクライアントからAWSに接続したい場合</p>
 <ul class="simple">
-<li><p>オンプレ 1:VPC 1</p>
-<ul>
-<li><p>クライアントVPN</p>
-<ul>
-<li><p>クライアントVPNエンドポイント</p></li>
+<li><p>クライアント：クライアントSW</p></li>
+<li><p>AWS：クライアントVPNエンドポイント</p></li>
 </ul>
-</li>
-<li><p>サイト:Site2Site VPN</p>
-<ul>
-<li><p>仮想プライベートGW</p></li>
+</section>
+<section id="site2site-vpn">
+<h4>Site2Site VPN<a class="headerlink" href="#site2site-vpn" title="Permalink to this heading">¶</a></h4>
+<p>オンプレからVPCにアクセスしたい</p>
+<ul class="simple">
+<li><p>オンプレ：カスタマーゲートウェイ</p></li>
+<li><p>AWSのVPC：仮想プライベートGW</p></li>
 </ul>
-</li>
-<li><p>専用線:DX</p>
+</section>
+<section id="directconnect-dx">
+<h4>DirectConnect(DX)<a class="headerlink" href="#directconnect-dx" title="Permalink to this heading">¶</a></h4>
+<p>オンプレから専用線を利用してVPCにアクセスしたい</p>
+<ul class="simple">
+<li><p>オンプレ：ルーターからDX Routerを目指す</p></li>
+<li><p>AWS: 仮想インターフェース</p>
 <ul>
-<li><p>DX Location</p></li>
-</ul>
-</li>
-</ul>
-</li>
-<li><p>オンプレ N:VPC 1</p>
-<ul>
-<li><p>Cloud Hub</p></li>
-</ul>
-</li>
-<li><p>オンプレ 1:VPC N</p>
-<ul>
-<li><p>一般回線: TransitGW</p></li>
-<li><p>専用線(N&lt;10): DXGW(DirectConnect GW)</p></li>
-<li><p>専用線(N&gt;10): DXGW+TransitGW</p></li>
+<li><p>プライベートIF：仮想プライベートGW or DX GW</p></li>
+<li><p>パブリックIF：S3やDynamoDB</p></li>
+<li><p>TransitIG：DXGW経由でTransitGWにアクセス</p></li>
 </ul>
 </li>
 </ul>
+</section>
+<section id="dx-gw">
+<h4>DX GW<a class="headerlink" href="#dx-gw" title="Permalink to this heading">¶</a></h4>
+<p>オンプレから専用線を利用して、複数のVPCにアクセス（10以下）</p>
+<ul class="simple">
+<li><p>オンプレ：ルーターからDX Routerを目指す</p></li>
+<li><p>DXGW：DXRouterから仮想プライベートIFとしてDXGWを接続して、DXGWから仮想プライベートGWへ</p></li>
+<li><p>AWS：仮想プライベートGW</p></li>
+</ul>
+</section>
+<section id="id30">
+<h4>VPCピアリング<a class="headerlink" href="#id30" title="Permalink to this heading">¶</a></h4>
+<p>VPC同士の接続。接続元から接続先にリクエストをして承認する。遷移的なアクセスは不可</p>
+</section>
+<section id="id31">
+<h4>TransitGW<a class="headerlink" href="#id31" title="Permalink to this heading">¶</a></h4>
+<p>VPCピアリングで管理できないようなVPC数を接続可能。遷移的なアクセスも可能<br />
+その状態で、仮想プライベートGWのように振る舞うことができ、カスタマーGWやDXGWと接続可能（DXRouterとは接続しない）</p>
+<ul class="simple">
+<li><p>VPC同士を紐づける</p></li>
+<li><p>多数VPCとVPNでオンプレと接続する</p>
+<ul>
+<li><p>オンプレ：カスタマーGW</p></li>
+<li><p>AWS：TransitGW</p></li>
+</ul>
+</li>
+<li><p>多数VPCとDXでオンプレと接続する</p>
+<ul>
+<li><p>オンプレ：DX Router</p></li>
+<li><p>DXGW</p></li>
+<li><p>AWS：TransitGW</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="transigw">
+<h4>TransiGWピアリング<a class="headerlink" href="#transigw" title="Permalink to this heading">¶</a></h4>
+<p>TransiGW同士を接続することで別リージョンにも対応</p>
 <p><img alt="" src="../_images/chap11_vpn_1.jpeg" />
 <img alt="" src="../_images/chap11_vpn_2.jpeg" />
 <img alt="" src="../_images/chap11_vpn_3.jpeg" /></p>
+</section>
 </section>
 </section>
 <section id="route53">
@@ -497,32 +559,68 @@ DirectConnect GWを利用することで専用線経由のVPNにも対応でき�
 <section id="resolver">
 <h3>Resolver<a class="headerlink" href="#resolver" title="Permalink to this heading">¶</a></h3>
 <p>VPC内やオンプレからの問い合わせを解決するサービスで<a class="reference external" href="https://dev.classmethod.jp/articles/explain-route53-resolver-ram/">こちらの記事</a>がわかりやすい</p>
-<section id="id29">
-<h4>VPC内の名前解決<a class="headerlink" href="#id29" title="Permalink to this heading">¶</a></h4>
+<section id="id32">
+<h4>VPC内の名前解決<a class="headerlink" href="#id32" title="Permalink to this heading">¶</a></h4>
 <p>通信を行う際に、Resolverに問い合わせを行い、Resolverはhosted zoneに問い合わせを行い解決する。</p>
 <p><img alt="" src="../_images/chap1_route53_resolver_1.png" /></p>
 </section>
-<section id="id30">
-<h4>オンプレからの名前解決(インバウンドエンドポイント)<a class="headerlink" href="#id30" title="Permalink to this heading">¶</a></h4>
+<section id="id33">
+<h4>オンプレからの名前解決(インバウンドエンドポイント)<a class="headerlink" href="#id33" title="Permalink to this heading">¶</a></h4>
 <p>オンプレミス環境からクラウド環境に名前解決のリクエストをする際には、Route53 Resolverのインバウンドエンドポイントの設定が必要になる。インバウンドのエンドポイントが作成されると、IPが発行されるので、このIPをオンプレ側のDNSに設定する。</p>
 <p><img alt="" src="../_images/chap1_route53_resolver_2.png" /></p>
 </section>
-<section id="id31">
-<h4>オンプレへの名前解決（アウトバウンドエンドポイント）<a class="headerlink" href="#id31" title="Permalink to this heading">¶</a></h4>
+<section id="id34">
+<h4>オンプレへの名前解決（アウトバウンドエンドポイント）<a class="headerlink" href="#id34" title="Permalink to this heading">¶</a></h4>
 <p>クラウド側からオンプレミスのDNSで名前解決をリクエストする際には、Route53 アウトバウンドエンドポイントとRoute53 ResolverRuleを設定する必要がある。</p>
 <p>このResolver Ruleは共有が可能で、別のAWSアカウントなどで共通利用することができる。</p>
 <p><img alt="" src="../_images/chap1_route53_resolver_3.png" /></p>
 </section>
+<section id="id35">
+<h4>VPC間での名前解決<a class="headerlink" href="#id35" title="Permalink to this heading">¶</a></h4>
+<p>VPC内部でのDNSサーバーを有効化するために、enableDnsSupportをTrueにする必要がある。VPC内のインスタンスたちにホストネームを割り当てるためにenableDnsHostnamesが割り当てられる。</p>
+<p>上記の設定をした上でRoute53にプライベートエンドポイントの設定をしてお互いのVPCにルートの設定をする。
+具体的には、CreateVPCAssociationAuthorizationを利用して、他のホストゾーンに対する名前解決の許可をする。次にAssociateVPCWithHostedZoneでホストゾーンにVPCを関連付ける。</p>
 </section>
-<section id="id32">
-<h3>ルーティング<a class="headerlink" href="#id32" title="Permalink to this heading">¶</a></h3>
+</section>
+<section id="id36">
+<h3>レコード<a class="headerlink" href="#id36" title="Permalink to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>Aレコード：IP Addressとドメイン名の紐付けを定義</p></li>
+<li><p>CNAME: １つのドメイン名と他のドメイン名の紐付けを定義</p></li>
+<li><p>Alies: Route53特別なレコードドメイン名とAWSリソースの紐付けを定義（AWSリソースのIPが変更してもマネージド対応してくれる</p></li>
+</ul>
+</section>
+<section id="id37">
+<h3>ルーティング<a class="headerlink" href="#id37" title="Permalink to this heading">¶</a></h3>
 <p>Route53では複数のルーティング方法がある。</p>
 <ul class="simple">
 <li><p>レイテンシーベース:レイテンシーが小さくなるようなルーティング</p></li>
 <li><p>フェイルオーバー：ヘルスチェックを行なってNGになるとセカンダリにルーティング</p></li>
+<li><p>荷重ルーティング：事前に設定した荷重に従ってルーティングを行う。</p></li>
 </ul>
+<p>上記のルーティングベースポリシーは組み合わせが可能であり、レイテンシーベースで割り振りつつ、荷重ルーティングで分散することも可能。加えてフェイルオーバーをすることも可能。</p>
 <p>Evaluate Target Healthという機能があり、接続先のELBのヘルスチェックを行って、エラーになった場合に、別の候補にルーティングすることができる。これは、フェイルオーバールーティングでもレイテンシーベースルーティングでも利用可能。
 レイテンシーベースとEvaluate Target Healthを組み合わせれば、フェイルオーバールーティングのような挙動も可能。</p>
+</section>
+</section>
+<section id="ipv6">
+<h2>IPv6対応<a class="headerlink" href="#ipv6" title="Permalink to this heading">¶</a></h2>
+<p>IPv4に対応しているVPCにしてIPv6を追加することでハイブリッドなデュアルスタックモードにすることができる。</p>
+<section id="id38">
+<h3>初期設定<a class="headerlink" href="#id38" title="Permalink to this heading">¶</a></h3>
+<p>IPv6のCICDを作成して、VPCとサブネットに紐付ける。</p>
+</section>
+<section id="id39">
+<h3>パブリックサブネットの設定<a class="headerlink" href="#id39" title="Permalink to this heading">¶</a></h3>
+<p>サブネットからIGWへのトラフィックをIPv6についても設定する。IGWはIPv4とIPv6両方に対応している。</p>
+</section>
+<section id="id40">
+<h3>プライベートサブネットの設定<a class="headerlink" href="#id40" title="Permalink to this heading">¶</a></h3>
+<p>サブネットからEgress-onlyへのトラフィックをエントリーする。</p>
+</section>
+<section id="id41">
+<h3>セキュリティグループの設定<a class="headerlink" href="#id41" title="Permalink to this heading">¶</a></h3>
+<p>IPv6のルールをネットワークACLやセキュリティグループに追加する</p>
 </section>
 </section>
 </section>

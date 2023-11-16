@@ -84,33 +84,42 @@
 <li class="toctree-l4"><a class="reference internal" href="#rtc">RTC</a></li>
 </ul>
 </li>
+<li class="toctree-l3"><a class="reference internal" href="#ebs">EBS</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#i-o">I/Oクレジット</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id13">最適化オプション</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#db">DBのパフォーマンス</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#rds">RDS</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#aurora">Aurora</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#dynamodb">DynamoDB</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#dynamodb">DynamoDB</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#autoscaling">AutoScaling</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#dax">DAX</a></li>
+</ul>
+</li>
 <li class="toctree-l3"><a class="reference internal" href="#elasticache">ElastiCache</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#memcached">Memcached</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#redis">Redis</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#id13">キャッシュの戦略</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id14">キャッシュの戦略</a></li>
 </ul>
 </li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#app">Appのパフォーマンス</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#cloudfront">CloudFront</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#id14">セキュリティ</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#id15">オリジンへのアクセス制限</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#id17">暗号化</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#id18">エッジ関数</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id15">セキュリティ</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id16">オリジンへのアクセス制限</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id18">暗号化</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id19">エッジ関数</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#global-accelerator">Global Accelerator</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#api-gw">API GW</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#id19">キャッシュ</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#id20">使用量プラン</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#id21">認証</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id20">キャッシュ</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id21">使用量プラン</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id22">認証</a></li>
 </ul>
 </li>
 </ul>
@@ -232,7 +241,7 @@
 </section>
 <section id="id7">
 <h3>プレスメントグループ<a class="headerlink" href="#id7" title="Permalink to this heading">¶</a></h3>
-<p>インスタンスの配置戦略により、配置を分散させることで障害発生時の影響を抑えることができる。一方で配置を集中させることでネットワークレイテンシ−を低減することができる。</p>
+<p>インスタンスの配置戦略により、配置を分散させることで障害発生時の影響を抑えることができる。一方で配置を集中させることでネットワークレイテンシ−を低減することができる。プレイスメントグループへEC2を所属させる場合は、EC2が停止している状態から起動するときに設定する</p>
 <p>プレスメントグループには3パターンがある</p>
 <section id="id8">
 <h4>クラスタプレイスメントグループ<a class="headerlink" href="#id8" title="Permalink to this heading">¶</a></h4>
@@ -285,6 +294,19 @@ FSx for Lustreは効率に起動でき、S3との連携も統合されており�
 15分を超えてコピーされた場合や、コピーされたオブジェクトに関するCloudWatchによる監視が可能。</p>
 </section>
 </section>
+<section id="ebs">
+<h3>EBS<a class="headerlink" href="#ebs" title="Permalink to this heading">¶</a></h3>
+<section id="i-o">
+<h4>I/Oクレジット<a class="headerlink" href="#i-o" title="Permalink to this heading">¶</a></h4>
+<p>EBSにもI/Oクレジットがあり、これを超えるとIOPSの性能が落ちる。
+I/OクレジットはEBSのサイズやタイプに依存している。</p>
+<p><a class="reference external" href="https://stakiran.hatenablog.com/entry/2018/06/25/190920#IO-%E3%82%AF%E3%83%AC%E3%82%B8%E3%83%83%E3%83%88%E3%81%9D%E3%81%AE1-%E6%B6%88%E8%B2%BB%E3%81%A8%E8%A3%9C%E5%85%85%E3%81%AE%E3%83%AB%E3%83%BC%E3%83%AB">AWS の IOPS と I/O クレジットがよくわからなかったので整理した</a></p>
+</section>
+<section id="id13">
+<h4>最適化オプション<a class="headerlink" href="#id13" title="Permalink to this heading">¶</a></h4>
+<p>EC2とEBSのネットワークをパフォーマンスを高めることができる</p>
+</section>
+</section>
 </section>
 <section id="db">
 <h2>DBのパフォーマンス<a class="headerlink" href="#db" title="Permalink to this heading">¶</a></h2>
@@ -303,6 +325,18 @@ AWSがクラウドの特性を利用した分散型のアーキテクチャを�
 <h3>DynamoDB<a class="headerlink" href="#dynamodb" title="Permalink to this heading">¶</a></h3>
 <p>パーティションキーはアクセスが分散するようにすることで性能が改善する。
 日付などをパーティションキーにするとアクセス集中する可能性があるので、適当なサフィックスをつけるなど工夫をする。</p>
+<section id="autoscaling">
+<h4>AutoScaling<a class="headerlink" href="#autoscaling" title="Permalink to this heading">¶</a></h4>
+<p>DyanamoDBにはオートスケーリング機能があり、スループットを変更することが可能。
+プロビジョンドとAutoScalingを組み合わせるとトラフィックの変動に応じて、プロビジョンドスループット設定を自動的に調整することでスロットリングに対応できる。</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://qiita.com/Nazuna_Nyanmage/items/443ee3d196d6ae600c9a">DynamoDBにAutoScalingを適用した時の挙動</a></p></li>
+</ul>
+</section>
+<section id="dax">
+<h4>DAX<a class="headerlink" href="#dax" title="Permalink to this heading">¶</a></h4>
+<p>DynamoDBのキャッシングが可能</p>
+</section>
 </section>
 <section id="elasticache">
 <h3>ElastiCache<a class="headerlink" href="#elasticache" title="Permalink to this heading">¶</a></h3>
@@ -320,10 +354,11 @@ AWSがクラウドの特性を利用した分散型のアーキテクチャを�
 女性らしく多様なデータの持ち方をすることができ、そのデータを永続に覚えられるそして暗号化できるなどの繊細さをもつ。</p>
 <p>単純なキーバリュー形式だけでなく、リスト・セット・ハッシュ・ビットマップなど高度なデータ構造をサポートしている。
 さまざまなタイプのデータ構造を高速に操作したい需要に応えることができ、例えばソートセットという順番付きのデータをメモリー上に保存することができるので、ゲームのリーダーボードなどのユースケース例が有名。
-アトミックオペレーションで、データへのアクセス回数を記録できる。</p>
+アトミックオペレーションで、データへのアクセス回数を記録できる。
+また、マルチAZ構成が可能で可能で高可用性を担保することができる。</p>
 </section>
-<section id="id13">
-<h4>キャッシュの戦略<a class="headerlink" href="#id13" title="Permalink to this heading">¶</a></h4>
+<section id="id14">
+<h4>キャッシュの戦略<a class="headerlink" href="#id14" title="Permalink to this heading">¶</a></h4>
 <p>ライトスルー戦略は、Appにデータを書き込む際にキャッシュも同時に更新する戦略であり、キャッシュミスが発生しにくくなるメリットがある。一方で、アクセス頻度の低い情報までキャッシュされてしまう問題や書き込み時に遅延が発生する問題がある。</p>
 <p>遅延書き込み戦略は、必要なデータだけキャッシュに書き込む戦略である。必要なデータだけがキャッシュに書き込まれるのでキャッシュの利用効率が高い。ただし、読み込み時にキャッシュミスが発生しやすいので、レイテンシーが増加する可能性がある。</p>
 </section>
@@ -335,12 +370,12 @@ AWSがクラウドの特性を利用した分散型のアーキテクチャを�
 <h3>CloudFront<a class="headerlink" href="#cloudfront" title="Permalink to this heading">¶</a></h3>
 <p>コンテンツ配信サービスで、キャッシュ機能によりオリジンへの負荷を低減することもできる。</p>
 <p>配信設定をディストリビューション、パスパターンに応じたルーティングのルールのことをビヘイビアとして指定することができる。</p>
-<section id="id14">
-<h4>セキュリティ<a class="headerlink" href="#id14" title="Permalink to this heading">¶</a></h4>
+<section id="id15">
+<h4>セキュリティ<a class="headerlink" href="#id15" title="Permalink to this heading">¶</a></h4>
 <p>デフォルトで、AWS Shieldが有効になっているので、DDos攻撃を緩和可能。</p>
 </section>
-<section id="id15">
-<h4>オリジンへのアクセス制限<a class="headerlink" href="#id15" title="Permalink to this heading">¶</a></h4>
+<section id="id16">
+<h4>オリジンへのアクセス制限<a class="headerlink" href="#id16" title="Permalink to this heading">¶</a></h4>
 <p>オリジンへの負荷を低減するためにCloudFrontを利用するため、オリジンへの直接アクセスは制御する必要がある。</p>
 <section id="oac-origin-access-control">
 <h5>OAC(Origin Access Control)<a class="headerlink" href="#oac-origin-access-control" title="Permalink to this heading">¶</a></h5>
@@ -348,8 +383,8 @@ AWSがクラウドの特性を利用した分散型のアーキテクチャを�
 <p>CloudFront側でOICを作成し、S3側のバケットポリシーでOICからのアクセスを許可する。
 バケットポリシーだけの制限も可能であるものの、シンプルかつ一貫性のあるルール設定ができるため推奨とのこと。</p>
 </section>
-<section id="id16">
-<h5>カスタムヘッダー<a class="headerlink" href="#id16" title="Permalink to this heading">¶</a></h5>
+<section id="id17">
+<h5>カスタムヘッダー<a class="headerlink" href="#id17" title="Permalink to this heading">¶</a></h5>
 <p>ALBがオリジンの場合に利用すると有効。<br />
 ディストリビューションのオリジン設定に任意のキーと値をカスタムヘッダーに追加する。
 リクエストヘッダーにこの値があることを確認しあって通信を許可する。</p>
@@ -380,13 +415,13 @@ AWSがクラウドの特性を利用した分散型のアーキテクチャを�
 <a class="reference external" href="https://www.aws-room.com/entry/presigned-cloudfront">参考記事</a>がわかりやすい</p>
 </section>
 </section>
-<section id="id17">
-<h4>暗号化<a class="headerlink" href="#id17" title="Permalink to this heading">¶</a></h4>
+<section id="id18">
+<h4>暗号化<a class="headerlink" href="#id18" title="Permalink to this heading">¶</a></h4>
 <p>CloudFront側に公開鍵を設定しておくことで、フィールド上のデータを暗号化することができる。
 秘密鍵は SecretsManagerに登録しておき、Lambdaなどで複合してアクションを起こすことで秘密情報を人目に触れることなく処理させることができる。</p>
 </section>
-<section id="id18">
-<h4>エッジ関数<a class="headerlink" href="#id18" title="Permalink to this heading">¶</a></h4>
+<section id="id19">
+<h4>エッジ関数<a class="headerlink" href="#id19" title="Permalink to this heading">¶</a></h4>
 <p>軽い処理の<code class="docutils literal notranslate"><span class="pre">CloudFront</span> <span class="pre">Functions</span></code>とLambdaの拡張である<code class="docutils literal notranslate"><span class="pre">Lambda&#64;Edge</span></code>がある。</p>
 </section>
 </section>
@@ -398,19 +433,19 @@ AWSがクラウドの特性を利用した分散型のアーキテクチャを�
 </section>
 <section id="api-gw">
 <h3>API GW<a class="headerlink" href="#api-gw" title="Permalink to this heading">¶</a></h3>
-<section id="id19">
-<h4>キャッシュ<a class="headerlink" href="#id19" title="Permalink to this heading">¶</a></h4>
+<section id="id20">
+<h4>キャッシュ<a class="headerlink" href="#id20" title="Permalink to this heading">¶</a></h4>
 <p>API GWのAPIステージの中でキャッシュを有効化することができる。<br />
 GETに対しては速度の改善とオリジンへのリクエストの低減という効果がある。
 指定したキャッシュインスタンスが作成されることになる。費用はキャッシュした容量と時間に応じた費用になる。</p>
 </section>
-<section id="id20">
-<h4>使用量プラン<a class="headerlink" href="#id20" title="Permalink to this heading">¶</a></h4>
+<section id="id21">
+<h4>使用量プラン<a class="headerlink" href="#id21" title="Permalink to this heading">¶</a></h4>
 <p>APIキーごとに1sec/1day/1week/1monthの単位でAPI利用料を設定することができる。
 ユーザーに提供するAPIキーに値を設定することで異常な数のリクエストに制限をかけることができる。</p>
 </section>
-<section id="id21">
-<h4>認証<a class="headerlink" href="#id21" title="Permalink to this heading">¶</a></h4>
+<section id="id22">
+<h4>認証<a class="headerlink" href="#id22" title="Permalink to this heading">¶</a></h4>
 <p>API GWで認証制限をするためには3つの方法がある</p>
 <section id="iam">
 <h5>IAM<a class="headerlink" href="#iam" title="Permalink to this heading">¶</a></h5>

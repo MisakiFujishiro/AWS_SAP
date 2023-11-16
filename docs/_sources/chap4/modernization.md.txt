@@ -86,7 +86,7 @@ ConsumerはLambdaやECSなどが想定される。
 
 シャードを削減することで費用を削減できるが、シャードは1MB/secの制限がある点に注意
 ### Kinesis Data Firehose
-大量のデータを指定した先へ配信する。AWSサービスであればS3やRedshiftなどに配信することができる。
+大量のデータを指定した先へ配信する。AWSサービスであればS3、Redshift、Elastic Serviceなどに配信することができる。
 配信タイミングは設定ができ、サイズが溜まったら配信したり、指定した時間が経過すると配信したりすることができる。
 ### Kinesis Data Analytics
 Data StreamsやData Firehoseから配信されるデータをSQLを利用して分析し、分析結果を再度配信する。
@@ -119,6 +119,7 @@ Salesfores/Slack/DatadogなどのデータをS3にインポートすることが
 S3に格納されたJSONやCSVのデータに対して、SQLを利用して分析を行うことができるサービス。
 分析した、結果は事前指定したS3に格納され、その結果をQuickSightなどで可視化することもできる。
 
+注意点として、Glacierに移動するとAthenaで検索できなくなるので注意
 ### データの利用
 #### SageMaker
 S3に蓄積されたデータを利用して独自のモデルを構築するための環境を提供するのがSageMakerである。  

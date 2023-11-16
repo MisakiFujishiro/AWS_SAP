@@ -95,6 +95,10 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="modernization.html">移行後アーキテクチャとアーキテクチャとモダナイゼーション</a></li>
 </ul>
+<p class="caption" role="heading"><span class="caption-text">基本知識:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../knowledge/knowledge.html">ITの基礎知識</a></li>
+</ul>
 
         </div>
       </div>
@@ -217,7 +221,8 @@ EC2をホストしたデータ処理が可能</p></li>
 <p>オンプレサーバーをAWSに移行するためのサービス。<br />
 AWS Replication Agentをオンプレ側のサーバーにインストールすることで、継続的に同期が行われソースサーバーの停止を必要としない。
 EBSボリュームにコピー元のAMIが作成され、起動テンプレートからEC2を起動させることができる。</p>
-<p>移行したEC2などが問題なく起動することができるかについては、テストとカットオーバーのための起動設定を構成することができ、テストインスタンをApplication Migration Serviceの中で設定することができる。</p>
+<p>実行するために、移行元にAWS Replication Agentをインストールする。
+移行したEC2などが問題なく起動することができるかについては、テストとカットオーバーのために起動設定を構成しておくことで、実行することができる。</p>
 </section>
 </section>
 <section id="db">

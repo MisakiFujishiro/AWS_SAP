@@ -30,12 +30,19 @@ S3とDynamo DBが対応しており、料金がかからない特徴がある。
 ### インターフェース型(PrivateLink型)
 50種類以上のサービスが対応しており、S3はインターフェース型の接続も可能。  
 データの転送とサービス利用時間に応じて課金する必要がある。  
-AWSのインターフェースエンドポイントは、VPC内の特定のサブネットにElastic Network Interface (ENI) を提供することで、プライベートな接続を介してAWSサービスにアクセスするためのエンドポイントを作成します。このENIはVPC内のプライベートIPアドレスを持ち、このENIを経由してAWSサービスに接続します。この技術全体がAWS PrivateLinkと呼ばれています。
+AWSのインターフェースエンドポイントは、VPC内の特定のサブネットにElastic Network Interface (ENI) を提供することで、プライベートな接続を介してAWSサービスにアクセスするためのエンドポイントを作成します。このENIはVPC内のプライベートIPアドレスを持ち、このENIを経由してAWSサービスに接続します。
 
 要するに、VPC内にプライベートIPアドレスを持つエンドポイントインターフェース（ENI）が提供され、このENIを通じてAWSのリソースにアクセスするのは、インターフェース型のVPCエンドポイントの特徴です。
 
-
 ![](../img/chap1_vpc_endpoint_if.png)
+
+
+
+VPCエンドポイントを利用して、プライベート接続を介したサービスを提供する技術をAWS PrivateLinkと呼ぶ。
+
+![](../img/chap1_vpc_privatelink.png)
+[【初心者向け】VPCエンドポイントとAWS PrivateLinkの違いを実際に構築して理解してみた](https://dev.classmethod.jp/articles/aws-vpcendpoint-privatelink-beginner/)
+
 
 作成としては以下の手順を踏む
 1. VPCサービスのエンドポイント機能を選択
@@ -247,20 +254,48 @@ DirectConnect GWを利用することで専用線経由のVPNにも対応でき�
 
 ![](../img/chap1_transitgw_merit_1.png)
 
-### VPNまとめ
-- オンプレ 1:VPC 1
-    - クライアントVPN
-        - クライアントVPNエンドポイント
-    - サイト:Site2Site VPN
-        - 仮想プライベートGW
-    - 専用線:DX
-        - DX Location
-- オンプレ N:VPC 1
-    - Cloud Hub
-- オンプレ 1:VPC N
-    - 一般回線: TransitGW
-    - 専用線(N<10): DXGW(DirectConnect GW)
-    - 専用線(N>10): DXGW+TransitGW
+#### TransitGWの補足
+TransitGWを利用する際に、Global Acceleratorを有効化すると、Acceleratedサイト間VPNが利用でき、エッジロケーションのGlobal Acceleratorを利用して、ネットワークの安定性が向上する。
+
+Transit GW Network Managerを利用すると、ネットワークの可視化とモニタリングが可能。
+
+
+### VPCとの接続まとめ
+#### クライアントVPN
+個別のクライアントからAWSに接続したい場合
+- クライアント：クライアントSW
+- AWS：クライアントVPNエンドポイント
+#### Site2Site VPN
+オンプレからVPCにアクセスしたい
+- オンプレ：カスタマーゲートウェイ
+- AWSのVPC：仮想プライベートGW
+#### DirectConnect(DX)
+オンプレから専用線を利用してVPCにアクセスしたい
+- オンプレ：ルーターからDX Routerを目指す
+- AWS: 仮想インターフェース
+    - プライベートIF：仮想プライベートGW or DX GW
+    - パブリックIF：S3やDynamoDB
+    - TransitIG：DXGW経由でTransitGWにアクセス
+#### DX GW
+オンプレから専用線を利用して、複数のVPCにアクセス（10以下）
+- オンプレ：ルーターからDX Routerを目指す
+- DXGW：DXRouterから仮想プライベートIFとしてDXGWを接続して、DXGWから仮想プライベートGWへ
+- AWS：仮想プライベートGW
+#### VPCピアリング
+VPC同士の接続。接続元から接続先にリクエストをして承認する。遷移的なアクセスは不可
+#### TransitGW
+VPCピアリングで管理できないようなVPC数を接続可能。遷移的なアクセスも可能  
+その状態で、仮想プライベートGWのように振る舞うことができ、カスタマーGWやDXGWと接続可能（DXRouterとは接続しない）
+- VPC同士を紐づける
+- 多数VPCとVPNでオンプレと接続する
+    - オンプレ：カスタマーGW
+    - AWS：TransitGW
+- 多数VPCとDXでオンプレと接続する
+    - オンプレ：DX Router
+    - DXGW
+    - AWS：TransitGW
+#### TransiGWピアリング
+TransiGW同士を接続することで別リージョンにも対応
 
 ![](../img/chap11_vpn_1.jpeg)
 ![](../img/chap11_vpn_2.jpeg)
@@ -287,6 +322,7 @@ VPC内やオンプレからの問い合わせを解決するサービスで[こ�
 
 ![](../img/chap1_route53_resolver_2.png)
 
+
 #### オンプレへの名前解決（アウトバウンドエンドポイント）
 クラウド側からオンプレミスのDNSで名前解決をリクエストする際には、Route53 アウトバウンドエンドポイントとRoute53 ResolverRuleを設定する必要がある。
 
@@ -294,12 +330,41 @@ VPC内やオンプレからの問い合わせを解決するサービスで[こ�
 
 ![](../img/chap1_route53_resolver_3.png)
 
+#### VPC間での名前解決
+VPC内部でのDNSサーバーを有効化するために、enableDnsSupportをTrueにする必要がある。VPC内のインスタンスたちにホストネームを割り当てるためにenableDnsHostnamesが割り当てられる。
+
+上記の設定をした上でRoute53にプライベートエンドポイントの設定をしてお互いのVPCにルートの設定をする。
+具体的には、CreateVPCAssociationAuthorizationを利用して、他のホストゾーンに対する名前解決の許可をする。次にAssociateVPCWithHostedZoneでホストゾーンにVPCを関連付ける。
+
+### レコード
+- Aレコード：IP Addressとドメイン名の紐付けを定義
+- CNAME: １つのドメイン名と他のドメイン名の紐付けを定義
+- Alies: Route53特別なレコードドメイン名とAWSリソースの紐付けを定義（AWSリソースのIPが変更してもマネージド対応してくれる
 
 ### ルーティング
 Route53では複数のルーティング方法がある。
 
 - レイテンシーベース:レイテンシーが小さくなるようなルーティング
 - フェイルオーバー：ヘルスチェックを行なってNGになるとセカンダリにルーティング
+- 荷重ルーティング：事前に設定した荷重に従ってルーティングを行う。
+
+上記のルーティングベースポリシーは組み合わせが可能であり、レイテンシーベースで割り振りつつ、荷重ルーティングで分散することも可能。加えてフェイルオーバーをすることも可能。
 
 Evaluate Target Healthという機能があり、接続先のELBのヘルスチェックを行って、エラーになった場合に、別の候補にルーティングすることができる。これは、フェイルオーバールーティングでもレイテンシーベースルーティングでも利用可能。
 レイテンシーベースとEvaluate Target Healthを組み合わせれば、フェイルオーバールーティングのような挙動も可能。
+
+
+## IPv6対応
+IPv4に対応しているVPCにしてIPv6を追加することでハイブリッドなデュアルスタックモードにすることができる。
+
+### 初期設定
+IPv6のCICDを作成して、VPCとサブネットに紐付ける。
+
+### パブリックサブネットの設定
+サブネットからIGWへのトラフィックをIPv6についても設定する。IGWはIPv4とIPv6両方に対応している。
+
+### プライベートサブネットの設定
+サブネットからEgress-onlyへのトラフィックをエントリーする。
+
+### セキュリティグループの設定
+IPv6のルールをネットワークACLやセキュリティグループに追加する

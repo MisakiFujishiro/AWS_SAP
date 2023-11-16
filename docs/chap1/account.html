@@ -61,7 +61,12 @@
 <li class="toctree-l2"><a class="reference internal" href="#aws-sso">AWS SSO</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#aws-organizations">AWS Organizations</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#organizations">Organizationsのアカウント管理</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id4">一括請求</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#scp-service-control-policy">SCP(Service Control Policy)</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id4">ホワイトリスト</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id5">拒否リスト</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#id6">一括請求</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#aws-service-catalog">AWS Service Catalog</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#aws-control-tower">AWS Control Tower</a></li>
 </ul>
@@ -188,8 +193,27 @@ OUやアカウントに対してSCP（サービスコントロールポリシー
 <p><img alt="" src="../_images/chap1_organizations.png" /></p>
 <p>OUやアカウントはCLIから作成することができる。</p>
 </section>
+<section id="scp-service-control-policy">
+<h3>SCP(Service Control Policy)<a class="headerlink" href="#scp-service-control-policy" title="Permalink to this heading">¶</a></h3>
+<p>Organizationで指定したOUや管理下のアカウントに対してSCPを設定することができる。
+SCPはIAMのポリシーのようにアクションの許可をすることができる。</p>
 <section id="id4">
-<h3>一括請求<a class="headerlink" href="#id4" title="Permalink to this heading">¶</a></h3>
+<h4>ホワイトリスト<a class="headerlink" href="#id4" title="Permalink to this heading">¶</a></h4>
+<p>SCPを設定したOUに所属する場合、実行できるActionを指定する。明示的に許可しているもの以外は操作できなくなる。
+ルートユーザーにはFullAccessがついているので、許可したものだけが利用されるようなFilterをするように制限をかけていくイメージ。
+注意点として、SCPで許可したからと言って、リソースを操作することができるわけではない。あくまでホワイトリストのSCPは境界線を設定しているだけであり、実際に操作するためには許可ポリシーを付与してもらう必要がある。<br />
+また、ホワイトリストの場合はConditionやNotAction、リソースの指定ができない。</p>
+</section>
+<section id="id5">
+<h4>拒否リスト<a class="headerlink" href="#id5" title="Permalink to this heading">¶</a></h4>
+<p>SCPを設定したOUに所属した場合に、禁止するActionを指定する。
+ルートユーザーにはFullAccessがついているので、拒否していくことでFilterをするように制限をかけていくイメージ。
+ConditionやNotAction、リソースの指定が可能なので、細かく拒否ポリシーを設定できる。
+注意点として、ホワイトリストはSCPで定義したからといって、許可されたものが実行できるわけではなく、合わせて実行者のPolicyに実行権限を付与する必要があったが、拒否リストの場合は、SCPに設定しただけで適用される。</p>
+</section>
+</section>
+<section id="id6">
+<h3>一括請求<a class="headerlink" href="#id6" title="Permalink to this heading">¶</a></h3>
 <p>Organizationsを利用することで、複数のアカウント請求を一括請求とすることができる。
 結果として、ボリュームディスカウントを受けやすくするといったメリットを受けることができる。</p>
 </section>

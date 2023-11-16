@@ -434,8 +434,9 @@ EC2 Instance Connectと呼ばれる技術でも接続できるが、こちらは
 </section>
 <section id="aws-config">
 <h3>AWS Config<a class="headerlink" href="#aws-config" title="Permalink to this heading">¶</a></h3>
-<p>AWSリソースの設定情報を収集し、変更などを記録・追跡することができるため、AWS環境内のコンプライアンスとガバナンスを確保するためのツールとして利用される。</p>
-<p>変更などの検知もすることができるため、コンプライアンスに準拠しない場合に強制的にSystemManagerのパッチで対応することもできる。</p>
+<p>AWSリソースの設定情報を収集し、監視することができるサービス。
+変更などを記録・追跡することができるため、AWS環境内のコンプライアンスとガバナンスを確保するためのツールとして利用される。</p>
+<p>マネージドルールやLambdaを利用したカスタムルールを利用して、AWSConfig Ruleを設定し、違反しているリソースを発見するとダッシュボードやSNSへの発砲、修復アクションによる修復が可能。</p>
 </section>
 </section>
 </section>
